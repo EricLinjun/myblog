@@ -1,0 +1,66 @@
+
+<style>
+    .navbar {
+      margin-bottom: 0px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      list-style: none;
+      height: 70px;
+      z-index: 1;
+      position: fixed;
+    }
+
+    #a{
+      height: 700px; 
+      background-color: Red;
+    }
+
+    #b{
+      height: 700px; 
+      background-color: blue;
+    }
+
+    #c{
+      height: 700px; 
+      background-color: yellow;
+    }
+
+    #d{
+      height: 700px; 
+      background-color: black;
+    }
+</style>
+  <nav class="navbar navbar-default" data-offset-top="10">
+    <div class="container">
+      <div id="navbar">
+        <ul class="nav navbar-nav">
+          <li><a href="#a">a</a></li>
+          <li><a href="#b">b</a></li>
+          <li><a href="#c">c</a></li>
+          <li><a href="#d">d</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+<div id="a"></div>
+<div id="b"></div>
+<div id="c"></div>
+<div id="d"></div>
+
+
+<script src="/static/js/jquery-3.5.1.min.js"></script>
+<script>
+    $(function() {
+        $('ul.nav a').bind('click',function(event){
+        event.preventDefault();
+            var $anchor = $(this);
+        console.log($anchor.attr('href'))
+            $('html, body').stop().animate({
+                scrollTop: $($anchor.attr('href')).offset().top
+            }, 1000);
+            event.preventDefault();
+        });
+    });
+</script>

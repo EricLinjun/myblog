@@ -1,0 +1,347 @@
+{% extends 'base.html'%}
+
+
+
+{% block css %}
+<style>
+    .cv-nav{
+          color:black;
+          text-shadow: none;
+          padding: 40px 40px;
+          transition: all 0.4s ease-in-out;
+          -webkit-transition: all 0.4s ease-in-out;
+          -moz-transition: all 0.4s ease-in-out ;
+    }
+    .cv-nav:hover{
+        background-color: #242829;
+        color:white;
+    }
+    .shrink-cv{
+        padding:20px 40px;
+    }
+    #stuckNav{
+      position: fixed;
+/*      top: 73px;*/
+      left:0;
+      right:0;
+      z-index: 99;
+    }
+    .content {
+    max-width: 100%;
+    }
+    .content-text {
+    word-wrap: break-word;
+    }
+    .caption-wrapper{
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: black;
+        opacity:0.7;
+        transition: all 0.4s ease-in-out;
+    }
+    .caption-wrapper:hover{
+        opacity:0;
+        transition: all 0.4s ease-in-out;
+    }
+    .caption {
+    position: absolute;
+    top: 45%;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    }
+    .fas,.far {
+      color: #242829;
+    }
+
+
+</style>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+{% endblock %}
+
+
+{% block main %}
+<div class='wrapper' style="">
+    <div class='container shadow intro' style=" background-color: #F9F9F9;z-index:98">
+        <div class='row'>
+            <div class='col-12 col-lg-6'>
+                <div id='profile-text' class="content profile-text" style="padding: 60px">
+                    <div class="content-text" style="text-align:left;color:black;font-size: 60px">MY NAME</div>
+                    <div class="content-text" style="text-align:left;color:black">HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO</div>
+                </div>
+            </div>
+            <div class='col-12 col-lg-6 px-0' style="background-color: #F9F9F9;">
+                <div class='col px-0'>
+                    <div class='profile'>
+                        <img src="/static/img/profile.jpeg" class="img-fluid  w-100" alt="Responsive image">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class='container cv-navbar d-flex flex-row sticky-top px-0' style=";background-color: #EAF0F3;z-index:98">
+        <div class='cv-nav text-uppercase education-nav'>Education</div>
+        <div class='cv-nav text-uppercase skills-nav'>Skills</div>
+        <div class='cv-nav text-uppercase proexp-nav'>Professional Exp</div>
+    </div>
+    
+
+    <div class='container shadow' style="background-color: #F9F9F9">
+        <div class='row' style="flex-direction: row-reverse;">
+            <div class='col-12 col-lg-5 px-0 order-1'>
+                <div class='col px-0'>
+                    <div class='profile'>
+                        <img src="/static/img/udel.png" class="img-fluid  w-100" alt="Responsive image">
+                        <div class="caption-wrapper">
+                             <div class="caption">
+                                <p>University of Delaware</p>
+                             </div>
+                        </div>            
+                    </div>
+                </div>
+            </div>
+            <div class='col-12 col-lg-7 px-0'>
+                <div id='education' style="background-color: #242829">
+                    <div class='text-uppercase py-2 mr-3 order-1' style="text-align: right">Education</div>
+                </div>
+                <div class="content" style="padding: 60px">
+                    <div class="content-text" style="text-align:left;color:black;font-size: 20px">MY NAME</div>
+                    <div class="content-text" style="text-align:left;color:black">HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHLO</div>
+                </div>  
+            </div>
+        </div>
+        <div class='row' style="flex-direction: row-reverse;">
+            <div class='col-12 col-lg-5 px-0 order-2'>
+                <div class='col px-0'>
+                    <div class='profile'>
+                        <img src="/static/img/monash.jpg" class="img-fluid  w-100" alt="Responsive image">
+                        <div class="caption-wrapper">
+                             <div class="caption">
+                                <p>Monash University</p>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-12 col-lg-7 px-0' >
+                <div class="content" style="padding: 60px">
+                    <div class="content-text" style="text-align:left;color:black;font-size: 20px">MY NAME</div>
+                    <div class="content-text" style="text-align:left;color:black">HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHLO</div>
+                </div>  
+            </div>
+        </div>
+    </div>
+    
+    <div class='container shadow px-0' style="background-color: #eeeeee">
+        <div id='skills' style="background-color: #242829">
+            <div class='text-uppercase py-2 mr-3' style="text-align: right">Skills</div>
+        </div>
+        <div class='row px-5 my-4'>
+            <div class='col-12 col-lg-6'>
+                <div class="content" style="padding: 20px">
+                    <div class="content-text text-center py-2" style="text-align:left;color:black;font-size: 20px">Programming</div>
+                    <div class="row">
+                        <div class="content-text text-left py-2 col-8" style="color:black;font-size: 20px">Python (Django, Data Analysis, Machine Learning)</div>
+                        <div class="content-text text-right py-2 col-4" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="content-text text-left py-2 col-8" style="color:black;font-size: 20px">R (Markdown, Shiny Dashboard, Data Analysis)</div>
+                        <div class="content-text text-right py-2 col-4" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="content-text text-left py-2 col-8" style="color:black;font-size: 20px">SQL (MySQL, Postgres)</div>
+                        <div class="content-text text-right py-2 col-4" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="content-text text-left py-2 col-8" style="color:black;font-size: 20px">JavaScript (Vue.js, JQuery)</div>
+                        <div class="content-text text-right py-2 col-4" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="content-text text-left py-2 col-8" style="color:black;font-size: 20px">HTML (Bootstrap, WeChat MiniProgram)</div>
+                        <div class="content-text text-right py-2 col-4" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="content-text text-left py-2 col-8" style="color:black;font-size: 20px">CSS (Bootstrap, WeChat MiniProgram)</div>
+                        <div class="content-text text-right py-2 col-4" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="content-text text-left py-2 col-8" style="color:black;font-size: 20px">Java</div>
+                        <div class="content-text text-right py-2 col-4" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span><span class="far fa-star"></span></div>
+                    </div>                 
+                </div>
+            </div>
+            <div class='col-12 col-lg-6'>
+                <div class="content" style="padding: 20px">
+                    <div class="content-text text-center py-2" style="text-align:left;color:black;font-size: 20px">Tools</div>
+                    <div class="row">
+                        <div class="content-text text-left py-2 col-6" style="color:black;font-size: 20px">MS Office</div>
+                        <div class="content-text text-right py-2 col-6" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="content-text text-left py-2 col-6" style="color:black;font-size: 20px">Adobe Photoshop</div>
+                        <div class="content-text text-right py-2 col-6" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="content-text text-left py-2 col-6" style="color:black;font-size: 20px">iMovie</div>
+                        <div class="content-text text-right py-2 col-6" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                    </div>   
+                    <div class="row">
+                        <div class="content-text text-left py-2 col-6" style="color:black;font-size: 20px">Aegisub</div>
+                        <div class="content-text text-right py-2 col-6" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                    </div> 
+                    <div class="content-text text-center py-2" style="text-align:left;color:black;font-size: 20px">Languages</div>
+                    <div class="row">
+                        <div class="content-text text-left py-2 col-6" style="color:black;font-size: 20px">Chinese</div>
+                        <div class="content-text text-right py-2 col-6" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span></div>
+                    </div>   
+                    <div class="row">
+                        <div class="content-text text-left py-2 col-6" style="color:black;font-size: 20px">English</div>
+                        <div class="content-text text-right py-2 col-6" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span></div>
+                    </div> 
+                </div>
+            </div>   
+    </div>
+        
+        <div class='container shadow' style="background-color: #F9F9F9">
+        
+        <div class='row' style="flex-direction: row-reverse;">
+            <div class='col-12 col-lg-4 px-0 order-1'>
+                <div class='col px-0'>
+                    <div class='profile'>
+                        <img src="/static/img/acn.png" class="img-fluid  w-100" alt="Responsive image">
+                        <div class="caption-wrapper">
+                             <div class="caption">
+                                <p>University of Delaware</p>
+                             </div>
+                        </div>            
+                    </div>
+                </div>
+            </div>
+        <div id="proexp" class='col-12 col-lg-8 px-0'>
+            <div style="background-color: #242829">
+        <div class='text-uppercase py-2 mr-3' style="text-align: right">professional exp</div>
+        </div>
+                <div class="content" style="padding: 60px">
+                    <div class="content-text" style="text-align:left;color:black;font-size: 20px">MY NAME</div>
+                    <div class="content-text" style="text-align:left;color:black">HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHLO</div>
+                </div>  
+            </div>
+        </div>
+        <div class='row' style="flex-direction: row-reverse;">
+            <div class='col-12 col-lg-4 px-0 order-2'>
+                <div class='col px-0'>
+                    <div class='profile'>
+                        <img src="/static/img/expo.jpg" class="img-fluid  w-100" alt="Responsive image">
+                        <div class="caption-wrapper">
+                             <div class="caption">
+                                <p>Monash University</p>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-12 col-lg-8 px-0'  >
+                <div class="content" style="padding: 60px">
+                    <div class="content-text" style="text-align:left;color:black;font-size: 20px">MY NAME</div>
+                    <div class="content-text" style="text-align:left;color:black">HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHLO</div>
+                </div>  
+            </div>
+        </div>
+        <div class='row' style="flex-direction: row-reverse;">
+            <div class='col-12 col-lg-4 px-0 order-2'>
+                <div class='col px-0'>
+                    <div class='profile'>
+                        <img src="/static/img/baicizhan.jpeg" class="img-fluid  w-100" alt="Responsive image">
+                        <div class="caption-wrapper">
+                             <div class="caption">
+                                <p>Monash University</p>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-12 col-lg-8 px-0'  >
+                <div class="content" style="padding: 60px">
+                    <div class="content-text" style="text-align:left;color:black;font-size: 20px">MY NAME</div>
+                    <div class="content-text" style="text-align:left;color:black">HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHLO</div>
+                </div>  
+            </div>
+        </div>
+    </div>
+    
+    <div class='container shadow px-0' style="height: 300px;background-color: #242829">
+        
+        
+    </div>
+</div>
+{% endblock %}
+
+
+{% block js %}
+<script>
+        
+        $('.education-nav').click(function() {
+            if ($(document).scrollTop() > 10){
+                var distance = $('.header-wrapper').outerHeight() + $('.cv-nav').outerHeight()  - 2
+            } else {
+                var distance = $('.header-wrapper').outerHeight() + $('.cv-nav').outerHeight() - $('#education').outerHeight() - 2
+            }
+            $('html,body').animate({ scrollTop: $("#education").offset().top - distance}, 1000)
+        });
+        $('.skills-nav').click(function() {
+            if ($(document).scrollTop() > 10){
+                var distance = $('.header-wrapper').outerHeight() + $('.cv-nav').outerHeight() - 2
+            } else {
+                var distance = $('.header-wrapper').outerHeight() + $('.cv-nav').outerHeight() - $('#education').outerHeight() - 2
+            }
+            $('html,body').animate({ scrollTop: $("#skills").offset().top - distance}, 1000)
+        });
+        $('.proexp-nav').click(function() {
+            if ($(document).scrollTop() > 10){
+                var distance = $('.header-wrapper').outerHeight() + $('.cv-nav').outerHeight() - 2
+            } else {
+                var distance = $('.header-wrapper').outerHeight() + $('.cv-nav').outerHeight() - $('#education').outerHeight() - 2
+            }
+            $('html,body').animate({ scrollTop: $("#proexp").offset().top  - distance}, 1000)
+        });
+    
+        var distance = 0;
+        var thisScroll = 0, lastScroll = 0; 
+        $( document ).ready(function() {
+            var distance = $('.header-wrapper').outerHeight()
+            $(".intro").css({"margin-top": distance});
+    
+        });
+        $(document).on("scroll", function(){
+            if ($(document).scrollTop() > 20){
+              $(".cv-nav").addClass("shrink-cv");
+              var distance = $('.header-wrapper').outerHeight()
+              $("#stuckNav").css({"top": distance});
+              thisScroll = $(window).scrollTop();
+              if($('.cv-navbar').offset().top - thisScroll <= distance +5 && !$('#stuckNav').length && thisScroll > lastScroll){
+                var newNav = $('.cv-navbar').clone(true);
+                newNav.attr('id', 'stuckNav');
+                $('.wrapper').append(newNav);
+              }
+              else if($('.cv-navbar').offset().top - $(window).scrollTop() > distance+5 && thisScroll < lastScroll){
+                $('#stuckNav').remove();
+              }
+              lastScroll = thisScroll;
+            }
+            else
+            {
+              $(".cv-nav").removeClass("shrink-cv");
+            }          
+        });
+    
+ 
+
+
+    
+</script>
+{% endblock %}
