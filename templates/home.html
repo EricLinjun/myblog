@@ -48,7 +48,7 @@
     }
     .caption {
     position: absolute;
-    top: 45%;
+    top: 40%;
     left: 0;
     height: 100%;
     width: 100%;
@@ -56,6 +56,83 @@
     .fas,.far {
       color: #242829;
     }
+    .arrow {
+      border: solid orange;
+      border-width: 0 5px 5px 0;
+      display: inline-block;
+      padding: 10px;
+    }
+    .arrow-sm {
+      border: solid orange;
+      border-width: 0 5px 5px 0;
+      display: inline-block;
+      padding: 5px;
+      margin: 0 10px 4px 0;
+    }
+    .right {
+      transform: rotate(-45deg);
+      -webkit-transform: rotate(-45deg);
+    }
+    .left {
+      transform: rotate( 135deg);
+      -webkit-transform: rotate(135deg);
+    }
+    .up {
+      transform: rotate(-135deg);
+      -webkit-transform: rotate(-135deg);
+    }
+    .contact-text{
+        text-align:left;
+        color:#bbbbbb;
+        font-size: 15px;
+        font-weight:400;
+        text-shadow: none   
+    }
+    .content-title{
+        color:black;
+        font-size: 20px;
+        text-shadow: none;
+    }
+    .content-title-time{
+        color:black;
+        font-size: 15px;
+        font-style: italic;
+        text-shadow: none;
+    }
+    .content-text{
+        text-align:left;
+        color:black;
+        text-shadow:none;
+        font-size: 16px;
+        font-weight: 100;
+    }
+    .exp-text{
+        text-align:left;
+        color:black;
+        text-shadow:none;
+        font-size: 20px;
+        font-weight: 100;
+    }
+    li {
+    font-size: 15px;
+/*    list-style-type: circle;*/
+    color:black;
+    text-align: left;
+    text-shadow: none;
+    }
+    .skill-title{
+        color:black;
+        font-size: 30px;
+        font-weight: 100;
+        text-shadow: none;
+    }
+    .skill-text{
+        color:black;
+        font-size: 20px;
+        font-weight: 100;
+        text-shadow: none;
+    }
+
 
 
 </style>
@@ -67,11 +144,26 @@
 <div class='wrapper' style="">
     <div class='container shadow intro' style=" background-color: #F9F9F9;z-index:98">
         <div class='row'>
-            <div class='col-12 col-lg-6'>
-                <div id='profile-text' class="content profile-text" style="padding: 60px">
-                    <div class="content-text" style="text-align:left;color:black;font-size: 60px">MY NAME</div>
-                    <div class="content-text" style="text-align:left;color:black">HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLO</div>
+            <div class='col-12 col-lg-6 px-0' style="padding-top: 80px">
+                
+                <div class="col-12 col-lg-11 px-0">    
+                    <div class="mr-5">
+                       <div class="content-text" style="text-align:right;color:black;font-size: 50px;font-weight: 100; text-shadow: none;margin-bottom: 30px;z-inde:99">A Passionate Data <div style="float: right;background-color: orange;height: 8px;width:95px;z-index:98;margin-left: -100px;margin-top:60px"></div>Explorer</div>     
+                        <div class="ml-0 col-5" style="background-color:orange;height: 4px"> </div>
+                        <div class="px-0" style="background-color:  #242829;height: 8px"> </div>
+                        <div class="mr-1" style="text-align:right;height: 10px;margin-top: -40px ">
+                             <i class="arrow right"></i><i class="arrow right"></i><i class="arrow right"></i><i class="arrow right"></i>
+                        </div>
+                        <div class="content-text" style="text-align:right;color:black;font-size: 30px;font-weight: 200;text-shadow: none; margin-top:80px">And Full-Stack Learner👨🏻‍💻</div>
+                        <div class="content-text" style="text-align:right;color:black;font-size: 30px;font-weight: 200;text-shadow: none; margin-top:10px;margin-bottom: 10px">Language & Food Lover🍜</div>     
+                        <div class="pl-5" style="text-align:left;height: 10px;margin-bottom: 80px">
+                             <i class="arrow up"></i> <i class="arrow up"></i> <i class="arrow up"></i> <i class="arrow up"></i>
+                        </div>
+                    </div>
+
+                
                 </div>
+                
             </div>
             <div class='col-12 col-lg-6 px-0' style="background-color: #F9F9F9;">
                 <div class='col px-0'>
@@ -84,10 +176,14 @@
         
     </div>
 
-    <div class='container cv-navbar d-flex flex-row sticky-top px-0' style=";background-color: #EAF0F3;z-index:98">
-        <div class='cv-nav text-uppercase education-nav'>Education</div>
-        <div class='cv-nav text-uppercase skills-nav'>Skills</div>
-        <div class='cv-nav text-uppercase proexp-nav'>Professional Exp</div>
+    <div class='container cv-navbar sticky-top px-0' style="background-color: #EAF0F3;z-index:98">
+        <div class='col-12 col-lg-8 d-flex flex-row px-0'>
+            <div class='col-3 cv-nav text-uppercase education-nav user-select-none'>Education</div>
+            <div class='col-3 cv-nav text-uppercase skills-nav user-select-none'>Skills</div>
+            <div class='col-3 cv-nav text-uppercase proexp-nav user-select-none'>Professional Exp</div>
+            <div class='col-3 cv-nav text-uppercase contact-nav user-select-none'>Contact</div>            
+        </div>
+
     </div>
     
 
@@ -96,10 +192,12 @@
             <div class='col-12 col-lg-5 px-0 order-1'>
                 <div class='col px-0'>
                     <div class='profile'>
-                        <img src="/static/img/udel.png" class="img-fluid  w-100" alt="Responsive image">
+                        <img src="/static/img/monash.jpg" class="img-fluid  w-100" alt="Responsive image">
                         <div class="caption-wrapper">
                              <div class="caption">
-                                <p>University of Delaware</p>
+                                 <p>Monash Caulfiled Library</p>
+                                 <p class="my-0"><span data-feather="map-pin"></span></p>
+                                 <p style="font-size: 12px">Melbourne, Australia</p>
                              </div>
                         </div>            
                     </div>
@@ -107,11 +205,20 @@
             </div>
             <div class='col-12 col-lg-7 px-0'>
                 <div id='education' style="background-color: #242829">
-                    <div class='text-uppercase py-2 mr-3 order-1' style="text-align: right">Education</div>
+                    <div class='text-uppercase py-0 my-0 mr-3 order-1' style="text-align: right;font-size: 20px;font-weight: 100">Education</div>
                 </div>
-                <div class="content" style="padding: 60px">
-                    <div class="content-text" style="text-align:left;color:black;font-size: 20px">MY NAME</div>
-                    <div class="content-text" style="text-align:left;color:black">HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHLO</div>
+                <div class="content" style="padding: 0 60px;padding-top: 20px;">
+                    <div class="skill-title text-left row mx-0" ><div style="height: 10px;width: 10px;background-color: orange;border-radius: 5px;margin:20px 10px 0 0"></div>Monash University</div>
+                    <div class="row">    
+                        <div class="content-title text-left col-6" style="font-size: 15px;font-weight: 600">Master of Data Science </div>
+                        <div class="content-title-time text-right col-6 ">Feb 2018 - Nov 2019 </div>
+                    </div>
+                    <div class="content-text mt-1">As a young and energetic uni, Monash has offered me a wide range of in-depth courses which have greatly boosted my data analytical and IT skills. </div>
+                    <ul class="mt-2 mb-4">
+                        <li>3rd place in course kaggle competitio of sentiment analysis held May 2019.</li>
+                        <li>Post Graduate Industry Experience Winner 2019</li>
+                        <li>Information Technology International Merit Scholarship</li>
+                    </ul>
                 </div>  
             </div>
         </div>
@@ -119,89 +226,102 @@
             <div class='col-12 col-lg-5 px-0 order-2'>
                 <div class='col px-0'>
                     <div class='profile'>
-                        <img src="/static/img/monash.jpg" class="img-fluid  w-100" alt="Responsive image">
+                        <img src="/static/img/udel.png" class="img-fluid  w-100" alt="Responsive image">
                         <div class="caption-wrapper">
                              <div class="caption">
-                                <p>Monash University</p>
+                                 <p>UD Memorial Hall</p>
+                                 <p class="my-0"><span data-feather="map-pin"></span></p>
+                                 <p style="font-size: 12px">Newark, DE, USA</p>
                              </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class='col-12 col-lg-7 px-0' >
-                <div class="content" style="padding: 60px">
-                    <div class="content-text" style="text-align:left;color:black;font-size: 20px">MY NAME</div>
-                    <div class="content-text" style="text-align:left;color:black">HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHLO</div>
+                <div style="margin: 0 60px;border-top: solid 1px #bbbbbb"></div>
+                <div class="content" style="padding: 30px 60px 10px 60px;">
+                    <div class="skill-title text-left row mx-0" ><div style="height: 10px;width: 10px;background-color: orange;border-radius: 5px;margin:20px 10px 0 0"></div>University of Delaware</div>
+                    <div class="row">
+                        <div class="content-title text-left col-6" style="font-size: 15px;font-weight: 600">Bachelor of Science, Finance </div>
+                        <div class="content-title-time text-right col-6 ">Sep 2014 - May 2017 </div>
+                    </div>
+                    <div class="content-text text-left" style="font-size: 13px;font-weight: 400">Minor: Management Information System  </div>
+                    <div class="content-text mt-1">UD has the one of the most beautiful campus I 've ever walked on. Besides that, I enjoyed my time there studying what I need to learn.</div>
+                    <ul class="mt-2 mb-4">
+                        <li>Overall GPA: 3.348/4.00</li>
+                        <li>Selected to Dean’s List Spring 2016 and Fall 2016</li>
+                    </ul>
                 </div>  
             </div>
         </div>
     </div>
     
     <div class='container shadow px-0' style="background-color: #eeeeee">
+        
         <div id='skills' style="background-color: #242829">
-            <div class='text-uppercase py-2 mr-3' style="text-align: right">Skills</div>
+            <div class='text-uppercase py-0 my-0 mr-3 order-1' style="text-align: right;font-size: 20px;font-weight: 100">Skills</div>
         </div>
         <div class='row px-5 my-4'>
             <div class='col-12 col-lg-6'>
-                <div class="content" style="padding: 20px">
-                    <div class="content-text text-center py-2" style="text-align:left;color:black;font-size: 20px">Programming</div>
+                <div class="content" style="padding: 10px">
+                    <div class="skill-title text-center py-2" ><i class="arrow-sm right"></i>Programming</div>
                     <div class="row">
-                        <div class="content-text text-left py-2 col-8" style="color:black;font-size: 20px">Python (Django, Data Analysis, Machine Learning)</div>
-                        <div class="content-text text-right py-2 col-4" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span></div>
+                        <div class="skill-text text-left py-2 col-8">Python (Django, Data Analysis, Machine Learning)</div>
+                        <div class="skill-text text-right py-2 col-4"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span></div>
                     </div>
                     <div class="row">
-                        <div class="content-text text-left py-2 col-8" style="color:black;font-size: 20px">R (Markdown, Shiny Dashboard, Data Analysis)</div>
-                        <div class="content-text text-right py-2 col-4" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                        <div class="skill-text text-left py-2 col-8">R (Markdown, Shiny Dashboard, Data Analysis)</div>
+                        <div class="skill-text text-right py-2 col-4"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
                     </div>
                     <div class="row">
-                        <div class="content-text text-left py-2 col-8" style="color:black;font-size: 20px">SQL (MySQL, Postgres)</div>
-                        <div class="content-text text-right py-2 col-4" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                        <div class="skill-text text-left py-2 col-8" >SQL (MySQL, Postgres)</div>
+                        <div class="skill-text text-right py-2 col-4"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
                     </div>
                     <div class="row">
-                        <div class="content-text text-left py-2 col-8" style="color:black;font-size: 20px">JavaScript (Vue.js, JQuery)</div>
-                        <div class="content-text text-right py-2 col-4" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                        <div class="skill-text text-left py-2 col-8" >JavaScript (Vue.js, JQuery)</div>
+                        <div class="skill-text text-right py-2 col-4"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
                     </div>
                     <div class="row">
-                        <div class="content-text text-left py-2 col-8" style="color:black;font-size: 20px">HTML (Bootstrap, WeChat MiniProgram)</div>
-                        <div class="content-text text-right py-2 col-4" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                        <div class="skill-text text-left py-2 col-8">HTML (Bootstrap, WeChat MiniProgram)</div>
+                        <div class="skill-text text-right py-2 col-4"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
                     </div>
                     <div class="row">
-                        <div class="content-text text-left py-2 col-8" style="color:black;font-size: 20px">CSS (Bootstrap, WeChat MiniProgram)</div>
-                        <div class="content-text text-right py-2 col-4" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                        <div class="skill-text text-left py-2 col-8">CSS (Bootstrap, WeChat MiniProgram)</div>
+                        <div class="skill-text text-right py-2 col-4"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
                     </div>
                     <div class="row">
-                        <div class="content-text text-left py-2 col-8" style="color:black;font-size: 20px">Java</div>
-                        <div class="content-text text-right py-2 col-4" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span><span class="far fa-star"></span></div>
+                        <div class="skill-text text-left py-2 col-8">Java</div>
+                        <div class="skill-text text-right py-2 col-4"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span><span class="far fa-star"></span></div>
                     </div>                 
                 </div>
             </div>
             <div class='col-12 col-lg-6'>
-                <div class="content" style="padding: 20px">
-                    <div class="content-text text-center py-2" style="text-align:left;color:black;font-size: 20px">Tools</div>
+                <div class="content" style="padding: 0px">
+                    <div class="skill-title text-center py-2"><i class="arrow-sm right"></i>Tools</div>
                     <div class="row">
-                        <div class="content-text text-left py-2 col-6" style="color:black;font-size: 20px">MS Office</div>
-                        <div class="content-text text-right py-2 col-6" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span></div>
+                        <div class="skill-text text-left py-2 col-6">MS Office</div>
+                        <div class="skill-text text-right py-2 col-6"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span></div>
                     </div>
                     <div class="row">
-                        <div class="content-text text-left py-2 col-6" style="color:black;font-size: 20px">Adobe Photoshop</div>
-                        <div class="content-text text-right py-2 col-6" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                        <div class="skill-text text-left py-2 col-6">Adobe Photoshop</div>
+                        <div class="skill-text text-right py-2 col-6"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
                     </div>
                     <div class="row">
-                        <div class="content-text text-left py-2 col-6" style="color:black;font-size: 20px">iMovie</div>
-                        <div class="content-text text-right py-2 col-6" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                        <div class="skill-text text-left py-2 col-6">iMovie</div>
+                        <div class="skill-text text-right py-2 col-6"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
                     </div>   
                     <div class="row">
-                        <div class="content-text text-left py-2 col-6" style="color:black;font-size: 20px">Aegisub</div>
-                        <div class="content-text text-right py-2 col-6" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
+                        <div class="skill-text text-left py-2 col-6">Aegisub</div>
+                        <div class="skill-text text-right py-2 col-6"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="far fa-star"></span></div>
                     </div> 
-                    <div class="content-text text-center py-2" style="text-align:left;color:black;font-size: 20px">Languages</div>
+                    <div class="skill-title text-center py-2"><i class="arrow-sm right"></i>Languages</div>
                     <div class="row">
-                        <div class="content-text text-left py-2 col-6" style="color:black;font-size: 20px">Chinese</div>
-                        <div class="content-text text-right py-2 col-6" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span></div>
+                        <div class="skill-text text-left py-2 col-6">Chinese</div>
+                        <div class="skill-text text-right py-2 col-6"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span></div>
                     </div>   
                     <div class="row">
-                        <div class="content-text text-left py-2 col-6" style="color:black;font-size: 20px">English</div>
-                        <div class="content-text text-right py-2 col-6" style="color:black;font-size: 20px"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span></div>
+                        <div class="skill-text text-left py-2 col-6">English</div>
+                        <div class="skill-text text-right py-2 col-6"><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span><span class="fas fa-star"></span></div>
                     </div> 
                 </div>
             </div>   
@@ -216,7 +336,9 @@
                         <img src="/static/img/acn.png" class="img-fluid  w-100" alt="Responsive image">
                         <div class="caption-wrapper">
                              <div class="caption">
-                                <p>University of Delaware</p>
+                                 <p>Access CN</p>
+                                 <p class="my-0"><span data-feather="map-pin"></span></p>
+                                 <p style="font-size: 12px">Melbourne, Australia</p>
                              </div>
                         </div>            
                     </div>
@@ -224,12 +346,21 @@
             </div>
         <div id="proexp" class='col-12 col-lg-8 px-0'>
             <div style="background-color: #242829">
-        <div class='text-uppercase py-2 mr-3' style="text-align: right">professional exp</div>
+        <div class='text-uppercase py-0 my-0 mr-3 order-1' style="text-align: right;font-size: 20px;font-weight: 100">professional exp</div>
         </div>
-                <div class="content" style="padding: 60px">
-                    <div class="content-text" style="text-align:left;color:black;font-size: 20px">MY NAME</div>
-                    <div class="content-text" style="text-align:left;color:black">HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHLO</div>
-                </div>  
+                <div class="content" style="padding: 0 60px;margin-top: 20px;">
+                    <div class="skill-title text-left row mx-0" ><div style="height: 10px;width: 10px;background-color: orange;border-radius: 5px;margin:20px 10px 0 0"></div>Access CN</div>
+                    <div class="row">    
+                        <div class="content-title text-left col-6" style="font-size: 15px;font-weight: 600">Market Intelligence Analyst (3-month contract)</div>
+                        <div class="content-title-time text-right col-6 ">Mar 2020 - May 2020 </div>
+                    </div>
+                    <div class="exp-text mt-1">Access CN has provided a me a good platform to learn about FMCG industry and the international e-commerce data.</div>
+                    <ul class="mt-2 mb-4">
+                        <li>Searched information, mined data from multiple sources, constructed and finalized insightful reports.</li>
+                        <li>Field work in qualitative and quantitative research, providing ongoing supporting answer business questions.</li>
+                        <li>Coded in R for data processing and other visualizations the market intelligence team needed.</li>
+                    </ul>
+                </div>   
             </div>
         </div>
         <div class='row' style="flex-direction: row-reverse;">
@@ -238,18 +369,31 @@
                     <div class='profile'>
                         <img src="/static/img/expo.jpg" class="img-fluid  w-100" alt="Responsive image">
                         <div class="caption-wrapper">
-                             <div class="caption">
-                                <p>Monash University</p>
+                                <div class="caption">
+                                 <p>Industry Exp Expo</p>
+                                 <p class="my-0"><span data-feather="map-pin"></span></p>
+                                 <p style="font-size: 12px">Melbourne, Australia</p>
                              </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class='col-12 col-lg-8 px-0'  >
-                <div class="content" style="padding: 60px">
-                    <div class="content-text" style="text-align:left;color:black;font-size: 20px">MY NAME</div>
-                    <div class="content-text" style="text-align:left;color:black">HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHLO</div>
-                </div>  
+            <div class='col-12 col-lg-8 px-0'>
+                <div style="margin: 0 60px;border-top: solid 10px #bbbbbb"></div>
+                <div class="content" style="padding: 20px 60px 20px 60px;">
+                    <div class="skill-title text-left row mx-0" ><div style="height: 10px;width: 10px;background-color: orange;border-radius: 5px;margin:20px 10px 0 0"></div>Post Graduate Industry Experience</div>
+                    <div class="row">    
+                        <div class="content-title text-left col-6" style="font-size: 15px;font-weight: 600">Data Analyst</div>
+                        <div class="content-title-time text-right col-6 ">Jul 2019 - Nov 2019 </div>
+                    </div>
+                    <div class="exp-text mt-1">It's a great a expereince for me to be able to start, plan, and finished an IT project in an agile approach and imporved my soft skills through my communication and cooperation with my teammates. </div>
+                    <ul class="mt-2 mb-4">
+                        <li>Wrangled with open data for our project website of doing social good.</li>
+                        <li>Managed and transformed data into website backend database.</li>
+                        <li>Designed and implemented web map function with filter for showing geolocations accordingly.</li>
+                        <li>Contributed in a multicultural environment with both tech and non-tech teammates.</li>
+                    </ul>
+                </div>   
             </div>
         </div>
         <div class='row' style="flex-direction: row-reverse;">
@@ -258,33 +402,75 @@
                     <div class='profile'>
                         <img src="/static/img/baicizhan.jpeg" class="img-fluid  w-100" alt="Responsive image">
                         <div class="caption-wrapper">
-                             <div class="caption">
-                                <p>Monash University</p>
+                                <div class="caption">
+                                 <p>Baicizhan</p>
+                                 <p class="my-0"><span data-feather="map-pin"></span></p>
+                                 <p style="font-size: 12px">Chengdu, Sichuan, China</p>
                              </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class='col-12 col-lg-8 px-0'  >
-                <div class="content" style="padding: 60px">
-                    <div class="content-text" style="text-align:left;color:black;font-size: 20px">MY NAME</div>
-                    <div class="content-text" style="text-align:left;color:black">HELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHELLOHLO</div>
+            <div class='col-12 col-lg-8 px-0'>
+                <div style="margin: 0 60px;border-top: solid 10px #bbbbbb"></div>
+                <div class="content" style="padding: 20px 60px 20px 60px;">
+                    <div class="skill-title text-left row mx-0" ><div style="height: 10px;width: 10px;background-color: orange;border-radius: 5px;margin:20px 10px 0 0"></div>Baicizhan</div>
+                    <div class="row">    
+                        <div class="content-title text-left col-6" style="font-size: 15px;font-weight: 600">Intern in Social Media Operation</div>
+                        <div class="content-title-time text-right col-6 ">Aug 2017 - Dec 2017 </div>
+                    </div>
+                    <div class="exp-text mt-1">Although Baicizhan has a very young team at that time, from this experience I have learnt a lot about how operations and internal management were ran through a user-content focused working environment.</div>
+                    <ul class="mt-2 mb-4">
+                        <li>Created digital content for marketing and provided customer service</li>
+                        <li>Analysed user behavior patterns to help improve product design.</li>
+                        <li>Kept tracks on the daily active users and their data, reported it to my supervisor weekly.</li>
+                    </ul>
                 </div>  
             </div>
         </div>
     </div>
     
-    <div class='container shadow px-0' style="height: 300px;background-color: #242829">
+    <div class='container shadow px-0' style="height: 250px;background-color: #242829">
+        <div>
+            <div style="padding:30px 0;">
+                <div class="content-text text-center" style="text-align:left;color:white;font-size: 20px;font-size: 50px;font-weight:100; text-shadow: none">Contact</div>
+                <div class="row justify-content-center">
+                    
+                    <div class="content-text mx-3 my-4" >
+                        <a class="text-decoration-none contact" href="https://www.linkedin.com/in/ericll/" target="_blank">
+                            <span data-feather="linkedin" style="background-color: #bbbbbb;padding: 5px;height: 30px;width: 30px;border-radius: 5px;color: #242829;">
+                            </span>
+                            <text class="contact-text">
+                                ericll 
+                            </text>
+                        </a>
+                    </div>
+                    <div class="content-text mx-3 my-4" style="text-align:left;color:#bbbbbb;font-size: 15px;font-weight:400; text-shadow: none">
+                        <a class="text-decoration-none contact" href="mailto:ericlinjunli@gmail.com" target="_blank">
+                            <span data-feather="mail" style="background-color: #bbbbbb;padding: 5px;height: 30px;width: 30px;border-radius: 5px;color: #242829;">
+                            </span>
+                            <text  class="contact-text">
+                                    ericlinjunli@gmail.com
+                            </text>
+                        </a>
+                    </div>
+                </div>
+                 
+            </div>
         
-        
+        </div>
     </div>
 </div>
+
 {% endblock %}
 
 
 {% block js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
 <script>
-        
+        (function () {
+            feather.replace()
+        })()
         $('.education-nav').click(function() {
             if ($(document).scrollTop() > 10){
                 var distance = $('.header-wrapper').outerHeight() + $('.cv-nav').outerHeight()  - 2
@@ -308,6 +494,9 @@
                 var distance = $('.header-wrapper').outerHeight() + $('.cv-nav').outerHeight() - $('#education').outerHeight() - 2
             }
             $('html,body').animate({ scrollTop: $("#proexp").offset().top  - distance}, 1000)
+        });
+        $('.contact-nav').click(function() {
+            $("html, body").animate({ scrollTop: $(document).height() }, 1000);
         });
     
         var distance = 0;
