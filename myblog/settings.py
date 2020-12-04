@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'g*=rxi22qbz#k1@@eg_g%eip%f4#njthqwxfa$c_dy8c@&wi2w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -123,8 +123,3 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')
 ]
-
-
-# Configure Django App for Heroku.
-import django_heroku
-django_heroku.settings(locals())
