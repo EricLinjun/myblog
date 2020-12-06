@@ -150,8 +150,8 @@
 
 
 {% block main %}
-<div class='wrapper' style="">
-    <div class='container shadow intro' style=" background-color: #F9F9F9;z-index:98">
+<div class='wrapper px-0 col-12' style="">
+    <div class='container-lg shadow intro' style=" background-color: #F9F9F9;z-index:98">
         <div class='row'>
             <div class='intro-text col-12 col-lg-6 px-0'>       
                 <div class="col-12 col-lg-11 px-0">    
@@ -183,8 +183,7 @@
         </div>
         
     </div>
-
-    <div class='container cv-navbar sticky-top px-0' style="background-color: #EAF0F3;z-index:98">
+    <div class='container-lg cv-navbar sticky-top px-0' style="background-color: #EAF0F3;z-index:98">
         <div class='col-12 col-lg-8 d-flex flex-row px-0'>
             <div class='col-3 cv-nav text-uppercase education-nav user-select-none'>Education</div>
             <div class='col-3 cv-nav text-uppercase skills-nav user-select-none'>Skills</div>
@@ -192,14 +191,13 @@
             <div class='col-3 cv-nav text-uppercase contact-nav user-select-none'>Contact</div>            
         </div>
 
-    </div>
-    
-    <div class='container shadow px-0' style="background-color: #F9F9F9">
+    </div> 
+    <div class='container-lg shadow px-0' style="background-color: #F9F9F9">
         <div class="px-0" id='education' style="background-color: #242829">
             <div class='text-uppercase py-0 my-0 mr-3 order-1' style="text-align: right;font-size: 20px;font-weight: 100">Education</div>
         </div>
     </div>
-    <div class='container shadow' style="background-color: #F9F9F9">
+    <div class='container-lg shadow' style="background-color: #F9F9F9">
         <div class='row' style="flex-direction: row-reverse;">
             <div class='col-12 col-lg-5 px-0 order-1'>
                 <div class='col px-0'>
@@ -265,8 +263,7 @@
             </div>
         </div>
     </div>
-    
-    <div class='container shadow px-0' style="background-color: #eeeeee">
+    <div class='container-lg shadow px-0' style="background-color: #eeeeee">
         
         <div id='skills' style="background-color: #242829">
             <div class='text-uppercase py-0 my-0 mr-3 order-1' style="text-align: right;font-size: 20px;font-weight: 100">Skills</div>
@@ -337,7 +334,7 @@
             </div>   
     </div>
         
-        <div class='container shadow' style="background-color: #F9F9F9">
+        <div class='container-lg shadow' style="background-color: #F9F9F9">
         
         <div class='row' style="flex-direction: row-reverse;">
             <div class='col-12 col-lg-4 px-0 order-1'>
@@ -412,7 +409,7 @@
                     <div class='profile'>
                         <img src="/static/img/baicizhan.jpeg" class="img-fluid  w-100" alt="Responsive image">
                         <div class="caption-wrapper">
-                                <div class="caption">
+                                <div class="caption" style="height:200px">
                                  <p>Baicizhan</p>
                                  <p class="my-0"><span data-feather="map-pin"></span></p>
                                  <p style="font-size: 12px">Chengdu, Sichuan, China</p>
@@ -440,11 +437,9 @@
         </div>
     </div>
    
-    </div>
-     
-    <div class='container shadow px-0' style="height: 250px;background-color: #242829">
-        <div>
-            <div style="padding:30px 0;">
+    </div>  
+    <div class='container-lg shadow px-0' style="background-color: #242829;">
+            <div style="padding:30px 0 50px 0;">
                 <div class="content-text text-center" style="text-align:left;color:white;font-size: 20px;font-size: 50px;font-weight:100; text-shadow: none">Contact</div>
                 <div class="row justify-content-center mx-0">
                     
@@ -470,7 +465,6 @@
                  
             </div>
         
-        </div>
     </div>
 
 {% endblock %}
