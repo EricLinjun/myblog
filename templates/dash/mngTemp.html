@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+{% block tmp_class %}active{% endblock %}
+
+{% block css %}
+<style>
+    .bigCard{
+        background-color: #eeeded;
+        border-radius: 10px;
+    }
+    .cardTitle{
+/*        background-color: #e5e5e5;*/
+         color: #343A40;
+         border-bottom: 2px solid white;
+    }
+
+
+</style>
+{% endblock%}
+
+
+{% block main %}
+<main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-md-4" >
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">编辑材料</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group mr-2">
+            <button id='showDel' type="button" class="btn btn-sm btn-outline-secondary shadow-none">选项</button>
+          </div>
+        </div>
+      </div>
+    
+    
+    
+    {% for row in mc%}
+    <div class="bigCard my-3 mx-2">
+        <div class="row d-flex flex-wrap px-5 ">
+            <div class="card-wrapper-title col-12 px-2 py-2">
+                <div class="cardTitle border-light" style="height:30px">
+                   <div class="card-body">
+                       <div id="totalR" class='row aling-items-center'>
+                           <div class='col'>
+                               <h6 class="text-uppercase mb-3 ml-3 text-center" style="margin-top: -15px; font-weight: 600">{{row.mainCategory}}</h6>
+                           </div>
+                       </div>
+                   </div>
+                </div>
+            </div>
+            {% for item in m %}
+                {% if row.mainCategory == item.mainCategory %}
+                <div class="card-wrapper col-12 col-lg-6 col-xl-3 px-2 py-2">
+                    <div class="card shadow-sm border-light  ">
+                       <div class="card-body py-0" style="height: 75px">
+                           <div class='row aling-items-center'>
+                               <div class='col py-4'>
+                                   <h6 class="mt-1 ml-3">{{item.categoryName}}</h6>
+                               </div>
+                               <div style="width: 100px">
+                                    <a class="btn btn-outline-secondary btn-sm noOutline  my-4 ml-0 mr-0 hide editCtg" style='margin-top: -10px;margin-bottom: -10px' data-val="{{item.id}}" data-name="{{item.categoryName}}">编辑</a>
+                                    <a class="btn btn-outline-danger btn-sm noOutline  my-4 ml-0 mr-2 hide delCtg" style='margin-top: -10px;margin-bottom: -10px' data-val="{{item.id}}">删除</a>
+                               </div>
+                              
+                           </div>
+                       </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+            <div class="add-card-wrapper col-12 col-lg-6 col-xl-3 px-2 py-2"  >
+                    <div class="card shadow-sm border-light addCard" style="height: 75px" data-val="{{row.mainCategory}}">
+                      <text class='text-muted' style="font-size: 50px;text-align: center;margin-top: -8px;margin-bottom: -3px" >+</text>
+
+                    </div>
+                </div>
+        </div>
+        <div style="height:10px"> </div>
+    </div>
+    {% endfor %}
+</main>
+
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="addModal-title" id="ModalLabel">确认添加</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body d-flex justify-content-center">
+          <div class="form-group col-6">
+            <div class="h6">名称:</div>
+            <input type="text" class="form-control" id="new-name">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary shadow-none" data-dismiss="modal">取消</button>
+        <button id='addCtg' type="button" class="btn btn-secondary shadow-none">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="editModal-title" id="ModalLabel">修改材料</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body d-flex justify-content-center">
+          <div class="form-group col-6">
+            <div class="h6">名称:</div>
+            <input type="text" class="form-control" id="edit-new-name">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary shadow-none" data-dismiss="modal">取消</button>
+        <button id='editCtgSend' type="button" class="btn btn-secondary shadow-none">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+
+
+
+{% block js%}
+<script>
+      $('#showDel').click(function(){
+          if ($('.delCtg').hasClass('hide')){
+              $('.delCtg').removeClass('hide')
+          } else {
+              $('.delCtg').addClass('hide')
+          }
+          if ($('.editCtg').hasClass('hide')){
+              $('.editCtg').removeClass('hide')
+          } else {
+              $('.editCtg').addClass('hide')
+          }
+      })
+    
+     $('.delCtg').click(function(){
+         var nid = $(this).data('val')
+         $.ajax({
+                url:'/ajax_delCtg/',
+                type:'POST',
+                dataType: 'json',
+                data:{'nid':nid,
+                      'csrfmiddlewaretoken': '{{ csrf_token }}',},
+                success: function(result){ 
+                    if (result.status){
+                        location.reload()
+                        alert('删除成功！')
+                    } else {
+                        alert(result.msg)
+                    }
+                }
+            })
+     })
+    
+    $('.editCtg').click(function(){
+         var nid = $(this).data('val')
+         var name = $(this).data('name')
+          $('.ctgID').remove()
+          var tag = document.createElement('span');
+          tag.innerHTML = nid
+          tag.className = 'h5 modal-title ctgID hide';
+          $('.editModal-title').after(tag);
+         $('#edit-new-name').val(name)
+         $("#editModal").modal('show')
+     })
+    
+    $('#editCtgSend').click(function(){
+        var name = $('#edit-new-name').val()
+        var nid = $('.ctgID').text()
+        $.ajax({
+                url:'/ajax_editCtg/',
+                type:'POST',
+                dataType: 'json',
+                data:{'nid':nid,
+                      'name':name,
+                      'csrfmiddlewaretoken': '{{ csrf_token }}',},
+                success: function(result){ 
+                    if (result.status){
+                        location.reload()
+                        alert('修改成功！')
+                    } else {
+                        alert(result.msg)
+                    }
+                }
+            })
+    })
+    
+      $('#addCtg').click(function(){
+          $('.error').remove()
+          var name = $('#new-name').val()
+          var mainCtg = $('.mainCtg').text()
+          if (name.length == 0){
+              var tag = document.createElement('span');
+              tag.innerHTML = '不能为空'
+              tag.className = 'error';
+              $('#new-name').after(tag);
+          } else{
+              $.ajax({
+                url:'/ajax_addCtg/',
+                type:'POST',
+                dataType: 'json',
+                data:{'ctgName':name,
+                      'mainCtg':mainCtg,
+                      'csrfmiddlewaretoken': '{{ csrf_token }}',},
+                success: function(result){ 
+                   if (result.status){
+                        location.reload()
+                    } else {
+                        alert(result.msg)
+                    }
+                }
+            })
+          }
+      })
+    
+      $( ".addCard" ).hover(
+          function() {
+            $(this).addClass('shadow').css('cursor', 'pointer'); 
+          }, function() {
+            $(this).removeClass('shadow');
+          }
+        );
+    
+      $(".addCard").click(function(){
+          $('.mainCtg').remove()
+          var ctg = $(this).data('val')
+          var tag = document.createElement('span');
+          tag.innerHTML = ctg
+          tag.className = 'h5 modal-title mainCtg';
+          $('.addModal-title').after(tag);
+          $("#Modal").modal('show')
+      })
+</script>
+{% endblock%}

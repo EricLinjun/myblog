@@ -1,0 +1,515 @@
+{% extends 'dash/base.html' %}
+{% block home_class %}active{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+<style>
+/* total width */
+::-webkit-scrollbar {
+    background-color: #fff;
+    width: 16px;
+}
+
+/* background of the scrollbar except button or resizer */
+::-webkit-scrollbar-track {
+    background-color: #fff;
+}
+
+/* scrollbar itself */
+::-webkit-scrollbar-thumb {
+    background-color: #babac0;
+    border-radius: 16px;
+    border: 4px solid #fff;
+}
+
+/* set button(top and bottom of the scrollbar) */
+::-webkit-scrollbar-button {
+    display:none;
+    
+}
+    
+    .card-header{
+        background-color: white;
+    }
+    .card-title{
+        margin-top:10px;
+        font-size:18px;
+        font-weight: 600;
+    }
+    
+    .daterangepicker > .ranges > ul > li.active{
+    background-color: #808080 
+    }
+    .daterangepicker > .ranges {
+    width: 100px !important
+    }
+    .daterangepicker > .ranges > ul > li{
+    width: 100px
+    }
+    
+    .daterangepicker:after, .daterangepicker:before { 
+       display: none !important; 
+    }
+    .daterangepicker{
+        margin-right: 23px;
+    }
+    
+    .daterangepicker > .drp-calendar > .calendar-table > .table-condensed
+    tbody > tr > td.in-range{
+        background-color: #e5e5e5
+    }
+    .daterangepicker > .drp-calendar > .calendar-table > .table-condensed
+    tbody > tr > td.active{
+        background-color: #808080 
+    }
+    .daterangepicker > .drp-buttons >.applyBtn{
+        background-color: #6C757D; 
+        border: none;
+
+    }
+    .daterangepicker > .drp-buttons >.applyBtn:hover,.applyBtn:active{
+        background-color: #343A40!important; 
+        border: none;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    .daterangepicker > .drp-buttons >.cancelBtn:hover,.cancelBtn:active{
+        background-color: #6C757D;
+        color: white;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+<main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-md-4" style="background-color: #F9FBFD" >
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">数据面板</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group mr-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+          </div>
+              <button value=0 class="btn btn-sm btn-secondary  shadow-none" type="button" id="dropdownMenuButton" >
+                <div id="reportrange">
+                    <span data-feather="calendar"></span>
+                    <span></span> <i class="fa fa-caret-down "></i>
+                </div>
+              </button>
+        </div>
+      </div>
+
+        <div class="row">
+         <div class="col-12">
+          <div class="card-deck">
+              
+            <div class="col-12 col-lg-7 col-xl-8 d-flex flex-column" style="" >
+            <div class="row" style="margin-bottom: 30px">
+             <div class="col-12">
+              <div class="card-deck">
+                <div class="card shadow-sm border-light ">
+                   <div class="card-body">
+                       <div id="totalR" class='row aling-items-center'>
+                           <div class='col'>
+                               <h6 class="text-uppercase text-muted mb-0 ml-3">总接收数</h6>
+                           </div>
+                       </div>
+                   </div>
+                </div>
+                <div class="card shadow-sm border-light">
+                  <div class="card-body">
+                       <div id="totalQ" class='row aling-items-center'>
+                           <div class='col'>
+                               <h6 class="text-uppercase text-muted mb-0 ml-1">总数量</h6>
+                           </div>
+                       </div>
+                   </div>
+                </div>
+                <div class="card shadow-sm border-light">
+                   <div class="card-body">
+                       <div id="activeP" class='row aling-items-center'>
+                           <div class='col'>
+                               <h6 class="text-uppercase text-muted mb-0 ml-1">活跃项目</h6>
+                           </div>
+                       </div>
+                   </div>
+                </div>
+              </div>
+             </div>
+            </div>
+              
+            <div class="card shadow-sm border-light"  style="margin:0 0 30px 0;padding-left: 15px;padding-right: 15px">
+                <div class="card-header">
+                   <h5 class="card-title">最近接收次数</h5>
+               </div>
+               <div class="card-body">
+                   <div class="chart-wrapper">               
+                      <div class="container" style="height: 250px">
+                        <canvas id="myLineChart"></canvas>
+                      </div>
+                   </div>
+                </div>
+            </div>
+        </div> 
+         
+
+
+              
+            <div class="card shadow-sm border-light" style="margin-bottom: 30px;padding-left: 15px;padding-right: 15px">
+              <div class="card-header">
+                       <div class='row aling-items-center'>
+                           <div class='col'>
+                               <h5 class="card-title">最近上传记录</h5>
+                           </div>
+                       </div>
+               </div>
+               <div class="card-body">
+                   
+                     <div style="height:345px;overflow: auto">
+                     <table id="recentTable" class="table table-borderless table-hover mb-0">
+                        </table>
+                     </div>
+                    <div class="tableNull text-muted text-center hide" style="margin:-220px"><text style="background: white;z-index: 99;position: relative">暂无数据 </text></div> 
+
+               </div>
+            </div>
+          </div>
+         </div>
+        </div>
+
+    <div class="row">
+         <div class="col-12">
+          <div class="card-deck">
+            <div class="card col-12 col-xl-4 shadow-sm border-light">
+              <div class="card-header">
+                   <div class='row aling-items-center'>
+                       <div class='col'>
+                           <h5 class="card-title">材料总类</h5>
+                       </div>
+                   </div>
+               </div>
+               <div class="card-body">
+                   <div class="chart-wrapper">               
+                      <div class="doughnut-container" style="height: 180px">
+                        <canvas id="myDoughnutChart"></canvas>    
+                       </div>
+                         <div class="doughnutNull text-muted text-center" style="margin:90px">暂无数据</div>
+                       
+                   </div>
+               </div>
+            </div>
+            <div class="card shadow-sm border-light" style="padding-left: 15px;padding-right: 15px">
+               <div class="card-header">     
+                   <div class='row aling-items-center'>
+                       <div class='col'>
+                           <h5 class="card-title">材料分类统计</h5>
+                       </div>
+                       <button type="button" class="btn btn-outline-secondary btn-sm mb-1 mt-1">Small button</button>
+                   </div>
+               </div>
+               <div class="card-body">
+                   <div class="chart-wrapper">               
+                      <div class="bar-container " style="height: 210px;z-index: 1;position: relative">
+                        <canvas id="myBarChart"></canvas>
+                      </div>
+                      <div class="barNull text-muted text-center" style="margin:-120px"><text style="background: white;z-index: 99;position: relative">暂无数据 </text></div>                       
+                   </div>
+               </div>
+            </div>
+          </div>
+         </div>
+    </div>  
+{% endblock %}
+    
+{% block js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0/dist/chartjs-plugin-datalabels.min.js"></script>-->
+    <script type="text/javascript" src="/static/dash/js/moment-with-locales.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/static/dash/js/Chart.roundedBarCharts.js"></script>
+   <script type="text/javascript" charset="utf-8" src="/static/dash/js/Chart.roundedBarCharts.min.js"></script>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    
+    <script>
+        
+        feather.replace()
+        
+            $(function() {
+
+            var start = moment();
+            var end = moment();
+
+            function cb(start, end) {
+                s = start.format('YYYY/M/D')
+                e = end.format('YYYY/M/D')
+                if (s == e){
+                    $('#reportrange span').html(s);
+                } else {
+                    $('#reportrange span').html(s + ' - ' + e);
+                }
+                AjaxSend(start.format('YYYY-M-D'), end.format('YYYY-M-D'));
+            }
+
+            $('#reportrange').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                   '只看今天': [moment(), moment()],
+                   '只看昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                   '最近七天': [moment().subtract(6, 'days'), moment()],
+                   '最近三十天': [moment().subtract(29, 'days'), moment()],
+                   '只看本月': [moment().startOf('month'), moment().endOf('month')],
+                   '只看上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                "orientation": 'right',
+                locale: moment.locale('zh-cn'),
+                locale: {
+                    "applyLabel": "确认",
+                    "cancelLabel": "取消",
+                    "customRangeLabel": "自定义",}
+            }, cb);
+
+            cb(start, end);
+
+        });
+        
+
+        
+        function AjaxSend(startDate, endDate){
+            $.ajax({
+                url:'/dash/dashMain/',
+                type:'POST',
+                dataType: 'json',
+                data:{'startDate':startDate,
+                      'endDate':endDate,
+                      'csrfmiddlewaretoken': '{{ csrf_token }}',},
+                success: function(result){           
+                    removeData(myLineChart)
+                    a = fillDates(result.receiveN)
+                    a.forEach(function(item){
+                        addData(myLineChart,item.uploadDate,item.c)
+                    })
+                    removeData(myDoughnutChart)
+                    removeData(myBarChart)
+                    if (result.ctgStat.length == 0){
+                        $('.doughnut-container').removeClass('hide')
+                        $('.doughnutNull').removeClass('hide')
+                        $('.doughnut-container').addClass('hide')
+                        $('.barNull').removeClass('hide')
+                        $('.newTag').remove();
+                         var tag = document.createElement('span');
+                         tag.innerHTML = '-';
+                         tag.className = 'h6 mb-0 mr-4 newTag';
+                         $('#totalQ').find(".col").after(tag);
+                         var tag = document.createElement('span');
+                         tag.innerHTML = '-';
+                         tag.className = 'h6 mb-0 mr-4 newTag';
+                         $('#totalR').find(".col").after(tag);
+                         var tag = document.createElement('span');
+                         tag.innerHTML = '-';
+                         tag.className = 'h6 mb-0 mr-4 newTag';
+                         $('#activeP').find(".col").after(tag);
+                    } else {
+                        $('.doughnut-container').removeClass('hide')
+                        $('.doughnutNull').addClass('hide')
+                        $('.barNull').addClass('hide')
+                        result.ctgStat.forEach(function(item){     addData(myDoughnutChart,item.category__mainCategory,item.t)
+                        })
+                        result.sCtgStat.forEach(function(item){      addData(myBarChart,item.category__categoryName,item.t)
+                        }) 
+                        $('.newTag').remove();
+                         var tag = document.createElement('span');
+                         tag.innerHTML = result.totalQ.quantity__sum.toFixed(2) + '吨';
+                         tag.className = 'h6 mb-0 mr-4 newTag';
+                         $('#totalQ').find(".col").after(tag);
+                         var tag = document.createElement('span');
+                         tag.innerHTML = result.totalR;
+                         tag.className = 'h6 mb-0 mr-4 newTag';
+                         $('#totalR').find(".col").after(tag);
+                         var tag = document.createElement('span');
+                         tag.innerHTML = result.activeP.project;
+                         tag.className = 'h6 mb-0 mr-4 newTag';
+                         $('#activeP').find(".col").after(tag);
+                    }
+                    if (result.recentT.length == 0){
+                        $('.tableNull').removeClass('hide')
+                    } else {
+                        $('.tableNull').addClass('hide')
+                    }
+                     $('#recentTable').html(result.recentT.recentTable);
+                     
+                }
+            })
+        }
+        function removeData(chart) {
+            while (chart.data.labels.length>0){
+                chart.data.labels.pop();
+                chart.data.datasets.forEach((dataset) => {
+                    dataset.data.pop();
+                });
+                chart.update();             
+            }
+        }
+        function addData(chart, label, data) {
+            chart.data.labels.push(label);
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(data);
+            });
+            chart.update();
+        }
+        function fillDates(list){
+            var newlist = []
+            var start =  new Date($('#reportrange span').text().split('-')[0]);
+            var end =  new Date($('#reportrange span').text().split('-')[1]);
+            var diffTime = Math.abs(end - start);
+            var timeRange = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+            
+            
+   
+            if (isNaN(timeRange)) {
+                var timeRange = 7
+                end = start
+            } else if (timeRange < 6){       
+                var timeRange = 7      
+            } else {
+                timeRange = timeRange + 1
+            }
+            for (var i = 0; i < timeRange; i++){
+                var day = new Date(end);
+                day.setDate(day.getDate() - i + 1 );
+                var before = day.toISOString().split('T')[0];
+                newC = {}
+                newC['uploadDate'] = before
+                newC['c'] = 0
+                list.forEach(function(item){
+                    if (item.uploadDate == before){
+                        newC['uploadDate'] = before
+                        newC['c'] = item.c
+                    }
+                })
+                newlist.push(newC)            
+            }
+            return newlist.reverse()
+        }
+        
+
+        var ctx = document.getElementById('myLineChart')
+          // eslint-disable-next-line no-unused-vars
+        var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              datasets: [{
+                pointRadius:2,
+                lineTension: 0,
+                backgroundColor: 'transparent',
+                borderColor: '#007bff',
+                borderWidth: 3,
+                pointBackgroundColor: '#007bff'
+              }]
+            },
+            options: {  
+                
+                legend: {
+                    display: false
+                },
+                scales: {
+                    xAxes: [{
+                        
+                        gridLines: {
+                            
+                            display:false,
+                        }
+                    }],
+                    yAxes: [{
+                       ticks:{
+                            maxTicksLimit:5
+                        },
+                        gridLines:{
+                            color: 'grey',
+                            zeroLineColor:'grey',
+                            drawBorder: false,
+                            zeroLineBorderDash: [2,3],
+                            borderDash: [2,3]
+                        }
+                    }]
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                
+            }
+          })
+        var colorHex = ['#007bff','#70b5ff','#99caff','#c2dfff','ebf4ff']
+        var ctx = document.getElementById('myDoughnutChart').getContext('2d')
+        var myDoughnutChart  = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                    datasets: [{
+                        backgroundColor: colorHex
+                    }],
+                    },
+            options: {
+                
+                legend:{
+                    position: 'left',
+                },
+                cutoutPercentage: 85,
+                responsive: true,
+                maintainAspectRatio: false
+            },
+            borderWidth: 5,
+        });
+        
+        
+        
+        
+        var ctx = document.getElementById('myBarChart').getContext('2d')
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                datasets: [{
+                    barThickness: 10,
+//                  barPercentage: 0.1,
+                  backgroundColor: '#007bff',
+                }]
+            },
+            options: {  
+                legend: {
+                    display: false
+                },
+                cornerRadius: 20,
+                scales: {
+                    xAxes: [{
+                        
+                        gridLines: {
+                            
+                            display:false,
+                        }
+                    }],
+                    yAxes: [{
+                       ticks:{
+                            maxTicksLimit:5
+                        },
+                        gridLines:{
+                            color: 'grey',
+                            zeroLineColor:'grey',
+                            drawBorder: false,
+                            zeroLineBorderDash: [2,3],
+                            borderDash: [2,3]
+                        }
+                    }]
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                
+            }
+        });
+        
+                
+
+    </script>
+
+
+{% endblock %}

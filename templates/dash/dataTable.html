@@ -1,0 +1,580 @@
+{% extends 'base.html' %}
+{% block data_class %}active{% endblock %}
+{% block css %}
+
+<style>
+    .div.dataTables_wrapper div.dataTables_paginate {
+      padding-top: 0.8em !important;
+    }
+
+
+    .daterangepicker > .ranges > ul > li.active{
+    background-color: #808080 
+    }
+    .daterangepicker > .ranges {
+    width: 100px !important
+    }
+    .daterangepicker > .ranges > ul > li{
+    width: 100px
+    }
+    
+    .daterangepicker:after, .daterangepicker:before { 
+       display: none !important; 
+    }
+    .daterangepicker{
+        margin-right: 23px;
+    }
+    
+    .daterangepicker > .drp-calendar > .calendar-table > .table-condensed
+    tbody > tr > td.in-range{
+        background-color: #e5e5e5
+    }
+    .daterangepicker > .drp-calendar > .calendar-table > .table-condensed
+    tbody > tr > td.active{
+        background-color: #808080 
+    }
+    .daterangepicker > .drp-buttons >.applyBtn{
+        background-color: #6C757D; 
+        border: none;
+
+    }
+    .daterangepicker > .drp-buttons >.applyBtn:hover,.applyBtn:active{
+        background-color: #343A40!important; 
+        border: none;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    .daterangepicker > .drp-buttons >.cancelBtn:hover,.cancelBtn:active{
+        background-color: #6C757D;
+        color: white;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+</style>
+
+<!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />-->
+<link href="/static/css/datatable.min.css" rel="stylesheet">
+
+<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+  
+{% endblock%}
+
+
+
+
+{% block main %}
+<main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 ">
+        <h1 class="h2">接收详情表</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group mr-2">
+            <button id="addData" type="button" class="btn btn-sm btn-outline-secondary shadow-none"data-toggle="modal" data-target="#modalAdd">添加一行 </button>
+            <button id="moreOptions" type="button" class="btn btn-sm btn-outline-secondary shadow-none" value=-1>显示操作</button>
+            <button id="hideOptions" type="button" class="btn btn-sm btn-outline-secondary shadow-none hide">隐藏操作</button>
+
+            <button id="pdfDownload" type="button" class="btn btn-sm btn-outline-secondary shadow-none">PDF <span data-feather="download"></span></button>
+            <button id="excelDownload" type="button" class="btn btn-sm btn-outline-secondary shadow-none">Excel <span data-feather="download"></span></button>
+          </div>
+              <button value=0 class="btn btn-sm btn-secondary  shadow-none" type="button" id="dropdownMenuButton" >
+                <div id="reportrange">
+                    <span data-feather="calendar"></span>
+                    <span></span> 
+                    <i class="fa fa-caret-down "></i>
+                </div>
+              </button>
+        </div>
+      </div>
+
+    
+      <div class="table-responsive">
+        <table id="datatable" class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>项目名</th>
+              <th>地点</th>
+              <th>司机</th>
+              <th>车牌号</th>
+              <th>接收人</th>
+              <th>收料单号</th>
+              <th>种类</th>
+              <th>数量</th>
+              <th>单位</th>
+              <th>收货日期</th>
+              <th>收货时间</th>
+              <th>上传时间</th>
+              <th></th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+        <div style="height: 20px"></div>
+    </main>
+
+    <div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modalAddTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalAddTitle">添加信息</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id='f1'>
+              {% csrf_token %}
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>项目名</label>
+                   <p>{{obj.project}}</p>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>地点</label>
+                  <p>{{obj.location}}</p>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label>司机</label>
+                  <p>{{obj.driverName}}</p>
+                </div>
+                <div class="form-group col-md-4">
+                  <label>车牌号</label>
+                  <p>{{obj.plateNumber}}</p>
+                </div>
+                <div class="form-group col-md-4">
+                  <label>接收人</label>
+                  <p>{{obj.receiverName}}</p>
+                </div>
+              </div>
+              <div class="form-row">
+                  <div class="form-group col-md-8">
+                      <label>收料单号</label>
+                      <p>{{obj.receiveID}}</p>
+                  </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-5">
+                  <label>种类</label>
+                  <p>{{obj.category_id}}</p>
+                </div>
+                <div class="form-group col-md-5">
+                  <label>数量</label>
+                  <p>{{obj.quantity}}</p>
+                </div>
+                <div class="form-group col-md-2">
+                  <label>单位</label>
+                  <p>{{obj.unit}}</p>
+                </div>
+              </div>
+                <div class='form-row'>  
+                    <div class="form-group col-md-5">  
+                        <label>交付日期：</label>  
+                        <div class='input-group date' id='datetimepicker1'>  
+                             {{obj.date}}
+                            <span class="input-group-addon">  
+                              <div class="input-group-append">
+                                <span class="input-group-text" style="font-size: 24px" ><span class="fas fa-calendar "></span>  </span>
+                              </div>
+                            </span> 
+                        </div>  
+                    </div>  
+                    <div class="form-group col-md-5">  
+                        <label>交付时间：</label>  
+                        <div class='input-group date' id='datetimepicker2' name='datetimepicker2'>  
+                              {{obj.time}}
+                              <span class="input-group-addon">  
+                              <div class="input-group-append">
+                                <span class="input-group-text" style="font-size: 24px" ><span class="fas fa-clock "></span>  </span>
+                              </div>
+                            </span>  
+                            
+
+                        </div>  
+                    </div>  
+                </div>  
+                <div class="input-group date hide" id='date'>
+                      <p>{{obj.uploadTime}}</p>
+                      <span class="input-group-addon">
+                      <span class="fas fa-calendar"></span>
+                   </span>
+                </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary shadow-none" style="min-width: 80px;" data-dismiss="modal">取消</button>
+                    <button onclick="submitForm();"  type="button" id="addBtn" class="btn btn-secondary shadow-none"  style="min-width: 80px;">提交
+                    </button>
+                  </div>
+
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="deleteData" tabindex="-1" role="dialog" aria-labelledby="deleteDataLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteDataLabel">确认删除</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center" style="margin-top: 10px" >
+            <p style='display: inline-block' name="confirmText">确认删除 ID=</p>
+            <p style='display: inline-block'>的数据吗？</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary shadow-none" data-dismiss="modal">关闭</button>
+            <button onclick="confirmDelete(this)" type="button" class="btn btn-secondary shadow-none">确认</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+{% block js %}
+<script type="text/javascript" src="/static/js/pdfmake.min.js"></script>
+<script type="text/javascript" src="/static/js/vfs_fonts.js"></script>
+<script type="text/javascript" src="/static/js/dataTables.min.js"></script>
+<script type="text/javascript" src="/static/js/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script>
+    
+    
+            $(function() {
+
+            var start = moment();
+            var end = moment();
+
+            function cb(start, end) {
+                s = start.format('YYYY/M/D')
+                e = end.format('YYYY/M/D')
+                if (s == e){
+                    $('#reportrange span').html(s);
+                } else {
+                    $('#reportrange span').html(s + ' - ' + e);
+                }
+                AjaxSend(start.format('YYYY-M-D'), end.format('YYYY-M-D'));
+                $('#moreOptions').val(-1)
+                $('#moreOptions').removeClass('hide')
+                $('#hideOptions').removeClass('hide')
+                $('#hideOptions').addClass('hide')
+            }
+
+            $('#reportrange').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                   '只看今天': [moment(), moment()],
+                   '只看昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                   '最近七天': [moment().subtract(6, 'days'), moment()],
+                   '最近三十天': [moment().subtract(29, 'days'), moment()],
+                   '只看本月': [moment().startOf('month'), moment().endOf('month')],
+                   '只看上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                locale: moment.locale('zh-cn'),
+                locale: {
+                    "applyLabel": "确认",
+                    "cancelLabel": "取消",
+                    "customRangeLabel": "自定义",}
+            }, cb);
+
+            cb(start, end);
+
+        });
+    
+    
+    
+    
+    
+        
+        moment.suppressDeprecationWarnings = true;
+        function modalEdit(ths){
+            var row = $(ths).parent().parent().prevAll();
+            var id = $(row[12]).text();
+            var url = "/editData/"+id
+            location.href = url
+        }
+        function modalDelete(ths){
+            $('#deleteID').remove();
+            var row = $(ths).parent().parent().prevAll();
+            var id = $(row[12]).text();
+              var ss = {
+                id: "deleteID",
+                style: 'display: inline-block',
+                value: id
+              };
+              var $p = $("<p>", ss);
+              $p.html(id);
+            $('#deleteData').find('p[name="confirmText"]').after($p);
+            $("#deleteData").modal('show')
+            
+        }
+        function confirmDelete(){
+            var nid = $('#deleteID').attr('value')
+            $.ajax({
+                url:'/ajax_deleteData/',
+                type:'POST',
+                data: {'nid':nid,
+                       'csrfmiddlewaretoken': '{{ csrf_token }}',},
+                dataType:"JSON",
+                success:function(arg){
+                    if(arg.status){
+                        location.reload();
+                    }
+                }
+            })
+        }
+        function submitForm(){
+            $('.c1').remove();
+            $.ajax({
+                url: '/ajax_addData/',
+                type: 'POST',
+                data: $('#f1').serialize(),
+                dataType:"JSON",
+                success:function(arg){
+                    if(arg.status){
+                        location.reload();
+                    } else {
+                        $.each(arg.msg, function(index,value){
+                            if (index == "time"){
+                                var tag = document.createElement('span');
+                                tag.innerHTML = value[0];
+                                tag.className = 'c1';
+                                $('#f1').find("#datetimepicker2").after(tag);
+                            } else if (index == "date"){
+                                var tag = document.createElement('span');
+                                tag.innerHTML = value[0];
+                                tag.className = 'c1';
+                                $('#f1').find("#datetimepicker1").after(tag);
+                            } else {
+                                var tag = document.createElement('span');
+                                tag.innerHTML = value[0];
+                                tag.className = 'c1';
+                                $('#f1').find('input[name="'+ index +'"]').after(tag);
+                                
+                            }                            
+                        })
+                    }
+                }
+            })
+        }
+ 
+    
+        $(function () {  
+            $('#datetimepicker1').datetimepicker({  
+                format: 'YYYY-MM-DD',
+                icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-arrow-up",
+                    down: "fa fa-arrow-down",
+                    previous: "fa fa-chevron-left",
+                    next: "fa fa-chevron-right",
+                    today: "fa fa-clock-o",
+                    clear: "fa fa-trash-o"
+                },
+                locale: moment.locale('zh-cn')  
+            });  
+            $('#datetimepicker2').datetimepicker({  
+                format: 'HH:mm',  
+                icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-arrow-up",
+                    down: "fa fa-arrow-down",
+                    previous: "fa fa-chevron-left",
+                    next: "fa fa-chevron-right",
+                    today: "fa fa-clock-o",
+                    clear: "fa fa-trash-o"
+                },
+                locale: moment.locale('zh-cn')  
+            });
+        });  
+
+
+        pdfMake.fonts = {
+            FZSSJW:{
+                normal:'FZSSJW.TTF',
+                bold: 'FZSSJW.TTF',
+                italics:'FZSSJW.TTF',
+                bolditalics: 'FZSSJW.TTF',
+            }
+        };
+
+        $(document).ready(function () {
+
+             $('#date').datetimepicker({
+                 format: 'YYYY-MM-DD HH:mm',
+                 defaultDate: new Date().toLocaleString("en-US", {timeZone: "Asia/Shanghai"})
+             });
+            $('#datatable').DataTable({
+                "order": [[ 12, "desc" ]],
+                "columnDefs": [
+                    { orderable: false, targets: 13 },
+                  ],
+                       drawCallback: function(){
+                  $('.paginate_button', this.api().table().container())          
+                         .on('click', function(){
+                            var show = $('#moreOptions').val()
+                            if (show>0){
+                                $('.options').removeClass('hide')
+                                $('.options').addClass('headerWidth')
+                            } else {
+                                $('.options').addClass('hide')
+                                $('.options').removeClass('headerWidth')
+                            }
+                         });       
+                   },
+                buttons: [       
+                    {
+                       extend: 'excel',
+                       exportOptions: {
+                            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
+                       },
+                       charset: 'UTF-8',
+                       bom: true,
+                       filename: function () { return exportFileName()},
+                       title:  function () { return exportFileName()},
+                    }, 
+                    {
+                       extend: 'pdfHtml5',
+                       exportOptions: {
+                            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
+                        },
+                       filename: function () { return exportFileName()},
+                       title: function () { return exportFileName()},
+                       orientation: 'landscape',
+                       customize: function (doc) {
+                             doc.styles.tableBodyEven.alignment = 'center';
+                             doc.styles.tableBodyOdd.alignment = 'center'; 
+                             doc.defaultStyle.font = 'FZSSJW';
+                             doc.styles.tableHeader.fontSize = 10;
+                             doc.defaultStyle.fontSize = 10;
+                              for (var row = 0; row < doc.content[1].table.headerRows; row++) {
+                                var header = doc.content[1].table.body[row];
+                                for (var col = 0; col < header.length; col++) {
+                                  header[col].fillColor = '#6C757D';
+                                }
+                              }
+                             doc.content[1].table.widths = [ '4%', '8%',  '8%', '6%', '8%', 
+                                                             '6%',  '10%', '10%', '6%',
+                                                             '4%',  '9%', '7%', '15%',];
+                       }
+                     } 
+                ],
+                "lengthMenu": [[15, 30, 50, -1], [15, 30, 50, "所有"]],
+                language:{
+                        "sProcessing": "处理中...",
+                        "sLengthMenu": "显示 _MENU_ 项结果",
+                        "sZeroRecords": "没有匹配结果",
+                        "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                        "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                        "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                        "sInfoPostFix": "",
+                        "sSearch": "搜索：",
+                        "sUrl": "",
+                        "sEmptyTable": "表中数据为空",
+                        "sLoadingRecords": "载入中...",
+                        "sInfoThousands": ",",
+                        "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "上页",
+                            "sNext": "下页",
+                            "sLast": "末页"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": 以升序排列此列",
+                            "sSortDescending": ": 以降序排列此列"
+                        }
+                    }
+                });
+//                var timeRange =  $('#dropdownMenuButton').val();
+//                AjaxSend(timeRange)     
+        });
+
+       $('#daterange').daterangepicker();
+        $('#daterange').on('apply.daterangepicker', function(ev, picker) {
+          console.log(picker.startDate.format('YYYY-MM-DD'));
+          console.log(picker.endDate.format('YYYY-MM-DD'));
+        });
+    
+    
+        $("#excelDownload").click(function(){
+           $('#datatable').DataTable().buttons(0,0).trigger()
+        });
+        $("#pdfDownload").click(function(){
+           $('#datatable').DataTable().buttons(0,1).trigger()
+        });
+        $("#moreOptions").click(function(){
+           $('#moreOptions').val(1)
+           $('.options').removeClass('hide')
+           $('.options').addClass('headerWidth')
+           $('#moreOptions').addClass('hide')
+           $('#hideOptions').removeClass('hide')
+        });
+        $("#hideOptions").click(function(){
+            $('#moreOptions').val(-1)
+            $('.options').addClass('hide')
+            $('.options').removeClass('headerWidth')
+           $('#moreOptions').removeClass('hide')
+           $('#hideOptions').addClass('hide')
+        });
+    
+        function exportFileName(){
+            var name = $('#reportrange span').text()
+//            var timeRange =  $('#dropdownMenuButton').val();
+            var search = $('.dataTables_filter input').val();
+            if (search.length != 0){
+                search = ' 搜索条件:'+search
+            }
+            var fileName = '接收详情表 ' + name + search
+            return(fileName);
+        };
+    
+    
+        function AjaxSend(startDate, endDate){
+            $.ajax({
+                url:'/dataTable/',
+                type:'POST',
+                dataType: 'json',
+                data:{'startDate':startDate,
+                      'endDate':endDate,
+                      'csrfmiddlewaretoken': '{{ csrf_token }}',},
+                success: function(result){
+                    var table = $('#datatable').dataTable();
+                    table.fnClearTable();
+                      $.each(result.newData, function(key, value) {
+                                table.fnAddData([
+                                  value.id,
+                                  value.project,
+                                  value.location,
+                                  value.driverName,
+                                  value.plateNumber,
+                                  value.receiverName,
+                                  value.receiveID,
+                                  value.category__categoryName,
+                                  value.quantity,
+                                  value.unit,
+                                  value.date,
+                                  value.time,
+                                  value.uploadTime,
+                                  '<div class="options hide" style="width:90px;text-align: center;"><button href="#" class="btn btn-outline-secondary btn-sm noOutline shadow-none" onclick="modalEdit(this)">编辑</button><a class="btn btn-outline-danger btn-sm noOutline" onclick="modalDelete(this)"">删除</a></div>'
+                                ]);  
+                              })
+                }
+            })
+        }
+    
+
+</script>
+{% endblock %}

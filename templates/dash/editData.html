@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block data_class %}active{% endblock %}
+
+{% block css %}
+<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+<style>
+        .hide{
+        display: none;
+    }
+</style>
+
+{% endblock %}
+
+{% block main %}
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 ">
+        <h1 class="h2" style="margin:0 auto">修改数据ID={{nid}}</h1>
+        </div>
+        <div class="modal-footer"></div>
+        <form method="POST" action="/editData/{{nid}}/" novalidate>
+              {% csrf_token %}
+              <div  style="width:600px;margin:0 auto">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>项目名</label>
+                   <p>{{obj.project}}{{ obj.errors.project.0 }}</p>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>地点</label>
+                  <p>{{obj.location}}{{ obj.errors.location.0 }}</p>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label>司机</label>
+                  <p>{{obj.driverName}}{{ obj.errors.driverName.0 }}</p>
+                </div>
+                <div class="form-group col-md-4">
+                  <label>车牌号</label>
+                  <p>{{obj.plateNumber}}{{ obj.errors.plateNumber.0 }}</p>
+                </div>
+                <div class="form-group col-md-4">
+                  <label>接收人</label>
+                  <p>{{obj.receiverName}}{{ obj.errors.receiverName.0 }}</p>
+                </div>
+              </div>
+              <div class="form-row">
+                  <div class="form-group col-md-8">
+                      <label>收料单号</label>
+                      <p>{{obj.receiveID}}{{ obj.errors.receiveID.0 }}</p>
+                  </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-5">
+                  <label>种类</label>
+                  <p>{{obj.category_id}}</p>
+                </div>
+                <div class="form-group col-md-5">
+                  <label>数量</label>
+                  <p>{{obj.quantity}}{{ obj.errors.quantity.0 }}</p>
+                </div>
+                <div class="form-group col-md-2">
+                  <label>单位</label>
+                  <p>{{obj.unit}}{{ obj.errors.unit.0 }}</p>
+                </div>
+              </div>
+                <div class='form-row'>  
+                    <div class="form-group col-md-5">  
+                        <label>交付日期：</label>  
+                        <div class='input-group date' id='datetimepicker1'>  
+                            {{obj.date}}
+                            <span class="input-group-addon">  
+                              <div class="input-group-append">
+                                <span class="input-group-text" style="font-size: 24px" ><span class="fas fa-calendar "></span>  </span>
+                              </div>
+                            </span>  
+                        </div>  
+                        {{ obj.errors.date.0 }}
+                    </div>  
+                    <div class="form-group col-md-5">  
+                        <label>交付时间：</label>  
+                        <div class='input-group date' id='datetimepicker2'>  
+                            {{obj.time}}
+                            <span class="input-group-addon">  
+                              <div class="input-group-append">
+                                <span class="input-group-text" style="font-size: 24px" ><span class="fas fa-clock "></span>  </span>
+                              </div>
+                            </span>  
+                        </div> 
+                        {{ obj.errors.time.0 }}
+                    </div>  
+                </div>  
+                <div class="input-group date hide" id='date'>
+                      {{obj.uploadTime}}
+                      <span class="input-group-addon">
+                      <span class="fas fa-calendar"></span>
+                   </span>
+                </div>
+            </div>
+                  <div class="modal-footer justify-content-center" style="margin-top:30px">
+                    <a href="/dataTable/" class="btn btn-outline-secondary shadow-none" style="min-width: 80px;">取消</a>
+                    <button type="submit" id="addBtn" class="btn btn-secondary shadow-none"  style="min-width: 80px;">提交
+                    </button>
+                  </div>
+        </form>
+</main>
+{% endblock %}
+
+
+{% block js %}
+<script type="text/javascript" src="/static/js/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
+
+<script>    
+            $(function () {  
+            $('#datetimepicker1').datetimepicker({  
+                format: 'YYYY-MM-DD',
+                icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-arrow-up",
+                    down: "fa fa-arrow-down",
+                    previous: "fa fa-chevron-left",
+                    next: "fa fa-chevron-right",
+                    today: "fa fa-clock-o",
+                    clear: "fa fa-trash-o"
+                },
+                locale: moment.locale('zh-cn')  
+            });  
+            $('#datetimepicker2').datetimepicker({  
+                format: 'HH:mm',  
+                icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-arrow-up",
+                    down: "fa fa-arrow-down",
+                    previous: "fa fa-chevron-left",
+                    next: "fa fa-chevron-right",
+                    today: "fa fa-clock-o",
+                    clear: "fa fa-trash-o"
+                },
+                locale: moment.locale('zh-cn')  
+            });
+        });  
+
+</script>
+
+{% endblock %}
