@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'dash/base.html' %}
 {% block tmp_class %}active{% endblock %}
 
 {% block css %}
@@ -49,12 +49,12 @@
                 {% if row.mainCategory == item.mainCategory %}
                 <div class="card-wrapper col-12 col-lg-6 col-xl-3 px-2 py-2">
                     <div class="card shadow-sm border-light  ">
-                       <div class="card-body py-0" style="height: 75px">
+                       <div class="card-body py-0" style="">
                            <div class='row aling-items-center'>
-                               <div class='col py-4'>
+                               <div class='col-6 py-4'>
                                    <h6 class="mt-1 ml-3">{{item.categoryName}}</h6>
                                </div>
-                               <div style="width: 100px">
+                               <div class='col-6'>
                                     <a class="btn btn-outline-secondary btn-sm noOutline  my-4 ml-0 mr-0 hide editCtg" style='margin-top: -10px;margin-bottom: -10px' data-val="{{item.id}}" data-name="{{item.categoryName}}">编辑</a>
                                     <a class="btn btn-outline-danger btn-sm noOutline  my-4 ml-0 mr-2 hide delCtg" style='margin-top: -10px;margin-bottom: -10px' data-val="{{item.id}}">删除</a>
                                </div>
@@ -146,7 +146,7 @@
      $('.delCtg').click(function(){
          var nid = $(this).data('val')
          $.ajax({
-                url:'/ajax_delCtg/',
+                url:'/dash/ajax_delCtg/',
                 type:'POST',
                 dataType: 'json',
                 data:{'nid':nid,
@@ -178,7 +178,7 @@
         var name = $('#edit-new-name').val()
         var nid = $('.ctgID').text()
         $.ajax({
-                url:'/ajax_editCtg/',
+                url:'/dash/ajax_editCtg/',
                 type:'POST',
                 dataType: 'json',
                 data:{'nid':nid,
@@ -206,7 +206,7 @@
               $('#new-name').after(tag);
           } else{
               $.ajax({
-                url:'/ajax_addCtg/',
+                url:'/dash/ajax_addCtg/',
                 type:'POST',
                 dataType: 'json',
                 data:{'ctgName':name,

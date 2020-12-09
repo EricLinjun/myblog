@@ -53,45 +53,37 @@ def dashMain(request):
             return render(request, 'dash/dashMain.html')
     
 def dataTable(request):
-    v = request.session.get('user')
-    if not v:
-        return redirect('/login/')
-    else:
-        if request.method == "POST":
+    if request.method == "POST":
 #            ret = {'status': True, 'messege': None}
 #            timeRange = int(request.POST.get('timeRange'))  
-            start = parse_date(request.POST.get('startDate'))
-            end = parse_date(request.POST.get('endDate'))
-            
-            print(start,end)
-            if start == end :  
-                end = end + timedelta(days=1)
-                data = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).order_by('-uploadTime')
-            else:
-                end = end + timedelta(days=1)
-                data = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).order_by('-uploadTime')
-            data_list = data.values()
-            data_list2 = data.values("id","project","location","driverName","plateNumber","receiverName",    "receiveID","quantity","unit","date","time","uploadTime","category_id","category__categoryName")
-            return JsonResponse({"newData": list(data_list2)})
-        else:    
-            obj = dataForm()
-            return render(request, 'dataTable.html',{'obj':obj})
+        start = parse_date(request.POST.get('startDate'))
+        end = parse_date(request.POST.get('endDate'))
+
+        print(start,end)
+        if start == end :  
+            end = end + timedelta(days=1)
+            data = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).order_by('-uploadTime')
+        else:
+            end = end + timedelta(days=1)
+            data = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).order_by('-uploadTime')
+        data_list = data.values()
+        data_list2 = data.values("id","project","location","driverName","plateNumber","receiverName",    "receiveID","quantity","unit","date","time","uploadTime","category_id","category__categoryName")
+        return JsonResponse({"newData": list(data_list2)})
+    else:    
+        obj = dataForm()
+        return render(request, 'dash/dataTable.html',{'obj':obj})
     
 def mngTemp(request):
-    v = request.session.get('user')
-    if not v:
-        return redirect('/login/')
-    else:
-        mc = material.objects.values('mainCategory').distinct()
-        m = material.objects.all().order_by('id')
-        return render(request, 'mngTemp.html',{'mc':mc,'m':m})
+    mc = material.objects.values('mainCategory').distinct()
+    m = material.objects.all().order_by('id')
+    return render(request, 'dash/mngTemp.html',{'mc':mc,'m':m})
 
-def lookUp(request):
-    v = request.session.get('user')
-    if not v:
-        return redirect('/login/')
-    else:
-        return render(request, 'lookUp.html')
+#def lookUp(request):
+#    v = request.session.get('user')
+#    if not v:
+#        return redirect('/login/')
+#    else:
+#        return render(request, 'lookUp.html')
     
 
     
@@ -175,12 +167,12 @@ def editData(request, nid):
         row = delivery.objects.filter(id=nid).values().first()
         obj = dataForm(initial=row)
         print(obj)
-        return render(request,"editData.html",{'nid':nid,'obj':obj})
+        return render(request,"dash/editData.html",{'nid':nid,'obj':obj})
     else:
         obj = dataForm(request.POST)
         if obj.is_valid():
             delivery.objects.filter(id=nid).update(**obj.cleaned_data)
             return redirect('/dataTable/')
-        return render(request,"editData.html",{'nid':nid,'obj':obj})
+        return render(request,"dash/editData.html",{'nid':nid,'obj':obj})
         
 

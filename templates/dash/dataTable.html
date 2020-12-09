@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'dash/base.html' %}
 {% block data_class %}active{% endblock %}
 {% block css %}
 
@@ -54,9 +54,9 @@
 </style>
 
 <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />-->
-<link href="/static/css/datatable.min.css" rel="stylesheet">
+<link href="/static/dash/css/datatable.min.css" rel="stylesheet">
 
-<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="/static/dash/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
@@ -239,11 +239,11 @@
 
 {% endblock %}
 {% block js %}
-<script type="text/javascript" src="/static/js/pdfmake.min.js"></script>
-<script type="text/javascript" src="/static/js/vfs_fonts.js"></script>
-<script type="text/javascript" src="/static/js/dataTables.min.js"></script>
-<script type="text/javascript" src="/static/js/moment-with-locales.min.js"></script>
-<script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="/static/dash/js/pdfmake.min.js"></script>
+<script type="text/javascript" src="/static/dash/js/vfs_fonts.js"></script>
+<script type="text/javascript" src="/static/dash/js/dataTables.min.js"></script>
+<script type="text/javascript" src="/static/dash/js/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="/static/dash/js/bootstrap-datetimepicker.min.js"></script>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
@@ -301,7 +301,7 @@
         function modalEdit(ths){
             var row = $(ths).parent().parent().prevAll();
             var id = $(row[12]).text();
-            var url = "/editData/"+id
+            var url = "/dash/editData/"+id
             location.href = url
         }
         function modalDelete(ths){
@@ -322,7 +322,7 @@
         function confirmDelete(){
             var nid = $('#deleteID').attr('value')
             $.ajax({
-                url:'/ajax_deleteData/',
+                url:'/dash/ajax_deleteData/',
                 type:'POST',
                 data: {'nid':nid,
                        'csrfmiddlewaretoken': '{{ csrf_token }}',},
@@ -337,7 +337,7 @@
         function submitForm(){
             $('.c1').remove();
             $.ajax({
-                url: '/ajax_addData/',
+                url: '/dash/ajax_addData/',
                 type: 'POST',
                 data: $('#f1').serialize(),
                 dataType:"JSON",
@@ -544,7 +544,7 @@
     
         function AjaxSend(startDate, endDate){
             $.ajax({
-                url:'/dataTable/',
+                url:'/dash/dataTable/',
                 type:'POST',
                 dataType: 'json',
                 data:{'startDate':startDate,

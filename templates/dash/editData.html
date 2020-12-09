@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'dash/base.html' %}
 
 {% block data_class %}active{% endblock %}
 
 {% block css %}
-<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="/static/dash/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
@@ -21,7 +21,7 @@
         <h1 class="h2" style="margin:0 auto">修改数据ID={{nid}}</h1>
         </div>
         <div class="modal-footer"></div>
-        <form method="POST" action="/editData/{{nid}}/" novalidate>
+        <form method="POST" action="/dash/editData/{{nid}}/" novalidate>
               {% csrf_token %}
               <div  style="width:600px;margin:0 auto">
               <div class="form-row">
@@ -102,7 +102,7 @@
                 </div>
             </div>
                   <div class="modal-footer justify-content-center" style="margin-top:30px">
-                    <a href="/dataTable/" class="btn btn-outline-secondary shadow-none" style="min-width: 80px;">取消</a>
+                    <a href="/dash/dataTable/" class="btn btn-outline-secondary shadow-none" style="min-width: 80px;">取消</a>
                     <button type="submit" id="addBtn" class="btn btn-secondary shadow-none"  style="min-width: 80px;">提交
                     </button>
                   </div>
