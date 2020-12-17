@@ -11,6 +11,10 @@ from django.utils.dateparse import parse_date
 from django.template.loader import render_to_string
 import json
 
+class Round2(Func):
+    function ="ROUND"
+    template ="%(function)s(%(expressions)s::numeric, 2)"
+
 def login(request):
     if request.method == "GET":
         return render(request, 'login.html')
@@ -39,8 +43,8 @@ def dashMain(request):
                 end = end + timedelta(days=1)
                 receiveN = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).annotate(uploadDate=TruncDate('uploadTime')).values('uploadDate').annotate(c=Count('id')).values('uploadDate','c').order_by('-uploadDate')
                 recentT = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).order_by('-uploadTime')[:5]
-            ctgStat = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).values('category__mainCategory').annotate(t=Sum('quantity')).order_by('-t')  
-            print(ctgStat)
+            ctgStat = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).values('category__mainCategory').annotate(t=Round2(Sum('quantity'))).order_by('-t')  
+#            print(ctgStat)
             sCtgStat = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).values('category__categoryName').annotate(t=Sum('quantity')).order_by('-t')[:10]
             totalR = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).count()
             totalQ = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).aggregate(Sum('quantity'))   
@@ -59,7 +63,7 @@ def dataTable(request):
         start = parse_date(request.POST.get('startDate'))
         end = parse_date(request.POST.get('endDate'))
 
-        print(start,end)
+#        print(start,end)
         if start == end :  
             end = end + timedelta(days=1)
             data = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).order_by('-uploadTime')
@@ -67,7 +71,7 @@ def dataTable(request):
             end = end + timedelta(days=1)
             data = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).order_by('-uploadTime')
         data_list = data.values()
-        data_list2 = data.values("id","project","location","driverName","plateNumber","receiverName",    "receiveID","quantity","unit","date","time","uploadTime","category_id","category__categoryName")
+        data_list2 = data.values("id","project","location","driverName","plateNumber","receiverName",    "receiveID","quantity","unit","uploadTime","category_id","category__categoryName")
         return JsonResponse({"newData": list(data_list2)})
     else:    
         obj = dataForm()
@@ -89,19 +93,19 @@ def mngTemp(request):
     
 class dataForm(Form):
 
-    driverName = fields.CharField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': '不能为空'})
-    date = fields.DateField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': '不能为空'})
-    location = fields.CharField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': '不能为空'})
-    plateNumber = fields.CharField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': '不能为空'})
-    project = fields.CharField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': '不能为空'})
-    quantity = fields.FloatField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': '不能为空','invalid':'必须为数字'})
-    receiveID = fields.CharField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': '不能为空'})
-    receiverName = fields.CharField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': '不能为空'})
+    driverName = fields.CharField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': "can't be null"})
+    date = fields.DateField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': "can't be null"})
+    location = fields.CharField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': "can't be null"})
+    plateNumber = fields.CharField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': "can't be null"})
+    project = fields.CharField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': "can't be null"})
+    quantity = fields.FloatField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': "can't be null",'invalid':'must be number'})
+    receiveID = fields.CharField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': "can't be null"})
+    receiverName = fields.CharField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': "can't be null"})
     category_id = fields.IntegerField( 
     )
-    time = fields.TimeField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': '不能为空'})
-    unit = fields.CharField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': '不能为空'})
-    uploadTime = fields.DateTimeField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': '不能为空'})
+    time = fields.TimeField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': "can't be null"})
+    unit = fields.CharField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': "can't be null"})
+    uploadTime = fields.DateTimeField(widget=widgets.TextInput(attrs={'class':'form-control'}),error_messages={'required': "can't be null"})
     def __init__(self, *args, **kwargs):  # 自定义__init__
         super(dataForm, self).__init__(*args, **kwargs) 
         self.fields['category_id'].widget = widgets.Select(choices=material.objects.values_list('id','categoryName'), attrs={'class':'form-control'})    
@@ -166,13 +170,13 @@ def editData(request, nid):
     if request.method=="GET":
         row = delivery.objects.filter(id=nid).values().first()
         obj = dataForm(initial=row)
-        print(obj)
         return render(request,"dash/editData.html",{'nid':nid,'obj':obj})
     else:
         obj = dataForm(request.POST)
-        if obj.is_valid():
-            delivery.objects.filter(id=nid).update(**obj.cleaned_data)
-            return redirect('/dataTable/')
-        return render(request,"dash/editData.html",{'nid':nid,'obj':obj})
+        return redirect('/dash/dataTable/')
+#        if obj.is_valid():
+#            delivery.objects.filter(id=nid).update(**obj.cleaned_data)
+#            return redirect('/dash/dataTable/')
+#        return render(request,"dash/editData.html",{'nid':nid,'obj':obj})
         
 

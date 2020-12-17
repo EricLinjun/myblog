@@ -21,10 +21,10 @@
 {% block main %}
 <main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-md-4" >
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">编辑材料</h1>
+        <h1 class="h2">Manage Category</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
-            <button id='showDel' type="button" class="btn btn-sm btn-outline-secondary shadow-none">选项</button>
+            <button id='showDel' type="button" class="btn btn-sm btn-outline-secondary shadow-none">Options</button>
           </div>
         </div>
       </div>
@@ -48,15 +48,15 @@
             {% for item in m %}
                 {% if row.mainCategory == item.mainCategory %}
                 <div class="card-wrapper col-12 col-lg-6 col-xl-3 px-2 py-2">
-                    <div class="card shadow-sm border-light  ">
+                    <div class="card shadow-sm border-light">
                        <div class="card-body py-0" style="">
                            <div class='row aling-items-center'>
-                               <div class='col-6 py-4'>
+                               <div class='col-7 py-4'>
                                    <h6 class="mt-1 ml-3">{{item.categoryName}}</h6>
                                </div>
-                               <div class='col-6'>
-                                    <a class="btn btn-outline-secondary btn-sm noOutline  my-4 ml-0 mr-0 hide editCtg" style='margin-top: -10px;margin-bottom: -10px' data-val="{{item.id}}" data-name="{{item.categoryName}}">编辑</a>
-                                    <a class="btn btn-outline-danger btn-sm noOutline  my-4 ml-0 mr-2 hide delCtg" style='margin-top: -10px;margin-bottom: -10px' data-val="{{item.id}}">删除</a>
+                               <div class='col-5 px-0'>
+                                    <a class="btn btn-outline-secondary btn-sm noOutline  my-4 mx-0 hide editCtg" style='margin-top: -10px;margin-bottom: -10px' data-val="{{item.id}}" data-name="{{item.categoryName}}">Edit</a>
+                                    <a class="btn btn-outline-danger btn-sm noOutline  my-4 mx-0 hide delCtg" style='margin-top: -10px;margin-bottom: -10px' data-val="{{item.id}}">Del</a>
                                </div>
                               
                            </div>
@@ -65,11 +65,12 @@
                 </div>
                 {% endif %}
             {% endfor %}
-            <div class="add-card-wrapper col-12 col-lg-6 col-xl-3 px-2 py-2"  >
-                    <div class="card shadow-sm border-light addCard" style="height: 75px" data-val="{{row.mainCategory}}">
-                      <text class='text-muted' style="font-size: 50px;text-align: center;margin-top: -8px;margin-bottom: -3px" >+</text>
-
+            <div class="add-card-wrapper col-12 col-lg-6 col-xl-3 px-2 pt-2 py-2"  >
+                    
+                    <div class="card shadow-sm border-light addCard" style="height: 81px" data-val="{{row.mainCategory}}">
+                      <text class='text-muted' style="font-size: 50px;text-align: center;" >+</text>
                     </div>
+
                 </div>
         </div>
         <div style="height:10px"> </div>
@@ -81,20 +82,20 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="addModal-title" id="ModalLabel">确认添加</h5>
+        <h5 class="addModal-title" id="ModalLabel">Adding new:</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body d-flex justify-content-center">
           <div class="form-group col-6">
-            <div class="h6">名称:</div>
+            <div class="h6">Name:</div>
             <input type="text" class="form-control" id="new-name">
           </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary shadow-none" data-dismiss="modal">取消</button>
-        <button id='addCtg' type="button" class="btn btn-secondary shadow-none">确定</button>
+        <button type="button" class="btn btn-outline-secondary shadow-none" data-dismiss="modal">Cancel</button>
+        <button id='addCtg' type="button" class="btn btn-secondary shadow-none">Confirm</button>
       </div>
     </div>
   </div>
@@ -104,20 +105,20 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="editModal-title" id="ModalLabel">修改材料</h5>
+        <h5 class="editModal-title" id="ModalLabel">Change Name</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body d-flex justify-content-center">
           <div class="form-group col-6">
-            <div class="h6">名称:</div>
+            <div class="h6">Name:</div>
             <input type="text" class="form-control" id="edit-new-name">
           </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary shadow-none" data-dismiss="modal">取消</button>
-        <button id='editCtgSend' type="button" class="btn btn-secondary shadow-none">确定</button>
+        <button type="button" class="btn btn-outline-secondary shadow-none" data-dismiss="modal">Cancel</button>
+        <button id='editCtgSend' type="button" class="btn btn-secondary shadow-none">Confirm</button>
       </div>
     </div>
   </div>
@@ -144,22 +145,23 @@
       })
     
      $('.delCtg').click(function(){
-         var nid = $(this).data('val')
-         $.ajax({
-                url:'/dash/ajax_delCtg/',
-                type:'POST',
-                dataType: 'json',
-                data:{'nid':nid,
-                      'csrfmiddlewaretoken': '{{ csrf_token }}',},
-                success: function(result){ 
-                    if (result.status){
-                        location.reload()
-                        alert('删除成功！')
-                    } else {
-                        alert(result.msg)
-                    }
-                }
-            })
+         alert('delete clicked！')
+//         var nid = $(this).data('val')
+//         $.ajax({
+//                url:'/dash/ajax_delCtg/',
+//                type:'POST',
+//                dataType: 'json',
+//                data:{'nid':nid,
+//                      'csrfmiddlewaretoken': '{{ csrf_token }}',},
+//                success: function(result){ 
+//                    if (result.status){
+//                        location.reload()
+//                        alert('删除成功！')
+//                    } else {
+//                        alert(result.msg)
+//                    }
+//                }
+//            })
      })
     
     $('.editCtg').click(function(){
@@ -175,24 +177,25 @@
      })
     
     $('#editCtgSend').click(function(){
-        var name = $('#edit-new-name').val()
-        var nid = $('.ctgID').text()
-        $.ajax({
-                url:'/dash/ajax_editCtg/',
-                type:'POST',
-                dataType: 'json',
-                data:{'nid':nid,
-                      'name':name,
-                      'csrfmiddlewaretoken': '{{ csrf_token }}',},
-                success: function(result){ 
-                    if (result.status){
-                        location.reload()
-                        alert('修改成功！')
-                    } else {
-                        alert(result.msg)
-                    }
-                }
-            })
+        alert('edit comfirm button clicked！')
+//        var name = $('#edit-new-name').val()
+//        var nid = $('.ctgID').text()
+//        $.ajax({
+//                url:'/dash/ajax_editCtg/',
+//                type:'POST',
+//                dataType: 'json',
+//                data:{'nid':nid,
+//                      'name':name,
+//                      'csrfmiddlewaretoken': '{{ csrf_token }}',},
+//                success: function(result){ 
+//                    if (result.status){
+//                        location.reload()
+//                        alert('修改成功！')
+//                    } else {
+//                        alert(result.msg)
+//                    }
+//                }
+//            })
     })
     
       $('#addCtg').click(function(){
@@ -201,25 +204,26 @@
           var mainCtg = $('.mainCtg').text()
           if (name.length == 0){
               var tag = document.createElement('span');
-              tag.innerHTML = '不能为空'
+              tag.innerHTML = "can't be null"
               tag.className = 'error';
               $('#new-name').after(tag);
           } else{
-              $.ajax({
-                url:'/dash/ajax_addCtg/',
-                type:'POST',
-                dataType: 'json',
-                data:{'ctgName':name,
-                      'mainCtg':mainCtg,
-                      'csrfmiddlewaretoken': '{{ csrf_token }}',},
-                success: function(result){ 
-                   if (result.status){
-                        location.reload()
-                    } else {
-                        alert(result.msg)
-                    }
-                }
-            })
+//              $.ajax({
+//                url:'/dash/ajax_addCtg/',
+//                type:'POST',
+//                dataType: 'json',
+//                data:{'ctgName':name,
+//                      'mainCtg':mainCtg,
+//                      'csrfmiddlewaretoken': '{{ csrf_token }}',},
+//                success: function(result){ 
+//                   if (result.status){
+//                        location.reload()
+//                    } else {
+//                        alert(result.msg)
+//                    }
+//                }
+//            })
+              alert('add confirm clicked！')
           }
       })
     
@@ -236,7 +240,7 @@
           var ctg = $(this).data('val')
           var tag = document.createElement('span');
           tag.innerHTML = ctg
-          tag.className = 'h5 modal-title mainCtg';
+          tag.className = 'h5 mainCtg';
           $('.addModal-title').after(tag);
           $("#Modal").modal('show')
       })

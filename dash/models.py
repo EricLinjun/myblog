@@ -5,7 +5,6 @@ class delivery(models.Model):
     category = models.ForeignKey('dash.material', null=True, on_delete=models.DO_NOTHING)
     driverName = models.CharField(max_length=32, null=True)
     date = models.DateField()
-    imgInfo = models.CharField(max_length=255, null=True)
     location = models.CharField(max_length=32)
     nickName = models.CharField(max_length=32, null=True)
     plateNumber = models.CharField(max_length=32)

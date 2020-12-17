@@ -3,20 +3,20 @@
     {% for row in recent %}
                   <tr>
                   <td >
-                      <h7 class="font-14 font-weight-normal"> {{row.project}}<br/></h7>
-                      <span class="text-muted font-13"> {{row.uploadTime|date:"Y-m-d H:i"}}</span>
+                      <h7 class="font-weight-normal" > {{row.project}}<br/></h7>
+                      <span class="text-muted" style="font-size: 12px"> {{row.uploadTime|date:"Y-m-d H:i"}}</span>
                   </td>
                   <td>
                       <h7 class="font-10 font-weight-normal"> {{row.receiveID}}<br/></h7>
-                      <span class="text-muted font-9">收料单号</span>
+                      <span class="text-muted font-9">T-ID</span>
                   </td>
                   <td>
                       <h7 class="font-10 font-weight-normal">{{row.category__categoryName}}<br/></h7>
-                      <span class="text-muted font-9">种类</span>
+                      <span class="text-muted font-9">Category</span>
                   </td>
                   <td>
-                      <h7 class="font-10 font-weight-normal">{{row.quantity}}吨<br/></h7>
-                      <span class="text-muted font-9">数量</span>
+                      <h7 class="font-10 font-weight-normal">{{row.quantity}}kg<br/></h7>
+                      <span class="text-muted font-9">Quantity</span>
                   </td>
                 </tr>
     {% endfor %}

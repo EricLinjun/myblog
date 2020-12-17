@@ -4,37 +4,15 @@
 {% block css %}
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 <style>
-/* total width */
-::-webkit-scrollbar {
-    background-color: #fff;
-    width: 16px;
-}
-
-/* background of the scrollbar except button or resizer */
-::-webkit-scrollbar-track {
-    background-color: #fff;
-}
-
-/* scrollbar itself */
-::-webkit-scrollbar-thumb {
-    background-color: #babac0;
-    border-radius: 16px;
-    border: 4px solid #fff;
-}
-
-/* set button(top and bottom of the scrollbar) */
-::-webkit-scrollbar-button {
-    display:none;
-    
-}
-    
     .card-header{
         background-color: white;
     }
     .card-title{
         margin-top:10px;
-        font-size:18px;
+/*        margin-bottom: -5px;*/
+        font-size:12px;
         font-weight: 600;
+        margin-left: -18px;
     }
     
     .daterangepicker > .ranges > ul > li.active{
@@ -80,18 +58,20 @@
         outline: none !important;
         box-shadow: none !important;
     }
+    .newTag{
+        font-size: 18px;
+        text-align: center;
+        margin-top: 10px;
+/*        padding-left: 25px;*/
+    }
 </style>
 {% endblock %}
 
 {% block main %}
-<main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-md-4" style="background-color: #F9FBFD" >
+<main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-md-4" style="background-color: #F9FBFD;height: 100vh" >
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">数据面板</h1>
+        <h1 class="h2">Dashboard</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
-          <div class="btn-group mr-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-          </div>
               <button value=0 class="btn btn-sm btn-secondary  shadow-none" type="button" id="dropdownMenuButton" >
                 <div id="reportrange">
                     <span data-feather="calendar"></span>
@@ -105,7 +85,7 @@
          <div class="col-12">
           <div class="card-deck">
               
-            <div class="col-12 col-lg-7 col-xl-8 d-flex flex-column" style="" >
+            <div class="col-12 col-lg-7 col-xl-7 d-flex flex-column" style="" >
             <div class="row" style="margin-bottom: 30px">
              <div class="col-12">
               <div class="card-deck">
@@ -113,7 +93,7 @@
                    <div class="card-body">
                        <div id="totalR" class='row aling-items-center'>
                            <div class='col'>
-                               <h6 class="text-uppercase text-muted mb-0 ml-3">总接收数</h6>
+                               <div class="lil-card text-uppercase text-muted mb-0 ml-0" style="font-size: 10px;font-weight: 600;margin-top: -15px">Total Number</div>
                            </div>
                        </div>
                    </div>
@@ -122,7 +102,7 @@
                   <div class="card-body">
                        <div id="totalQ" class='row aling-items-center'>
                            <div class='col'>
-                               <h6 class="text-uppercase text-muted mb-0 ml-1">总数量</h6>
+                               <div class="lil-card text-uppercase text-muted mb-0 ml-0" style="font-size: 10px;font-weight: 600;margin-top: -15px">Total Quantity</div>
                            </div>
                        </div>
                    </div>
@@ -131,7 +111,7 @@
                    <div class="card-body">
                        <div id="activeP" class='row aling-items-center'>
                            <div class='col'>
-                               <h6 class="text-uppercase text-muted mb-0 ml-1">活跃项目</h6>
+                               <div class="lil-card text-uppercase text-muted mb-0 ml-0" style="font-size: 10px;font-weight: 600;margin-top: -15px">Active Project</div>
                            </div>
                        </div>
                    </div>
@@ -142,11 +122,11 @@
               
             <div class="card shadow-sm border-light"  style="margin:0 0 30px 0;padding-left: 15px;padding-right: 15px">
                 <div class="card-header">
-                   <h5 class="card-title">最近接收次数</h5>
+                   <h5 class="card-title text-muted text-uppercase">Recent Daily Count</h5>
                </div>
                <div class="card-body">
                    <div class="chart-wrapper">               
-                      <div class="container" style="height: 250px">
+                      <div class="container px-0" style="height: 250px">
                         <canvas id="myLineChart"></canvas>
                       </div>
                    </div>
@@ -161,17 +141,16 @@
               <div class="card-header">
                        <div class='row aling-items-center'>
                            <div class='col'>
-                               <h5 class="card-title">最近上传记录</h5>
+                               <h5 class="card-title text-muted text-uppercase">Recent Transactions</h5>
                            </div>
                        </div>
                </div>
-               <div class="card-body">
-                   
+               <div class="card-body px-0">
                      <div style="height:345px;overflow: auto">
                      <table id="recentTable" class="table table-borderless table-hover mb-0">
                         </table>
                      </div>
-                    <div class="tableNull text-muted text-center hide" style="margin:-220px"><text style="background: white;z-index: 99;position: relative">暂无数据 </text></div> 
+                    <div class="tableNull text-muted text-center hide" style="margin:-220px"><text style="background: white;z-index: 99;position: relative">No Data </text></div> 
 
                </div>
             </div>
@@ -179,14 +158,15 @@
          </div>
         </div>
 
-    <div class="row">
+   
+    <div class="row mb-4">
          <div class="col-12">
           <div class="card-deck">
             <div class="card col-12 col-xl-4 shadow-sm border-light">
               <div class="card-header">
                    <div class='row aling-items-center'>
                        <div class='col'>
-                           <h5 class="card-title">材料总类</h5>
+                           <h5 class="card-title text-muted text-uppercase">Main Category</h5>
                        </div>
                    </div>
                </div>
@@ -195,7 +175,7 @@
                       <div class="doughnut-container" style="height: 180px">
                         <canvas id="myDoughnutChart"></canvas>    
                        </div>
-                         <div class="doughnutNull text-muted text-center" style="margin:90px">暂无数据</div>
+                         <div class="doughnutNull text-muted text-center" style="margin:90px">No Data</div>
                        
                    </div>
                </div>
@@ -204,28 +184,29 @@
                <div class="card-header">     
                    <div class='row aling-items-center'>
                        <div class='col'>
-                           <h5 class="card-title">材料分类统计</h5>
+                           <h5 class="card-title text-muted text-uppercase">Sub Category</h5>
                        </div>
-                       <button type="button" class="btn btn-outline-secondary btn-sm mb-1 mt-1">Small button</button>
                    </div>
                </div>
                <div class="card-body">
                    <div class="chart-wrapper">               
-                      <div class="bar-container " style="height: 210px;z-index: 1;position: relative">
+                      <div class="bar-container" style="height: 210px;z-index: 1;position: relative">
                         <canvas id="myBarChart"></canvas>
                       </div>
-                      <div class="barNull text-muted text-center" style="margin:-120px"><text style="background: white;z-index: 99;position: relative">暂无数据 </text></div>                       
+                      <div class="barNull text-muted text-center" style="margin-top:-120px">
+                          <text style="background: white;z-index: 99;position: relative">No Data </text>
+                      </div>                       
                    </div>
                </div>
             </div>
           </div>
          </div>
     </div>  
+</main>
 {% endblock %}
     
 {% block js %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
-<!--    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0/dist/chartjs-plugin-datalabels.min.js"></script>-->
     <script type="text/javascript" src="/static/dash/js/moment-with-locales.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="/static/dash/js/Chart.roundedBarCharts.js"></script>
    <script type="text/javascript" charset="utf-8" src="/static/dash/js/Chart.roundedBarCharts.min.js"></script>
@@ -257,19 +238,14 @@
                 startDate: start,
                 endDate: end,
                 ranges: {
-                   '只看今天': [moment(), moment()],
-                   '只看昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                   '最近七天': [moment().subtract(6, 'days'), moment()],
-                   '最近三十天': [moment().subtract(29, 'days'), moment()],
-                   '只看本月': [moment().startOf('month'), moment().endOf('month')],
-                   '只看上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                   'Today': [moment(), moment()],
+                   'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                   'Last 7 days': [moment().subtract(6, 'days'), moment()],
+                   'Last 30 days': [moment().subtract(29, 'days'), moment()],
+                   'This Month': [moment().startOf('month'), moment().endOf('month')],
+                   'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                 },
                 "orientation": 'right',
-                locale: moment.locale('zh-cn'),
-                locale: {
-                    "applyLabel": "确认",
-                    "cancelLabel": "取消",
-                    "customRangeLabel": "自定义",}
             }, cb);
 
             cb(start, end);
@@ -300,18 +276,18 @@
                         $('.doughnut-container').addClass('hide')
                         $('.barNull').removeClass('hide')
                         $('.newTag').remove();
-                         var tag = document.createElement('span');
+                         var tag = document.createElement('div');
                          tag.innerHTML = '-';
-                         tag.className = 'h6 mb-0 mr-4 newTag';
-                         $('#totalQ').find(".col").after(tag);
-                         var tag = document.createElement('span');
+                         tag.className = 'h6 mb-0 newTag';
+                         $('#totalQ').find(".lil-card").after(tag);
+                         var tag = document.createElement('div');
                          tag.innerHTML = '-';
-                         tag.className = 'h6 mb-0 mr-4 newTag';
-                         $('#totalR').find(".col").after(tag);
-                         var tag = document.createElement('span');
+                         tag.className = 'h6 mb-0 newTag';
+                         $('#totalR').find(".lil-card").after(tag);
+                         var tag = document.createElement('div');
                          tag.innerHTML = '-';
-                         tag.className = 'h6 mb-0 mr-4 newTag';
-                         $('#activeP').find(".col").after(tag);
+                         tag.className = 'h6 mb-0 newTag';
+                         $('#activeP').find(".lil-card").after(tag);
                     } else {
                         $('.doughnut-container').removeClass('hide')
                         $('.doughnutNull').addClass('hide')
@@ -321,18 +297,18 @@
                         result.sCtgStat.forEach(function(item){      addData(myBarChart,item.category__categoryName,item.t)
                         }) 
                         $('.newTag').remove();
-                         var tag = document.createElement('span');
-                         tag.innerHTML = result.totalQ.quantity__sum.toFixed(2) + '吨';
-                         tag.className = 'h6 mb-0 mr-4 newTag';
-                         $('#totalQ').find(".col").after(tag);
-                         var tag = document.createElement('span');
+                         var tag = document.createElement('div');
+                         tag.innerHTML = result.totalQ.quantity__sum.toFixed(2) + 'kg';
+                         tag.className = 'h6 mb-0 newTag';
+                         $('#totalQ').find(".lil-card").after(tag);
+                         var tag = document.createElement('div');
                          tag.innerHTML = result.totalR;
-                         tag.className = 'h6 mb-0 mr-4 newTag';
-                         $('#totalR').find(".col").after(tag);
-                         var tag = document.createElement('span');
+                         tag.className = 'h6 mb-0 newTag';
+                         $('#totalR').find(".lil-card").after(tag);
+                         var tag = document.createElement('div');
                          tag.innerHTML = result.activeP.project;
-                         tag.className = 'h6 mb-0 mr-4 newTag';
-                         $('#activeP').find(".col").after(tag);
+                         tag.className = 'h6 mb-0 newTag';
+                         $('#activeP').find(".lil-card").after(tag);
                     }
                     if (result.recentT.length == 0){
                         $('.tableNull').removeClass('hide')
@@ -450,14 +426,13 @@
                         backgroundColor: colorHex
                     }],
                     },
-            options: {
-                
+            options: { 
                 legend:{
                     position: 'left',
                 },
                 cutoutPercentage: 85,
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
             },
             borderWidth: 5,
         });

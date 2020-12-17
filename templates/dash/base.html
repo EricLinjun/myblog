@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>验收工具后台</title>
+    <title>Backend</title>
 
 <!--    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">-->
 
@@ -13,37 +13,47 @@
     <link href="/static/dash/css/custom.css" rel="stylesheet">
 
     <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
+        .goback {
+            background-color: black;
+            opacity: 0.8;
+            width: 200px;
+            height: 40px;
+            position: fixed;
+            left: 50%;
+            bottom: 20px;
+            border-radius: 10px;
+            transform: translate(-50%, 0);
         }
-      }
+        
+        .goback:hover{
+            opacity: 0.7
+        }
     </style>
     {% block css %}{% endblock %}
 
   </head>
   <body>
       <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow"  >
-  <a class="navbar-brand col-md-2 col-lg-2 mr-0 px-3"  href="#">验收工具后台</a>
+  <a class="navbar-brand col-md-2 col-lg-2 mr-0 px-3"  href="#">Backend Name</a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
 
   <span class="navbar-toggler-icon"></span>
   </button>
-          
+        
+    
+    <a href="/project/">
+        <div class="goback">
+            <div class="text-center my-2 text-uppercase user-select-none" style="color: white;font-weight: 200">
+                go back to eric<text style="color:orange;font-weight: 800">LL</text>
+            </div>
 
+        </div>
+    </a>
+    
           
   <ul class="navbar-nav px-3" style="margin:0 0 0 auto">
     <li class="nav-item text-nowrap" >
-      <a class="nav-link" href="#">退出登录</a>
+      <a class="nav-link" href="#">Log Out</a>
     </li>
   </ul>
 
@@ -55,21 +65,21 @@
       <div id="mysidebar" class="sidebar-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item" >
-            <a class="nav-link btn shadow-none {% block home_class %}{% endblock %}" href="/dash/dashMain/">
+            <a class=" nav-link btn shadow-none {% block home_class %}{% endblock %}" href="/dash/dashMain/">
               <span data-feather="home"></span>
-              面板主页 <span class="sr-only">(current)</span>
+              Dashboard <span class="sr-only">(current)</span>
             </a>
           </li>
-          <li class="nav-item ">
+          <li class="nav-item pl-0">
             <a class="nav-link btn shadow-none {% block tmp_class %}{% endblock %}" href="/dash/mngTemp/">
               <span data-feather="file-text"></span>
-              模板管理
+              Category
             </a>
           </li>
           <li class="nav-item ">
             <a class="nav-link btn shadow-none {% block data_class %}{% endblock %}" href="/dash/dataTable/">
               <span data-feather="database"></span>
-              数据表格
+              Datatable
             </a>
           </li>
 <!--
@@ -96,18 +106,9 @@
 
       
     <script>
-//        $(function(){
-//          var url = location.protocol + "//" + location.href.split('/')[2] + '/' + location.href.split('/')[3] + '/'
-//          $('nav li a').filter(function(){
-//              return this.href === url;
-//            }).addClass('active');
-//        });
-//    
-        
         (function () {
             feather.replace()
         })()
-
     </script>
     {% block js %}{% endblock %}
 

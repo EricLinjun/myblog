@@ -3,6 +3,122 @@
 
 
 {% block css %}
+<style>
+    .cv-nav{
+          position: fixed;
+          color:black;
+          text-shadow: none;
+          padding: 40px 40px;
+          transition: all 0.4s ease-in-out;
+          -webkit-transition: all 0.4s ease-in-out;
+          -moz-transition: all 0.4s ease-in-out ;
+    }
+    .cv-nav:hover{
+        background-color: #242829;
+        color:white;
+    }
+    .content {
+    max-width: 100%;
+    }
+    .content-text {
+    word-wrap: break-word;
+    }
+    .caption-wrapper{
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: black;
+        opacity:0.7;
+        transition: all 0.4s ease-in-out;
+    }
+    .caption-wrapper:hover{
+        opacity:0;
+        transition: all 0.4s ease-in-out;
+    }
+    .caption {
+    position: absolute;
+    top: 80%;
+    left: 0;
+    font-size: 40px;
+    font-weight: 200;
+    text-align: right;
+    height: 100%;
+    width: 100%;
+    }
+    .fas,.far {
+      color: #242829;
+    }
+    .content-title{
+        color:black;
+        font-size: 20px;
+        text-shadow: none;
+    }
+    .content-title-time{
+        color:black;
+        font-size: 15px;
+        font-style: italic;
+        text-shadow: none;
+    }
+    .content-text{
+        text-align:left;
+        color:black;
+        text-shadow:none;
+        font-size: 16px;
+        font-weight: 100;
+    }
+    li {
+    font-size: 15px;
+/*    list-style-type: circle;*/
+    color:black;
+    text-align: left;
+    text-shadow: none;
+    font-weight: 100;
+        
+    }
+    .li-title {
+        color:black;
+        font-size: 15px;
+        text-shadow: none; 
+        font-weight: 400;
+    }
+    .project-title{
+        color:black;
+        font-size: 30px;
+        font-weight: 100;
+        text-shadow: none;
+        padding-top: 40px;
+        margin-left: -21px !important;
+    }
+    .contact-text{
+        text-align:left;
+        color:#bbbbbb;
+        font-size: 15px;
+        font-weight:400;
+        text-shadow: none   
+    }
+    .project-icon-text{
+        text-align:left;
+        color:orange;
+        font-size: 15px;
+        font-weight:400;
+        text-shadow: none   
+    }
+    @media (max-width: 1200px) {
+        .project-title {
+            padding-top: 0px;
+        }
+    }
+
+    .icon-text:hover{
+        filter: brightness(0.5);
+    }
+    .icon-text2:hover{
+        filter: brightness(0.8);
+    }
+
+</style>
 {% endblock css %}
 
 {% block project%}
@@ -11,18 +127,135 @@
 
 {% block main %}
 <div class='wrapper px-0 col-12' style="">
-    <div class='container-xl shadow intro' style=" height: 2000px;background-color: #F9F9F9;z-index:98">
-        <div class='row'>
-                <div style="height: 200px;width: 200px;background-color: pink;margin: 300px auto" >
-                    <a href="/dash/dashMain">
-                        dd
-                    </a>
-                </div>
+    <div class='container-xl shadow px-0' style="background-color: #F9F9F9">
+        <div class="px-0" id='education' style="background-color: #242829">
+            <div class='text-uppercase py-0 my-0 mr-3 order-1' style="text-align: right;font-size: 20px;font-weight: 100">Django Project</div>
         </div>
+    </div>
+    <div class='container-xl shadow' style="background-color: #F9F9F9">
+        <div class='row'>
+            <div class='col-12 col-xl-5 px-0'>
+                <div class='col px-0'>
+                    <div class='profile'>
+                        <img src="/static/img/dash.png" class="img-fluid  w-100" alt="Responsive image">
+                        <div class="caption-wrapper">
+                             <div class="caption">
+                                 <p>Dashboard</p>
+                             </div>
+                        </div>            
+                    </div>
+                </div>
+                <div class='col px-0'>
+                    <div class='profile'>
+                        <img src="/static/img/table.png" class="img-fluid  w-100" alt="Responsive image">
+                        <div class="caption-wrapper">
+                             <div class="caption">
+                                 <p>Datatable</p>
+                             </div>
+                        </div>            
+                    </div>
+                </div>
+            </div>
+            <div class='col-12 col-xl-7'>
+                <div class="content px-5" style="padding-top: 20px;">
+                    <div class="project-title text-left row">
+                        <div style="height: 10px;width: 10px;background-color: orange;border-radius: 5px;margin:13px 10px 0 0"></div>
+                        Simple Backend</div>
+                    <div class="row">    
+                        <div class="content-title text-left col-6" style="font-size: 15px;font-weight: 600">Django/Bootstrap/Chart.js/Datatables </div>
+                    </div>
+                    <div class="content-text mt-1">A simple Django backend to present and visualise data with dashboard page, category managing page, and datatable page from a connected postgre database.</div>
+                    <ul>
+                        <li>
+                            <text class="li-title">Dashboard
+                            </text>
+                            <br>
+                            containing three simple charts and one brief table presenting a overall view on the data from each category, which could also be presented in a selected day or time range.
+                        </li>
+                        <li>
+                            <text class="li-title">Category Managing
+                            </text>
+                            <br>
+                            a easy way to add and delete the sub-categories in the database.
+                        </li>
+                        <li>
+                            <text class="li-title">Datatable
+                            </text>
+                            <br>
+                            Allowing user to add/edit/delete data, including other functions like search and sort. And the table can also be exported as csv/pdf files.
+                        </li>
+                    </ul>
+                    
+                </div> 
+                <div style="margin: 0 40px;border-top: solid 1px #bbbbbb"></div>
+                <div class="row justify-content-center mx-0">
+                    
+                    <div class="icon-text2 content-text mx-3 my-4" >
+                        <a class="text-decoration-none contact" href="https://www.linkedin.com/in/ericll/" target="_blank">
+                            <span data-feather="github" style="background-color: orange;padding: 5px;height: 30px;width: 30px;border-radius: 10px;color: white;">
+                            </span>
+                            <text class="project-icon-text text-uppercase">
+                                 github 
+                            </text>
+                        </a>
+                    </div>
+                    <div class="icon-text2 content-text mx-3 my-4" style="text-align:left;color:#bbbbbb;font-size: 15px;font-weight:400; text-shadow: none">
+                        <a class="text-decoration-none contact" href="/dash/dashMain/">
+                            <span data-feather="monitor" style="background-color: orange;padding: 5px;height: 30px;width: 30px;border-radius: 10px;color: white;">
+                            </span>
+                            <text  class="project-icon-text text-uppercase">
+                                   preview
+                            </text>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class='container-xl shadow px-0' style="background-color: #242829;">
+            <div style="padding:30px 0 50px 0;">
+                <div class="content-text text-center" style="text-align:left;color:white;font-size: 20px;font-size: 50px;font-weight:100; text-shadow: none">Contact</div>
+                <div class="row justify-content-center mx-0">
+                    
+                    <div class="icon-text content-text mx-3 my-4" >
+                        <a class="text-decoration-none contact" href="https://www.linkedin.com/in/ericll/" target="_blank">
+                            <span data-feather="linkedin" style="background-color: #bbbbbb;padding: 5px;height: 30px;width: 30px;border-radius: 10px;color: #242829;">
+                            </span>
+                            <text class="contact-text">
+                                ericll 
+                            </text>
+                        </a>
+                    </div>
+                    <div class="icon-text content-text mx-3 my-4" style="text-align:left;color:#bbbbbb;font-size: 15px;font-weight:400; text-shadow: none">
+                        <a class="text-decoration-none contact" href="mailto:ericlinjunli@gmail.com" target="_blank">
+                            <span data-feather="mail" style="background-color: #bbbbbb;padding: 5px;height: 30px;width: 30px;border-radius: 10px;color: #242829;">
+                            </span>
+                            <text  class="contact-text">
+                                    ericlinjunli@gmail.com
+                            </text>
+                        </a>
+                    </div>
+                </div>
+                 
+            </div>
         
     </div>
+
 </div>
 {% endblock main %}
 
 {% block js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+<script>
+        (function () {
+            feather.replace()
+        })()
+
+        $( document ).ready(function() {
+            var distance = $('.header-wrapper').outerHeight();
+            $(".wrapper").css({"padding-top": distance});
+        });
+
+</script>
 {% endblock js %}
