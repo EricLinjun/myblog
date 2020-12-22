@@ -45,7 +45,7 @@ def dashMain(request):
                 recentT = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).order_by('-uploadTime')[:5]
             ctgStat = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).values('category__mainCategory').annotate(t=Round2(Sum('quantity'))).order_by('-t')  
 #            print(ctgStat)
-            sCtgStat = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).values('category__categoryName').annotate(t=Sum('quantity')).order_by('-t')[:10]
+            sCtgStat = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).values('category__categoryName').annotate(t=Round2(Sum('quantity'))).order_by('-t')[:10]
             totalR = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).count()
             totalQ = delivery.objects.filter(uploadTime__gte = start).filter(uploadTime__lte = end).aggregate(Sum('quantity'))   
             recent_list = recentT.values("id","project","location","driverName","plateNumber","receiverName","receiveID","quantity","unit","date","time","uploadTime","category_id","category__categoryName")
