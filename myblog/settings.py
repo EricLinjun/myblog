@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app01',
-    'dash'
+    'appSalesReport',
+    'dash',
+    'covidDash'
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,643 @@
+   <!-- CARDS -->
+      <div class="container-fluid mt-n6 container-xl">
+        <div class="row">
+          <div class="col-12 col-xl-8">
+
+            <!-- Orders -->
+            <div class="card">
+              <div class="card-header">
+
+                <!-- Title -->
+                <h4 class="card-header-title">
+                  Payment
+                </h4>
+
+                <!-- Caption -->
+                <span class="text-muted mr-3">
+                  Show Last Year:
+                </span>
+
+                <!-- Switch -->
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="cardToggle" :checked="checked" @click="checked_ly()" />
+                  <label class="custom-control-label" for="cardToggle"></label>
+                </div>
+
+              </div>
+              <div class="card-body">
+
+                <!-- Chart -->
+                <div class="chart">
+                  <canvas id="barChart" class="chart-canvas barChart"></canvas>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-4">
+
+            <!-- Traffic -->
+            <div class="card">
+              <div class="card-header">
+
+                <!-- Title -->
+                <h4 class="card-header-title">
+                  Payment Proportion
+                </h4>
+
+                <!-- Tabs -->
+                <ul class="nav nav-tabs nav-tabs-sm card-header-tabs">
+                  <li class="nav-item" >
+                    <a href="#" class="nav-link" :class="{active:d_tab==1}" @click.prevent="d_tab_one()">
+                      Channel
+                    </a>
+                  </li>
+                  <li class="nav-item" >
+                    <a href="#" class="nav-link" :class="{active:d_tab==2}" @click.prevent="d_tab_two()">
+                      Product
+                    </a>
+                  </li>
+                </ul>
+
+              </div>
+              <div class="card-body">
+
+                <!-- Chart -->
+                <div class="chart chart-appended">
+                  <canvas id="dchart" class="chart-canvas" ></canvas>
+                </div>
+
+                <!-- Legend -->
+                <div id='dchartLegend' class="chart-legend overflow-auto"></div>
+
+              </div>
+            </div>
+
+          </div>
+        </div> <!-- / .row -->
+        <div class="row">
+          <div class="col-12 col-lg-6 col-xl">
+
+            <!-- Card -->
+            <div class="card">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <!-- Title -->
+                    <h6 class="text-uppercase text-muted mb-2">
+                      Total Payment
+                    </h6>
+
+                    <!-- Heading -->
+                    <span class="h3 mb-0">
+                      [[total_payment|toCurrency]]
+                    </span>
+                  </div>
+                  <div class="col-auto">
+
+                    <!-- Icon -->
+                    <span class="h2 fe fe-dollar-sign text-muted mb-0"></span>
+
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12 col-lg-6 col-xl">
+
+            <!-- Card -->
+            <div class="card">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <!-- Title -->
+                    <h6 class="text-uppercase text-muted mb-2">
+                      AVG.Payment/Order
+                    </h6>
+
+                    <!-- Heading -->
+                    <span class="h3 mb-0">
+                      [[total_payment/total_count|toCurrency]]
+                    </span>
+
+                  </div>
+                  <div class="col-auto">
+
+                    <!-- Icon -->
+                    <span class="h2 fe fe-dollar-sign text-muted mb-0"></span>
+
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12 col-lg-6 col-xl">
+
+            <!-- Card -->
+            <div class="card">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <!-- Title -->
+                    <h6 class="text-uppercase text-muted mb-2">
+                      Conversion Rate
+                    </h6>
+
+                    <div class="row align-items-center no-gutters">
+                      <div class="col-auto">
+
+                        <!-- Heading -->
+                        <span class="h2 mr-2 mb-0">
+                          84.5%
+                        </span>
+
+                      </div>
+                      <div class="col">
+
+                        <!-- Progress -->
+                        <div class="progress progress-sm">
+                          <div class="progress-bar" role="progressbar" style="width:50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+
+                      </div>
+                    </div> <!-- / .row -->
+                  </div>
+                  <div class="col-auto">
+
+                    <!-- Icon -->
+                    <span class="h2 fe fe-clipboard text-muted mb-0"></span>
+
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12 col-lg-6 col-xl">
+
+            <!-- Card -->
+            <div class="card">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <!-- Title -->
+                    <h6 class="text-uppercase text-muted mb-2">
+                      Avg. Value
+                    </h6>
+
+                    <!-- Heading -->
+                    <span class="h2 mb-0">
+                      $85.50
+                    </span>
+
+                  </div>
+                  <div class="col-auto">
+
+                    <!-- Chart -->
+                    <div class="chart chart-sparkline">
+                      <canvas class="chart-canvas" id="sparklineChart"></canvas>
+                    </div>
+
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+            </div>
+
+          </div>
+        </div> <!-- / .row -->
+        <div class="row">
+          <div class="col-12 col-xl-4">
+
+            <!-- Activity -->
+            <div class="card-adjust-xl">
+              <div class="card">
+                <div class="card-header">
+
+                  <!-- Title -->
+                  <h4 class="card-header-title">
+                    Recent Activity
+                  </h4>
+
+                  <!-- Button -->
+                  <a class="small" href="#!">View all</a>
+
+                </div>
+                <div class="card-body">
+
+                  <!-- List group -->
+                  <div class="list-group list-group-flush list-group-activity my-n3">
+                    <div class="list-group-item">
+                      <div class="row">
+                        <div class="col-auto">
+
+                      
+
+                        </div>
+                        <div class="col ml-n2">
+
+                          <!-- Content -->
+                          <div class="small">
+                            <strong>Dianna Smiley</strong> shared your post with Ab Hadley, Adolfo
+                            Hess, and 3 others.
+                          </div>
+
+                          <!-- Time -->
+                          <small class="text-muted">
+                            2m ago
+                          </small>
+
+                        </div>
+                      </div> <!-- / .row -->
+                    </div>
+                    <div class="list-group-item">
+                      <div class="row">
+                        <div class="col-auto">
+
+                      
+
+                        </div>
+                        <div class="col ml-n2">
+
+                          <!-- Content -->
+                          <div class="small">
+                            <strong>Ab Hadley</strong> reacted to your post with a 😍
+                          </div>
+
+                          <!-- Time -->
+                          <small class="text-muted">
+                            2m ago
+                          </small>
+
+                        </div>
+                      </div> <!-- / .row -->
+                    </div>
+                    <div class="list-group-item">
+                      <div class="row">
+                        <div class="col-auto">
+
+                          <!-- Avatar -->
+                        
+
+                        </div>
+                        <div class="col ml-n2">
+
+                          <!-- Content -->
+                          <div class="small">
+                            <strong>Adolfo Hess</strong> commented
+                            <blockquote class="mb-0">
+                              “I don’t think this really makes sense to do without approval from
+                              Johnathan since he’s the one...”
+                            </blockquote>
+                          </div>
+
+                          <!-- Time -->
+                          <small class="text-muted">
+                            2m ago
+                          </small>
+
+                        </div>
+                      </div> <!-- / .row -->
+                    </div>
+                    <div class="list-group-item">
+                      <div class="row">
+                        <div class="col-auto">
+
+                     
+
+                        </div>
+                        <div class="col ml-n2">
+
+                          <!-- Content -->
+                          <div class="small">
+                            <strong>Daniela Dewitt</strong> subscribed to you.
+                          </div>
+
+                          <!-- Time -->
+                          <small class="text-muted">
+                            2m ago
+                          </small>
+
+                        </div>
+                      </div> <!-- / .row -->
+                    </div>
+                    <div class="list-group-item">
+                      <div class="row">
+                        <div class="col-auto">
+
+                       
+
+                        </div>
+                        <div class="col ml-n2">
+
+                          <!-- Content -->
+                          <div class="small">
+                            <strong>Miyah Myles</strong> shared your post with Ryu Duke, Glen Rouse,
+                            and 3 others.
+                          </div>
+
+                          <!-- Time -->
+                          <small class="text-muted">
+                            2m ago
+                          </small>
+
+                        </div>
+                      </div> <!-- / .row -->
+                    </div>
+                    <div class="list-group-item">
+                      <div class="row">
+                        <div class="col-auto">
+
+
+                        </div>
+                        <div class="col ml-n2">
+
+                          <!-- Content -->
+                          <div class="small">
+                            <strong>Ryu Duke</strong> reacted to your post with a 😍
+                          </div>
+
+                          <!-- Time -->
+                          <small class="text-muted">
+                            2m ago
+                          </small>
+
+                        </div>
+                      </div> <!-- / .row -->
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12 col-xl-8">
+
+            <!-- Products -->
+            <div class="card">
+              <div class="card-header">
+
+                <!-- Title -->
+                <h4 class="card-header-title">
+                  Best Selling Products
+                </h4>
+
+                <!-- Button -->
+                <a href="#!" class="btn btn-sm btn-white">
+                  Export
+                </a>
+
+              </div>
+              <div class="table-responsive mb-0" data-list='{"valueNames": ["products-product", "products-stock", "products-price", "products-sales"]}' id="productsList">
+                <table class="table table-sm table-nowrap table-hover card-table">
+                  <thead>
+                    <tr>
+                      <th>
+                        <a href="#" class="text-muted list-sort" data-sort="products-product">
+                          Product
+                        </a>
+                      </th>
+                      <th>
+                        <a href="#" class="text-muted list-sort" data-sort="products-stock">
+                          Stock
+                        </a>
+                      </th>
+                      <th>
+                        <a href="#" class="text-muted list-sort" data-sort="products-price">
+                          Price
+                        </a>
+                      </th>
+                      <th colspan="2">
+                        <a href="#" class="text-muted list-sort" data-sort="products-sales">
+                          Monthly Sales
+                        </a>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="list">
+                    <tr>
+                      <td class="products-product">
+                        <div class="d-flex align-items-center">
+
+                          <!-- Image -->
+                         
+
+                          <div class="ml-3">
+
+                            <!-- Heading -->
+                            <h4 class="font-weight-normal mb-1">Sketchpad</h4>
+
+                            <!-- Text -->
+                            <small class="text-muted">3" x 5" Size</small>
+
+                          </div>
+
+                        </div>
+                      </td>
+                      <td class="products-stock">
+
+                        <!-- Badge -->
+                        <span class="badge badge-soft-success">Available</span>
+
+                      </td>
+                      <td class="products-price">
+                        $14.99
+                      </td>
+                      <td class="products-sales">
+                        $3,145.23
+                      </td>
+                      <td class="text-right">
+
+                        <!-- Dropdown -->
+                        <div class="dropdown">
+                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fe fe-more-vertical"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-right">
+                            <a href="#!" class="dropdown-item">
+                              Action
+                            </a>
+                            <a href="#!" class="dropdown-item">
+                              Another action
+                            </a>
+                            <a href="#!" class="dropdown-item">
+                              Something else here
+                            </a>
+                          </div>
+                        </div>
+
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="products-product">
+                        <div class="d-flex align-items-center">
+
+                          <!-- Image -->
+                          
+
+                          <div class="ml-3">
+
+                            <!-- Heading -->
+                            <h4 class="font-weight-normal mb-1">Turtleshell Shades</h4>
+
+                            <!-- Text -->
+                            <small class="text-muted">UV + Blue Light</small>
+
+                          </div>
+
+                        </div>
+                      </td>
+                      <td class="products-stock">
+
+                        <!-- Badge -->
+                        <span class="badge badge-soft-warning">Unavailable</span>
+
+                      </td>
+                      <td class="products-price">
+                        $39.99
+                      </td>
+                      <td class="products-sales">
+                        $2,611.82
+                      </td>
+                      <td class="text-right">
+
+                        <!-- Dropdown -->
+                        <div class="dropdown">
+                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fe fe-more-vertical"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-right">
+                            <a href="#!" class="dropdown-item">
+                              Action
+                            </a>
+                            <a href="#!" class="dropdown-item">
+                              Another action
+                            </a>
+                            <a href="#!" class="dropdown-item">
+                              Something else here
+                            </a>
+                          </div>
+                        </div>
+
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="products-product">
+                        <div class="d-flex align-items-center">
+
+                          <!-- Image -->
+                        
+
+                          <div class="ml-3">
+
+                            <!-- Heading -->
+                            <h4 class="font-weight-normal mb-1">Nike "Go Bag"</h4>
+
+                            <!-- Text -->
+                            <small class="text-muted">Leather + Gortex</small>
+
+                          </div>
+
+                        </div>
+                      </td>
+                      <td class="products-stock">
+
+                        <!-- Badge -->
+                        <span class="badge badge-soft-success">Available</span>
+
+                      </td>
+                      <td class="products-price">
+                        $149.99
+                      </td>
+                      <td class="products-sales">
+                        $2,372.19
+                      </td>
+                      <td class="text-right">
+
+                        <!-- Dropdown -->
+                        <div class="dropdown">
+                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fe fe-more-vertical"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-right">
+                            <a href="#!" class="dropdown-item">
+                              Action
+                            </a>
+                            <a href="#!" class="dropdown-item">
+                              Another action
+                            </a>
+                            <a href="#!" class="dropdown-item">
+                              Something else here
+                            </a>
+                          </div>
+                        </div>
+
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="products-product">
+                        <div class="d-flex align-items-center">
+
+                          <!-- Image -->
+                        
+
+                          <div class="ml-3">
+
+                            <!-- Heading -->
+                            <h4 class="font-weight-normal mb-1">Swell Bottle</h4>
+
+                            <!-- Text -->
+                            <small class="text-muted">Bone Clay White</small>
+
+                          </div>
+
+                        </div>
+                      </td>
+                      <td class="products-stock">
+
+                        <!-- Badge -->
+                        <span class="badge badge-soft-success">Available</span>
+
+                      </td>
+                      <td class="products-price">
+                        $24.99
+                      </td>
+                      <td class="products-sales">
+                        $1,145.23
+                      </td>
+                      <td class="text-right">
+
+                        <!-- Dropdown -->
+                        <div class="dropdown">
+                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fe fe-more-vertical"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-right">
+                            <a href="#!" class="dropdown-item">
+                              Action
+                            </a>
+                            <a href="#!" class="dropdown-item">
+                              Another action
+                            </a>
+                            <a href="#!" class="dropdown-item">
+                              Something else here
+                            </a>
+                          </div>
+                        </div>
+
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div> <!-- / .row -->
+      </div>

@@ -1,0 +1,864 @@
+
+
+
+
+
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Libs CSS -->
+    <link rel="stylesheet" href="/static/sales-report/fonts/feather/feather.css" />
+    <link rel="stylesheet" href="/static/sales-report/libs/flatpickr/dist/flatpickr.min.css" />
+    <link rel="stylesheet" href="/static/sales-report/libs/quill/dist/quill.core.css" />
+    <link rel="stylesheet" href="/static/sales-report/libs/highlightjs/styles/vs2015.css" />
+
+    <!-- Map -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css" rel="stylesheet" />
+
+    <!-- Theme CSS -->
+    
+    <link rel="stylesheet" href="/static/sales-report/css/theme.min.css">
+      
+    <!-- Title -->
+    <title>Distributor Sales Report</title>
+
+  </head>
+  <body>
+    <style>
+    .dropdown-menu {
+      min-width:inherit;
+    }
+    .hide{
+        display:none;
+    }
+    </style>
+
+    <div class="main-content" id="app" >
+      
+
+      <!-- HEADER -->
+      <div class="header bg-dark pb-5 ">
+        <div class="container">
+          <!-- Body -->
+          <div class="header-body" >
+            <div class="row align-items-end">
+              <div class="col">
+                <!-- Pretitle -->
+                <h6 class="header-pretitle text-secondary px-2">
+                  Distributor Sales Report
+                </h6>
+                <!-- Title -->
+                <div class="row" >
+                    <div class="dropdown">
+                      <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fe fe-more-vertical"></i>
+                      </a>
+                      <div  class="dropdown-menu mt-2">
+                        <a v-for="item in company" :value="item.id" @click="select" href="#!" class="dropdown-item" >
+                            [[item.name]]
+                        </a>
+                      </div>
+                     </div>
+                    <h1 :value="title_id" class="header-title text-white">
+                       [[ title ]]
+                    </h1>
+                    <div class="dropdown">
+                      <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fe fe-more-vertical"></i>
+                      </a>
+                      <div  class="dropdown-menu mt-2">
+                        <a v-for="item in year_list" :value="item.time__year" @click="select_year" href="#!" class="dropdown-item" >
+                            [[item.time__year]]
+                        </a>
+                      </div>
+                     </div>
+                    <h1 id="year" :value="year" class="header-title text-white">
+                       [[ year ]]
+                    </h1>
+                    <div class="dropdown">
+                      <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fe fe-more-vertical"></i>
+                      </a>
+                      <div  class="dropdown-menu mt-2">
+                        <a v-for="item in season_list" :value="item" @click="select_season" href="#!" class="dropdown-item" >
+                            [[item]]
+                        </a>
+                      </div>
+                     </div>
+                    <h1 id="season" :value="season" class="header-title text-white">
+                       [[ season ]]
+                    </h1>
+                    
+
+                </div>
+              </div>
+              <div class="col-auto">
+                <!-- Nav -->
+                <ul class="nav nav-tabs header-tabs">
+                  <li class="nav-item" >
+                    <a href="#" class="nav-link text-center" :class="{active:tab==1}" @click.prevent="tab_one()">
+                      <h6 class="header-pretitle text-secondary" >
+                        Total Orders
+                      </h6>
+                      <h3 class="text-white mb-0">
+                        [[total_count]]
+                      </h3>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#" class="nav-link text-center" :class="{active:tab==2}" @click.prevent="tab_two()">
+                      <h6 class="header-pretitle text-secondary">
+                        Total Quantity
+                      </h6>
+                      <h3 class="text-white mb-0">
+                        [[total_quantity]]
+                      </h3>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div><!-- / .row -->
+              
+          </div> <!-- / .header-body -->
+
+          <!-- Footer -->
+            
+            
+          <div class="header-footer">
+              
+
+            <!-- Chart -->
+            <div class="chart">
+              <canvas id="lineChart" class="chart-canvas"></canvas>
+            </div>
+
+          </div>
+
+        </div>
+      </div> <!-- / .header -->
+
+      <!-- CARDS -->
+      <div class="container-fluid mt-n6 container">
+        <div class="row">
+          <div class="col-12 col-xl-8">
+
+            <!-- Orders -->
+            <div class="card">
+              <div class="card-header">
+
+                <!-- Title -->
+                <h4 class="card-header-title">
+                  Payment
+                </h4>
+
+                <!-- Caption -->
+                <span class="text-muted mr-3">
+                  Show Last Year:
+                </span>
+
+                <!-- Switch -->
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="cardToggle" :checked="checked" @click="checked_ly()" />
+                  <label class="custom-control-label" for="cardToggle"></label>
+                </div>
+
+              </div>
+              <div class="card-body">
+
+                <!-- Chart -->
+                <div class="chart">
+                  <canvas id="barChart" class="chart-canvas barChart"></canvas>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-4">
+
+            <!-- Traffic -->
+            <div class="card">
+              <div class="card-header">
+
+                <!-- Title -->
+                <h4 class="card-header-title">
+                  Sales Proportion
+                </h4>
+
+                <!-- Tabs -->
+                <ul class="nav nav-tabs nav-tabs-sm card-header-tabs">
+                  <li class="nav-item" >
+                    <a href="#" class="nav-link" :class="{active:d_tab==1}" @click.prevent="d_tab_one()">
+                      Channel
+                    </a>
+                  </li>
+                  <li class="nav-item" >
+                    <a href="#" class="nav-link" :class="{active:d_tab==2}" @click.prevent="d_tab_two()">
+                      Product
+                    </a>
+                  </li>
+                </ul>
+
+              </div>
+              <div class="card-body">
+
+                <!-- Chart -->
+                <div class="chart chart-appended">
+                  <canvas id="dchart" class="chart-canvas" ></canvas>
+                </div>
+
+                <!-- Legend -->
+                <div id='dchartLegend' class="chart-legend overflow-auto"></div>
+
+              </div>
+            </div>
+
+          </div>
+        </div> <!-- / .row -->
+        <div class="row">
+          <div class="col-12 col-lg-6 col-xl">
+
+            <!-- Card -->
+            <div class="card">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <!-- Title -->
+                    <h6 class="text-uppercase text-muted mb-2">
+                      Total Sales
+                    </h6>
+
+                    <!-- Heading -->
+                    <span class="h3 mb-0">
+                      [[total_payment|toCurrency]]
+                    </span>
+                  </div>
+                  <div class="col-auto">
+
+                    <!-- Icon -->
+                    <span class="h2 fe fe-dollar-sign text-muted mb-0"></span>
+
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12 col-lg-6 col-xl">
+
+            <!-- Card -->
+            <div class="card">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <!-- Title -->
+                    <h6 class="text-uppercase text-muted mb-2">
+                      Average Payment
+                    </h6>
+
+                    <!-- Heading -->
+                    <span class="h3 mb-0">
+                      [[total_payment/total_count|toCurrency]]
+                    </span>
+
+                  </div>
+                  <div class="col-auto">
+
+                    <!-- Icon -->
+                    <span class="h2 fe fe-dollar-sign text-muted mb-0"></span>
+
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12 col-lg-6 col-xl">
+
+            <!-- Card -->
+            <div class="card">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <!-- Title -->
+                    <h6 class="text-uppercase text-muted mb-2">
+                      Top Day
+                    </h6>
+
+                    <div class="row align-items-center no-gutters">
+                      <div class="col-auto">
+
+                        <!-- Heading -->
+                        <span class="h3 mr-2 mb-0">
+                          [[top_day]]
+                        </span>
+
+                      </div>
+
+                    </div> <!-- / .row -->
+                  </div>
+                  <div class="col-auto">
+
+                    <!-- Icon -->
+                    <span class="h2 fe fe-calendar text-muted mb-0"></span>
+
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12 col-lg-6 col-xl">
+
+            <!-- Card -->
+            <div class="card">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col">
+
+                    <!-- Title -->
+                    <h6 class="text-uppercase text-muted mb-2">
+                      Top Day Sales
+                    </h6>
+
+                    <!-- Heading -->
+                    <span class="h3 mb-0">
+                      [[top_day_payments|toCurrency]]
+                    </span>
+                    
+                  </div>
+                 
+                  <div class="col-auto">
+
+
+                    <span class="h2 fe fe-dollar-sign text-muted mb-0"></span>
+
+
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+            </div>
+
+          </div>
+        </div> <!-- / .row -->
+        <div class="row">
+          <div class="col-12">
+
+            <!-- Products -->
+            <div class="card">
+              <div class="card-header">
+
+                <!-- Title -->
+                <h4 class="card-header-title">
+                   [[table_name]] Five Orders of Payment
+                </h4>
+                <ul class="nav nav-tabs nav-tabs-sm card-header-tabs">
+                  <li class="nav-item" >
+                    <a href="#" class="nav-link" :class="{active:tb_tab==1}" @click.prevent="tb_tab_one()">
+                     &nbsp;&nbsp;&nbsp;&nbsp;Top&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                  </li>
+                  <li class="nav-item" >
+                    <a href="#" class="nav-link" :class="{active:tb_tab==2}" @click.prevent="tb_tab_two()">
+                      &nbsp;&nbsp;Bottom&nbsp;&nbsp;
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="table-responsive mb-0" >
+                <table class="table table-sm table-nowrap table-hover card-table">
+                  <thead>
+                    <tr>
+                      <th>
+                        <a href="#" class="text-muted pl-3" >
+                          Product / Order Code
+                        </a>
+                      </th>
+                      <th>
+                        <a href="#" class="text-muted">
+                          Payment
+                        </a>
+                      </th>
+                      <th>
+                        <a href="#" class="text-muted" >
+                          Price
+                        </a>
+                      </th>                      
+                      <th>
+                        <a href="#" class="text-muted">
+                          Quantity
+                        </a>
+                      </th><th>
+                        <a href="#" class="text-muted">
+                          Channel
+                        </a>
+                      </th>
+                      <th colspan="2">
+                        <a href="#" class="text-muted">
+                          Time
+                        </a>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="list" v-for="item in top_trans" :value="item.id" :class="{hide:tb_tab==2}">
+                    <tr  style="border-top:2px solid transparent">
+                      <td class="products-product">
+                        <div class="d-flex align-items-center">
+
+                          <!-- Image -->
+                         
+
+                          <div class="ml-3">
+
+                            <!-- Heading -->
+                            <h4 class="font-weight-normal mb-1">[[item.product__name_en]]</h4>
+
+                            <!-- Text -->
+                            <small class="text-muted">[[item.t_code]]</small>
+
+                          </div>
+
+                        </div>
+                      </td>
+                      <td class="products-payment">
+                        [[item.payment|toCurrency]]
+                      </td>
+                      <td class="products-price">
+                        [[item.price|toCurrency]]
+                      </td>
+                      <td class="products-quantity">
+                        [[item.quantity]]
+                      </td><td class="products-quantity">
+                        [[item.channel]]
+                      </td>
+                      <td class="products-time">
+                        [[item.time]]
+                      </td>
+                    </tr>
+                  </tbody>
+                          
+                  <tbody class="list" v-for="item in bottom_trans" :value="item.id" :class="{hide:tb_tab==1}">
+                    <tr  style="border-top:2px solid transparent">
+                      <td class="products-product">
+                        <div class="d-flex align-items-center">
+
+                          <!-- Image -->
+                         
+
+                          <div class="ml-3">
+
+                            <!-- Heading -->
+                            <h4 class="font-weight-normal mb-1">[[item.product__name_en]]</h4>
+
+                            <!-- Text -->
+                            <small class="text-muted">[[item.t_code]]</small>
+
+                          </div>
+
+                        </div>
+                      </td>
+                      <td class="products-payment">
+                        [[item.payment|toCurrency]]
+                      </td>
+                      <td class="products-price">
+                        [[item.price|toCurrency]]
+                      </td>
+                      <td class="products-quantity">
+                        [[item.quantity]]
+                      </td><td class="products-quantity">
+                        [[item.channel]]
+                      </td>
+                      <td class="products-time">
+                        [[item.time]]
+                      </td>
+                    </tr>
+                  </tbody>
+                  
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div> <!-- / .row -->
+      </div>
+    </div>
+
+
+
+      
+     
+    <script src="/static/sales-report/libs/jquery/dist/jquery.min.js"></script>
+    <script src="/static/sales-report/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/sales-report/libs/@shopify/draggable/lib/es5/draggable.bundle.legacy.js"></script>
+    <script src="/static/sales-report/libs/autosize/dist/autosize.min.js"></script>
+    <script src="/static/sales-report/libs/chart.js/dist/Chart.min.js"></script>
+    <script src="/static/sales-report/libs/dropzone/dist/min/dropzone.min.js"></script>
+    <script src="/static/sales-report/libs/flatpickr/dist/flatpickr.min.js"></script>
+    <script src="/static/sales-report/libs/highlightjs/highlight.pack.min.js"></script>
+    <script src="/static/sales-report/libs/jquery-mask-plugin/dist/jquery.mask.min.js"></script>
+    <script src="/static/sales-report/libs/list.js/dist/list.min.js"></script>
+    <script src="/static/sales-report/libs/quill/dist/quill.min.js"></script>
+    <script src="/static/sales-report/libs/select2/dist/js/select2.full.min.js"></script>
+    <script src="/static/sales-report/libs/chart.js/Chart.extension.js"></script>
+
+    <!-- Map -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+
+    <!-- Theme JS -->
+    <script src="/static/js/theme.min.js"></script>
+    <script src="/static/js/dashkit.min.js"></script>
+
+
+
+
+   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+   <script src="https://cdn.bootcss.com/vue-resource/1.5.1/vue-resource.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.4/qs.min.js"></script>
+   <script>
+        Vue.filter('toCurrency', function (value) {
+            var formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'AUD',
+                minimumFractionDigits: 0
+            });
+            return formatter.format(value);
+        });
+       
+       
+        var app = new Vue({
+          delimiters: ['[[', ']]'],
+          el: '#app',
+          data: {
+            tab: 1,
+            d_tab: 1,
+            tb_tab: 1,
+            checked: 0,
+            company: [],
+            total_count: [],
+            total_quantity:[],
+            total_payment:[],
+            title: [],
+            title_id: [],
+            year_list:[],
+            year:[],
+            season_list:['FY-Monthly','S1-Weekly','S2-Weekly','S3-Weekly','S4-Weekly'],
+            season:[],
+            top_trans:[],
+            bottom_trans:[],
+            table_data:[],
+              
+            table_name:'',
+            
+            top_day:[],
+            top_day_payments:[],
+            
+            data: [],
+            barData:[],
+            dData:[[60, 25, 15],[15, 45, 20]],
+            dLabel:['Direct', 'Organic', 'Referral'],
+            label: {
+                "FY-Monthly": [],
+                "S1-Weekly": [],
+                "S2-Weekly": [],
+                "S3-Weekly": [],
+                "S4-Weekly": [],        
+            },
+            mylineChart: null,
+            mybarChart: null,
+            mydChart: null,
+            axis:['yAxisOne','yAxisTwo']
+          },
+          mounted:function(){
+            this.render_charts()
+            this.get_company()
+          },
+          methods:{
+            tb_tab_one:function(){
+                this.tb_tab = 1
+                this.table_name = "Top"
+//                this.table_data = []
+//                this.table_data = this.top_trans
+                
+
+            },
+            tb_tab_two:function(){
+                this.tb_tab = 2
+                this.table_name = "Bottom"
+//                this.table_data = []
+//                this.table_data = this.bottom_trans
+
+                
+            },
+              
+            tab_one:function(){
+                this.tab = 1;
+                this.removeData(this.mylineChart)
+                var _this = this
+                this.label[_this.season].forEach(function(item,index){    
+                  _this.addData(_this.mylineChart, item, _this.data[_this.tab-1][index])
+                }) 
+                this.mylineChart.data.datasets[0].yAxisID = this.axis[this.tab - 1]
+                this.mylineChart.update();
+            },
+            tab_two:function(){
+                this.tab = 2;
+                this.removeData(this.mylineChart)
+                var _this = this
+                this.label[_this.season].forEach(function(item,index){    
+                  _this.addData(_this.mylineChart, item, _this.data[_this.tab-1][index])
+                }) 
+                this.mylineChart.data.datasets[0].yAxisID = this.axis[this.tab - 1]
+                this.mylineChart.update();
+            },
+            d_tab_one:function(){
+                this.d_tab = 1;
+                this.removeData(this.mydChart)
+                var _this = this
+                _this.dLabel[_this.d_tab-1].forEach(function(item,index){    
+                      _this.addData(_this.mydChart, item, _this.dData[_this.d_tab-1][index])
+                     })   
+                     document.getElementById('dchartLegend').innerHTML = this.mydChart.generateLegend();
+
+            },
+            d_tab_two:function(){
+                this.d_tab = 2;
+                this.removeData(this.mydChart)
+                var _this = this
+                _this.dLabel[_this.d_tab-1].forEach(function(item,index){    
+                      _this.addData(_this.mydChart, item, _this.dData[_this.d_tab-1][index])
+                     })   
+                     document.getElementById('dchartLegend').innerHTML = 'Top 3 Product Proportion';
+            },
+            checked_ly:function(){
+              if (this.checked == 0){
+                  this.checked = 1
+                  this.mybarChart.data.datasets[1].hidden = false
+                  this.mybarChart.update()
+              } else {
+                  this.checked = 0
+                  this.mybarChart.data.datasets[1].hidden = true
+                  this.mybarChart.update()
+              }
+            },
+            get_company:function(){
+             var _this = this;
+             this.$http.get('/sales-report/get-company/')
+               .then((response)=>{
+                 _this.company = response.body.list;
+                 _this.year_list = response.body.year_list;
+                 _this.title = response.body.list[0].name;
+                 _this.title_id = response.body.list[0].id;
+                 _this.year = response.body.year_list[0].time__year;
+                 _this.season = _this.season_list[0]
+                 _this.get_chartData()
+             })   
+            },
+            get_chartData:function(){
+             this.removeData(this.mylineChart)
+             this.removeData(this.mybarChart)
+             this.removeData(this.mydChart)
+             var _this = this;
+             let data = {"year":this.year,"season":this.season,"company":this.title_id}
+             axios.post('/sales-report/get-lineChart/',
+                             Qs.stringify(data),
+                             {headers: {'X-CSRFToken': this.getCookie('csrftoken')}}
+                             )
+               .then((response)=>{
+                 if (response.data.error_num == 0){
+
+                     console.log(response.data)
+                     _this.data[0]=response.data.count
+                     _this.data[1]=response.data.quantity
+                     _this.total_count=response.data.total_count
+                     _this.total_quantity=response.data.total_quantity
+                     _this.total_payment=response.data.total_payment
+                     _this.barData[0]=response.data.payment
+                     _this.barData[1]=response.data.payment_last_year
+                     _this.dData = response.data.proportion
+                     _this.dLabel = response.data.proportion_label           
+                     _this.top_day = response.data.top_day
+                     _this.top_day_payments = response.data.top_day_payments
+
+                     
+                     _this.top_trans = response.data.top_trans
+                     _this.bottom_trans = response.data.bottom_trans
+                     _this.table_name = "Top"
+                     _this.table_data = response.data.top_trans
+    
+                     
+                     
+                     _this.label[_this.season] = response.data.label
+                     _this.label[_this.season].forEach(function(item,index){    
+                      _this.addData(_this.mylineChart, item, _this.data[_this.tab-1][index])
+                     })   
+                     _this.mybarChart.data.labels =  _this.label[_this.season]
+                     _this.mybarChart.data.datasets[0].data =  _this.barData[0]
+                     _this.mybarChart.data.datasets[0].label =  _this.year
+                     _this.mybarChart.data.datasets[1].data =  _this.barData[1]
+                     _this.mybarChart.data.datasets[1].label =  _this.year-1
+                     _this.mybarChart.update()
+                     
+                     _this.dLabel[_this.d_tab-1].forEach(function(item,index){    
+                      _this.addData(_this.mydChart, item, _this.dData[_this.d_tab-1][index])
+                     })   
+                     if (_this.d_tab == 1){
+                         document.getElementById('dchartLegend').innerHTML = this.mydChart.generateLegend();
+                     } else {
+                         document.getElementById('dchartLegend').innerHTML = 'Top 3 Popular Products';
+                     }
+                 }
+    
+             })   
+            },
+            getCookie (name) {
+              var value = '; ' + document.cookie
+              var parts = value.split('; ' + name + '=')
+              if (parts.length === 2) return parts.pop().split(';').shift()
+            },
+            select:function(event){
+                this.title = event.target.text
+                this.title_id = event.target.getAttribute('value')
+                this.get_chartData()
+            },
+            select_year:function(event){
+                this.year = event.target.getAttribute('value')
+                this.get_chartData()
+            },
+            select_season:function(event){
+                this.season = event.target.getAttribute('value') 
+                this.get_chartData()
+            },
+            render_charts:function(){    
+                 var _this = this
+                 this.mylineChart = new Chart('lineChart', {
+                      type: 'line',
+                      options: {
+                        elements: {
+                            line: {
+                                tension: 0.1
+                            }
+                        },
+                        scales: {
+                          yAxes: [{
+                            id: 'yAxisOne',
+                            type: 'linear',
+                            display: 'auto',
+                            gridLines: {
+                              color: '#283E59',
+                              zeroLineColor: '#283E59'
+                            },
+                            ticks: {
+                              callback: function(value) {
+                                return value;
+                              }
+                            }
+                          }, {
+                            id: 'yAxisTwo',
+                            type: 'linear',
+                            display: 'auto',
+                            gridLines: {
+                              color: '#283E59',
+                              zeroLineColor: '#283E59'
+                            },
+                            ticks: {
+                              callback: function(value) {
+                                return parseInt(value/1000) + 'k';
+                              },
+                              maxTicksLimit: 10
+                            }
+                          }]
+                        }
+                      },
+                      data: {
+                        labels: [],
+                        datasets: [{
+//                          label: 'Customers',
+                          data: [],
+                          yAxisID: 'yAxisOne'
+                        }]
+                      }
+             });
+                 this.mybarChart = new Chart('barChart', {
+                      type: 'bar',
+                      options: {
+                        scales: {
+                          yAxes: [{
+                            ticks: {
+                              callback: function(value) {
+                                return parseFloat(value/1000).toFixed(1) + 'k';
+                              },
+                              maxTicksLimit: 10
+                            }
+                          }]
+                        }
+                      },
+                      data: {
+                        labels: [],
+                        datasets: [{
+                          label: '',
+                          data: []
+                        }, {
+                          label: '',
+                          data: [],
+                          backgroundColor: '#d2ddec',
+                          hidden: true
+                        }]
+                      }
+                    });
+                 this.mydChart = new Chart('dchart', {
+                      type: 'doughnut',
+                      options: {
+                        tooltips: {
+                          callbacks: {
+                            afterLabel: function() {
+                              return '%'
+                            }
+                          }
+                        }
+                      },
+                      data: {
+                        labels: [],
+                        datasets: [{
+                          data: [],
+                          backgroundColor: ['#2C7BE5', '#A6C5F7', '#D2DDEC','#EEEEEE']
+                        }]
+                      }
+                    });
+            },
+            removeData:function(chart) {
+                while (chart.data.datasets[0].data.length>0){
+                chart.data.labels.pop();
+                chart.data.datasets.forEach((dataset, index) => {
+                    dataset.data.pop();
+                });
+                }
+                chart.update();
+                
+            },
+            addData:function(chart, label, data) {
+
+                chart.data.labels.push(label)
+       
+                chart.data.datasets.forEach((dataset) => {
+                    dataset.data.push(data);
+                })
+                chart.update();
+                
+            }
+          },                          
+        })
+        
+        
+
+       
+           
+    </script>
+
+  </body>
+</html>
