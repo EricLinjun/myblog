@@ -35,13 +35,32 @@
     .hide{
         display:none;
     }
+    .goback {
+        background-color: black;
+        opacity: 0.8;
+        width: 200px;
+        height: 35px;
+        position: fixed;
+        left: 50%;
+        bottom: 20px;
+        border-radius: 10px;
+        transform: translate(-50%, 0);
+    }
+
+    .goback:hover{
+        opacity: 0.7
+    }
+    [v-cloak]{
+        display: none;
+    }
     </style>
 
-    <div class="main-content" id="app" >
+    <div class="main-content" id="app" v-cloak>
+        
       
 
       <!-- HEADER -->
-      <div class="header bg-dark pb-5 ">
+      <div class="header bg-dark pb-5" >
         <div class="container">
           <!-- Body -->
           <div class="header-body" >
@@ -58,7 +77,7 @@
                         <i class="fe fe-more-vertical"></i>
                       </a>
                       <div  class="dropdown-menu mt-2">
-                        <a v-for="item in company" :value="item.id" @click="select" href="#!" class="dropdown-item" >
+                        <a v-for="item in company" :value="item.id" @click="select" href="#!" class="dropdown-item" v-cloak>
                             [[item.name]]
                         </a>
                       </div>
@@ -126,11 +145,14 @@
           </div> <!-- / .header-body -->
 
           <!-- Footer -->
-            
-            
+          <div style="margin-top: 120px;margin-bottom: -120px;position: absolute;left: 50%;">
+                  <div class="spinner-border text-light" :class="{hide:spinner==false}"  role="status">
+                      <span class="sr-only">Loading...</span>
+                  </div>  
+          </div>   
+        
           <div class="header-footer">
-              
-
+                
             <!-- Chart -->
             <div class="chart">
               <canvas id="lineChart" class="chart-canvas"></canvas>
@@ -376,31 +398,31 @@
                   <thead>
                     <tr>
                       <th>
-                        <a href="#" class="text-muted pl-3" >
+                        <a class="text-muted pl-3" >
                           Product / Order Code
                         </a>
                       </th>
                       <th>
-                        <a href="#" class="text-muted">
+                        <a class="text-muted">
                           Payment
                         </a>
                       </th>
                       <th>
-                        <a href="#" class="text-muted" >
+                        <a class="text-muted" >
                           Price
                         </a>
                       </th>                      
                       <th>
-                        <a href="#" class="text-muted">
+                        <a class="text-muted">
                           Quantity
                         </a>
                       </th><th>
-                        <a href="#" class="text-muted">
+                        <a class="text-muted">
                           Channel
                         </a>
                       </th>
                       <th colspan="2">
-                        <a href="#" class="text-muted">
+                        <a class="text-muted">
                           Time
                         </a>
                       </th>
@@ -489,6 +511,14 @@
       </div>
     </div>
 
+    <a href="/project/">
+        <div class="goback">
+            <div class="text-center my-2 text-uppercase user-select-none" style="color: white;font-weight: 200">
+                go back to eric<text style="color:orange;font-weight: 800">LL</text>
+            </div>
+
+        </div>
+    </a>
 
 
       
@@ -556,7 +586,7 @@
             top_trans:[],
             bottom_trans:[],
             table_data:[],
-              
+            spinner: false,
             table_name:'',
             
             top_day:[],
@@ -669,14 +699,14 @@
              this.removeData(this.mydChart)
              var _this = this;
              let data = {"year":this.year,"season":this.season,"company":this.title_id}
+             this.spinner = true
              axios.post('/sales-report/get-lineChart/',
                              Qs.stringify(data),
                              {headers: {'X-CSRFToken': this.getCookie('csrftoken')}}
                              )
                .then((response)=>{
                  if (response.data.error_num == 0){
-
-                     console.log(response.data)
+                     this.spinner = false
                      _this.data[0]=response.data.count
                      _this.data[1]=response.data.quantity
                      _this.total_count=response.data.total_count
@@ -846,9 +876,9 @@
                 
             },
             addData:function(chart, label, data) {
-
-                chart.data.labels.push(label)
-       
+                if(label!="others"){
+                   chart.data.labels.push(label)
+                }  
                 chart.data.datasets.forEach((dataset) => {
                     dataset.data.push(data);
                 })

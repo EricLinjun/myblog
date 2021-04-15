@@ -4,6 +4,7 @@ from django.db.models import F, Func, Value, CharField, Count, Sum
 from appSalesReport.models import Products, Company, Transactions
 from django.http import JsonResponse
 import datetime
+import time
 import json
 
 
@@ -31,7 +32,7 @@ def sales_report(request):
 def get_company(request):
     response = {}
     try:
-        company = Company.objects.all().order_by('name').values()
+        company = Company.objects.all().order_by('id').values()
         year_list = Transactions.objects.values('time__year').distinct().order_by('-time__year')
         response['list'] = list(company)
         response['year_list'] = list(year_list)
@@ -185,6 +186,6 @@ def get_lineChart(request):
     except Exception as e:
         response['msg'] = str(e)
         response['error_num'] = 1
-        
+         
 
     return JsonResponse(response)
