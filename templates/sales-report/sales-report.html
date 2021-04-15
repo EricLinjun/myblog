@@ -876,9 +876,9 @@
                 
             },
             addData:function(chart, label, data) {
-                if(label!="others"){
-                   chart.data.labels.push(label)
-                }  
+//                if(label!="others"){
+                chart.data.labels.push(label)
+//                }  
                 chart.data.datasets.forEach((dataset) => {
                     dataset.data.push(data);
                 })
