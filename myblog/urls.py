@@ -19,6 +19,8 @@ from app01 import views
 from dash import urls as dash_urls
 from covidDash import urls as covidDash_urls
 from appSalesReport import urls as salesReport_urls
+from appHmtool import urls as hmtool_urls
+
 
 urlpatterns = [
 #    path('admin/', admin.site.urls),
@@ -27,6 +29,8 @@ urlpatterns = [
     path('dash/',include(dash_urls)),
 #    path('covid-dash/',include(covidDash_urls)),
     path('sales-report/',include(salesReport_urls)),
-#    path('test/', views.test)
+    path('hmtool/', include(hmtool_urls)),
+
+    #    path('test/', views.test)
 #    path('dash/', include('blog.urls')),
 ]
