@@ -255,7 +255,7 @@
               document.getElementById("upload").classList.add("hide")
               document.getElementById("uploading").classList.remove("hide")
               formData.append(`host_excel`, file);
-              setTimeout(() => { 
+//              setTimeout(() => { 
 
                 axios.post(``, formData, {
                   headers: {'Content-Type': 'multipart/form-data'},
@@ -279,7 +279,7 @@
                   
                 }).catch()
 
-              }, 100);
+//              }, 100);
             } else {
               alert('请上传excel文件')
             }
@@ -688,7 +688,7 @@
             var today = moment().format('YYMMDD');
             var fileName =  this.response['product_brand'] + ' ' + year +'年销售明细帐分析v'+today+'.xlsx'
             
-            console.log(sheet)
+//            console.log(sheet)
             window.saveAs(wbBlob, fileName)
           
             
