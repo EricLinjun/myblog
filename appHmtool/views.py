@@ -25,17 +25,18 @@ class home(APIView):
             Transactions.objects.all().delete()
             for row in data:
                 
+                
                 data_list = date + row[:13] + row[-1:] + upload_id
-                dic = {'upload_time': data_list[0], 'sale_warehouse': data_list[1], 'sale_id': data_list[2],
-                       'sale_status': data_list[3], 'sale_updated_time': data_list[4], 'sale_client': data_list[5],
-                       'sale_name': data_list[6], 'product_barcode': data_list[7], 'product_name_cn': data_list[8],
-                       'product_name_en': data_list[9], 'product_brand': data_list[10],
-                       'product_supplier': data_list[11],
-                       'sale_quantity': data_list[12], 'sale_price': data_list[13], 'sale_payment': data_list[14],
-                       'upload_id': data_list[15]}
-            
-
-                Transactions.objects.create(**dic)
+                
+                if data_list[3] == 'already_delivery':
+                    dic = {'upload_time': data_list[0], 'sale_warehouse': data_list[1], 'sale_id': data_list[2],
+                           'sale_status': data_list[3], 'sale_updated_time': data_list[4], 'sale_client': data_list[5],
+                           'sale_name': data_list[6], 'product_barcode': data_list[7], 'product_name_cn': data_list[8],
+                           'product_name_en': data_list[9], 'product_brand': data_list[10],
+                           'product_supplier': data_list[11],
+                           'sale_quantity': data_list[12], 'sale_price': data_list[13], 'sale_payment': data_list[14],
+                           'upload_id': data_list[15]}
+                    Transactions.objects.create(**dic)
 
             product_brand = Transactions.objects.values('product_brand').first()['product_brand']
 
