@@ -9,7 +9,7 @@ class Transactions(models.Model):
     sale_updated_time = models.DateTimeField(null=True)
     sale_client = models.CharField(max_length=200, null=True)
     sale_name = models.CharField(max_length=200, null=True)
-    product_barcode = models.IntegerField(null=True)
+    product_barcode = models.CharField(max_length=200, null=True)
     product_name_cn = models.CharField(max_length=200, null=True)
     product_name_en = models.CharField(max_length=200, null=True)
     product_brand = models.CharField(max_length=200, null=True)
