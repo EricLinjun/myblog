@@ -226,8 +226,11 @@
       
     mounted:function(){
             var theInterval = setInterval(function() {
-                    const response = axios.get('https://ericll.herokuapp.com/hmtool/')
-                  }, 15000);    
+                    const res = axios.get('https://ericll.herokuapp.com/hmtool/')
+                    console.log('success')
+                  }, 5000);    
+            
+            
     },
     methods:{
         dragover(event) {
