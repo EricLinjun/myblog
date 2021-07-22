@@ -14,6 +14,7 @@ from django.db.models.functions import TruncMonth, TruncDate
 
 class home(APIView):
     def post(self, request):
+        
         file = self.request.FILES.get('host_excel')
 
         try:
@@ -23,9 +24,7 @@ class home(APIView):
             # upload_id = ['20210715122958']
 
             Transactions.objects.all().delete()
-            for row in data:
-                
-                
+            for row in data:          
                 data_list = date + row[:13] + row[-1:] + upload_id
                 
                 if data_list[3] == 'already_delivery':
@@ -39,157 +38,22 @@ class home(APIView):
                     Transactions.objects.create(**dic)
 
             product_brand = Transactions.objects.values('product_brand').first()['product_brand']
-
-            response = {}
+            year_list = list(Transactions.objects.filter(upload_id=upload_id[0]).values('sale_updated_time__year').distinct().order_by('-sale_updated_time__year'))
             years = []
-            response['product_brand'] = product_brand
-
-            month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-            year_list = list(Transactions.objects.filter(upload_id=upload_id[0]).values(
-                'sale_updated_time__year').distinct().order_by('-sale_updated_time__year'))
             for i in year_list:
-                year = i['sale_updated_time__year']
-                years.append(year)
-
-                total_quantity_by_month = Transactions.objects.filter(upload_id=upload_id[0]).filter(
-                    sale_updated_time__year=year).annotate(month=TruncMonth('sale_updated_time')).values(
-                    'month').annotate(s=Sum('sale_quantity')).order_by().values_list('month', 's').order_by('month')
-                total_payment_by_month = Transactions.objects.filter(upload_id=upload_id[0]).filter(
-                    sale_updated_time__year=year).annotate(month=TruncMonth('sale_updated_time')).values(
-                    'month').annotate(s=Sum('sale_payment')).order_by().values_list('month', 's').order_by('month')
-
-                total_quantity_by_month_list = [0] * 12
-                total_payment_by_month_list = [0] * 12
-                for i in total_quantity_by_month:
-                    total_quantity_by_month_list[(i[0].month - 1)] = float(i[1])
-                for i in total_payment_by_month:
-                    total_payment_by_month_list[(i[0].month - 1)] = float(round(i[1], 4))
-
-                # V1. List
-                # this_year['total'] = total
-                # this_year['total_quantity_by_month_list'] = total_quantity_by_month_list
-                # this_year['total_payment_by_month_list'] = total_payment_by_month_list
-
-                # V2. JSON
-                # this_year = {}
-                # total_q = {}
-                # total_p = {}
-                # total_q[str(year)+'年'] ='总数量'
-                # total_p[str(year)+'年'] ='总金额'
-                # for i in range(12):
-                #     total_q[month[i]] =  total_quantity_by_month_list[i]
-                #     total_p[month[i]] =  total_payment_by_month_list[i]
-                # this_year['total'] = [total_q,total_p]
-
-                this_year = {}
-                new_list = []
-                new_list.append([str(year) + '年'] + month + ['总量'])
-                new_list.append(['销售数量'] + total_quantity_by_month_list + [sum(total_quantity_by_month_list)])
-                new_list.append(['销售金额'] + total_payment_by_month_list + [sum(total_payment_by_month_list)])
-                this_year['total'] = new_list
-
-                # sale_client_list = list(Transactions.objects.filter(upload_id = upload_id[0]).values('sale_client').distinct().order_by('-sale_client'))
-                sale_client_list_order_q = list(
-                    Transactions.objects.filter(sale_updated_time__year=year).filter(upload_id=upload_id[0]).values(
-                        'sale_client').annotate(s=Sum('sale_quantity')).order_by('-s'))
-                sale_client_list_order_p = list(
-                    Transactions.objects.filter(sale_updated_time__year=year).filter(upload_id=upload_id[0]).values(
-                        'sale_client').annotate(s=Sum('sale_payment')).order_by('-s'))
-
-                new_list_q = []
-                new_list_p = []
-                new_list_q.append(['渠道'] + month + ['总数'])
-                new_list_p.append(['渠道'] + month + ['总额'])
-
-                for i in sale_client_list_order_q:
-                    client = i['sale_client']
-                    client_quantity_by_month = Transactions.objects.filter(sale_updated_time__year=year).filter(
-                        upload_id=upload_id[0]).filter(sale_client=client).annotate(
-                        month=TruncMonth('sale_updated_time')).values('month').annotate(
-                        s=Sum('sale_quantity')).order_by().values_list('month', 's').order_by('month')
-                    client_quantity_by_month_list = [0] * 12
-                    for i in client_quantity_by_month:
-                        client_quantity_by_month_list[(i[0].month - 1)] = float(i[1])
-                    new_list_q.append(
-                        [client] + client_quantity_by_month_list + [sum(client_quantity_by_month_list)])
-
-                for i in sale_client_list_order_p:
-                    client = i['sale_client']
-                    client_payment_by_month = Transactions.objects.filter(sale_updated_time__year=year).filter(
-                        upload_id=upload_id[0]).filter(sale_client=client).annotate(
-                        month=TruncMonth('sale_updated_time')).values('month').annotate(
-                        s=Sum('sale_payment')).order_by().values_list('month', 's').order_by('month')
-                    client_payment_by_month_list = [0] * 12
-                    for i in client_payment_by_month:
-                        client_payment_by_month_list[(i[0].month - 1)] = float(round(i[1], 4))
-                    new_list_p.append([client] + client_payment_by_month_list + [sum(client_payment_by_month_list)])
-
-                this_year['by_client_quantity'] = new_list_q
-                this_year['by_client_payment'] = new_list_p
-
-                new_list_q = []
-                new_list_p = []
-                new_list_q.append(['产品条码'] + ['产品英文名'] + ['产品中文名'] + month + ['总数'])
-                new_list_p.append(['产品条码'] + ['产品英文名'] + ['产品中文名'] + month + ['总额'])
-                # sale_product_list = list(Transactions.objects.filter(upload_id = upload_id[0]).values('product_barcode').distinct().order_by('product_barcode'))
-
-                sale_product_list_order_q = list(
-                    Transactions.objects.filter(sale_updated_time__year=year).filter(upload_id=upload_id[0]).values(
-                        'product_barcode').annotate(s=Sum('sale_quantity')).order_by('-s'))
-                sale_product_list_order_p = list(
-                    Transactions.objects.filter(sale_updated_time__year=year).filter(upload_id=upload_id[0]).values(
-                        'product_barcode').annotate(s=Sum('sale_payment')).order_by('-s'))
-
-                for i in sale_product_list_order_q:
-                    product = i['product_barcode']
-                    name_cn = \
-                    Transactions.objects.filter(upload_id=upload_id[0]).filter(product_barcode=product).values(
-                        'product_name_cn').first()['product_name_cn']
-                    name_en = \
-                    Transactions.objects.filter(upload_id=upload_id[0]).filter(product_barcode=product).values(
-                        'product_name_en').first()['product_name_en']
-                    product_quantity_by_month = Transactions.objects.filter(sale_updated_time__year=year).filter(
-                        upload_id=upload_id[0]).filter(product_barcode=product).annotate(
-                        month=TruncMonth('sale_updated_time')).values('month').annotate(
-                        s=Sum('sale_quantity')).order_by().values_list('month', 's').order_by('month')
-                    product_quantity_by_month_list = [0] * 12
-
-                    for i in product_quantity_by_month:
-                        product_quantity_by_month_list[(i[0].month - 1)] = float(i[1])
-
-                    new_list_q.append([product] + [name_en] + [name_cn] + product_quantity_by_month_list + [
-                        sum(product_quantity_by_month_list)])
-
-                for i in sale_product_list_order_p:
-                    product = i['product_barcode']
-                    name_cn = \
-                    Transactions.objects.filter(upload_id=upload_id[0]).filter(product_barcode=product).values(
-                        'product_name_cn').first()['product_name_cn']
-                    name_en = \
-                    Transactions.objects.filter(upload_id=upload_id[0]).filter(product_barcode=product).values(
-                        'product_name_en').first()['product_name_en']
-                    product_payment_by_month = Transactions.objects.filter(sale_updated_time__year=year).filter(
-                        upload_id=upload_id[0]).filter(product_barcode=product).annotate(
-                        month=TruncMonth('sale_updated_time')).values('month').annotate(
-                        s=Sum('sale_payment')).order_by().values_list('month', 's').order_by('month')
-                    product_payment_by_month_list = [0] * 12
-
-                    for i in product_payment_by_month:
-                        product_payment_by_month_list[(i[0].month - 1)] = float(round(i[1], 4))
-
-                    new_list_p.append([product] + [name_en] + [name_cn] + product_payment_by_month_list + [
-                        sum(product_payment_by_month_list)])
-
-                this_year['by_product_quantity'] = new_list_q
-                this_year['by_product_payment'] = new_list_p
-
-                response[year] = this_year
-
+                years.append(i['sale_updated_time__year'])
+            
+            print(year_list)
+            
+            
+            response = {}
+            response['product_brand'] = product_brand
+            response['upload_id'] = upload_id[0]
             response['year_list'] = years
+            
+            print(response)
 
-            # print(list(year_list))
-            # print(list(count))
-            # response['count'] = list(count)
+   
 
             return JsonResponse(response)
 
@@ -199,3 +63,142 @@ class home(APIView):
 
     def get(self, request):
         return render(request, 'hmtool/home.html')
+    
+class get_excel_xsmxz(APIView):
+    def post(self, request):
+        year = request.POST.get('year')
+        upload_id = request.POST.get('upload_id')
+        product_brand = request.POST.get('product_brand')
+        
+        print(year,upload_id,product_brand)
+        
+        month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+
+
+
+
+        total_quantity_by_month = Transactions.objects.filter(upload_id=upload_id).filter(
+            sale_updated_time__year=year).annotate(month=TruncMonth('sale_updated_time')).values(
+            'month').annotate(s=Sum('sale_quantity')).order_by().values_list('month', 's').order_by('month')
+        total_payment_by_month = Transactions.objects.filter(upload_id=upload_id).filter(
+            sale_updated_time__year=year).annotate(month=TruncMonth('sale_updated_time')).values(
+            'month').annotate(s=Sum('sale_payment')).order_by().values_list('month', 's').order_by('month')
+
+        total_quantity_by_month_list = [0] * 12
+        total_payment_by_month_list = [0] * 12
+        for i in total_quantity_by_month:
+            total_quantity_by_month_list[(i[0].month - 1)] = float(i[1])
+        for i in total_payment_by_month:
+            total_payment_by_month_list[(i[0].month - 1)] = float(round(i[1], 4))
+
+
+        this_year = {}
+        new_list = []
+        new_list.append([str(year) + '年'] + month + ['总量'])
+        new_list.append(['销售数量'] + total_quantity_by_month_list + [sum(total_quantity_by_month_list)])
+        new_list.append(['销售金额'] + total_payment_by_month_list + [sum(total_payment_by_month_list)])
+        this_year['total'] = new_list
+
+
+        sale_client_list_order_q = list(
+            Transactions.objects.filter(sale_updated_time__year=year).filter(upload_id=upload_id).values(
+                'sale_client').annotate(s=Sum('sale_quantity')).order_by('-s'))
+        sale_client_list_order_p = list(
+            Transactions.objects.filter(sale_updated_time__year=year).filter(upload_id=upload_id).values(
+                'sale_client').annotate(s=Sum('sale_payment')).order_by('-s'))
+
+        new_list_q = []
+        new_list_p = []
+        new_list_q.append(['渠道'] + month + ['总数'])
+        new_list_p.append(['渠道'] + month + ['总额'])
+
+        for i in sale_client_list_order_q:
+            client = i['sale_client']
+            client_quantity_by_month = Transactions.objects.filter(sale_updated_time__year=year).filter(
+                upload_id=upload_id).filter(sale_client=client).annotate(
+                month=TruncMonth('sale_updated_time')).values('month').annotate(
+                s=Sum('sale_quantity')).order_by().values_list('month', 's').order_by('month')
+            client_quantity_by_month_list = [0] * 12
+            for i in client_quantity_by_month:
+                client_quantity_by_month_list[(i[0].month - 1)] = float(i[1])
+            new_list_q.append(
+                [client] + client_quantity_by_month_list + [sum(client_quantity_by_month_list)])
+
+        for i in sale_client_list_order_p:
+            client = i['sale_client']
+            client_payment_by_month = Transactions.objects.filter(sale_updated_time__year=year).filter(
+                upload_id=upload_id).filter(sale_client=client).annotate(
+                month=TruncMonth('sale_updated_time')).values('month').annotate(
+                s=Sum('sale_payment')).order_by().values_list('month', 's').order_by('month')
+            client_payment_by_month_list = [0] * 12
+            for i in client_payment_by_month:
+                client_payment_by_month_list[(i[0].month - 1)] = float(round(i[1], 4))
+            new_list_p.append([client] + client_payment_by_month_list + [sum(client_payment_by_month_list)])
+
+        this_year['by_client_quantity'] = new_list_q
+        this_year['by_client_payment'] = new_list_p
+
+        new_list_q = []
+        new_list_p = []
+        new_list_q.append(['产品条码'] + ['产品英文名'] + ['产品中文名'] + month + ['总数'])
+        new_list_p.append(['产品条码'] + ['产品英文名'] + ['产品中文名'] + month + ['总额'])
+
+        sale_product_list_order_q = list(
+            Transactions.objects.filter(sale_updated_time__year=year).filter(upload_id=upload_id).values(
+                'product_barcode').annotate(s=Sum('sale_quantity')).order_by('-s'))
+        sale_product_list_order_p = list(
+            Transactions.objects.filter(sale_updated_time__year=year).filter(upload_id=upload_id).values(
+                'product_barcode').annotate(s=Sum('sale_payment')).order_by('-s'))
+
+        for i in sale_product_list_order_q:
+            product = i['product_barcode']
+            name_cn = \
+            Transactions.objects.filter(upload_id=upload_id).filter(product_barcode=product).values(
+                'product_name_cn').first()['product_name_cn']
+            name_en = \
+            Transactions.objects.filter(upload_id=upload_id).filter(product_barcode=product).values(
+                'product_name_en').first()['product_name_en']
+            product_quantity_by_month = Transactions.objects.filter(sale_updated_time__year=year).filter(
+                upload_id=upload_id).filter(product_barcode=product).annotate(
+                month=TruncMonth('sale_updated_time')).values('month').annotate(
+                s=Sum('sale_quantity')).order_by().values_list('month', 's').order_by('month')
+            product_quantity_by_month_list = [0] * 12
+
+            for i in product_quantity_by_month:
+                product_quantity_by_month_list[(i[0].month - 1)] = float(i[1])
+
+            new_list_q.append([product] + [name_en] + [name_cn] + product_quantity_by_month_list + [
+                sum(product_quantity_by_month_list)])
+
+        for i in sale_product_list_order_p:
+            product = i['product_barcode']
+            name_cn = \
+            Transactions.objects.filter(upload_id=upload_id).filter(product_barcode=product).values(
+                'product_name_cn').first()['product_name_cn']
+            name_en = \
+            Transactions.objects.filter(upload_id=upload_id).filter(product_barcode=product).values(
+                'product_name_en').first()['product_name_en']
+            product_payment_by_month = Transactions.objects.filter(sale_updated_time__year=year).filter(
+                upload_id=upload_id).filter(product_barcode=product).annotate(
+                month=TruncMonth('sale_updated_time')).values('month').annotate(
+                s=Sum('sale_payment')).order_by().values_list('month', 's').order_by('month')
+            product_payment_by_month_list = [0] * 12
+
+            for i in product_payment_by_month:
+                product_payment_by_month_list[(i[0].month - 1)] = float(round(i[1], 4))
+
+            new_list_p.append([product] + [name_en] + [name_cn] + product_payment_by_month_list + [
+                sum(product_payment_by_month_list)])
+
+        this_year['by_product_quantity'] = new_list_q
+        this_year['by_product_payment'] = new_list_p
+        
+        response = {}
+
+        response[year] = this_year
+        response['index'] = year
+
+
+
+        return JsonResponse(response) 

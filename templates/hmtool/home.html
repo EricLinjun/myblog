@@ -35,7 +35,7 @@
             </div>
             <div style="height: 100px;padding-top: 50px;color: black;">
               
-              <p>[[file_name]] 转换中...</p>
+              <p>[[file_name]] [[progress]]...</p>
               
 
             </div>
@@ -209,7 +209,8 @@
     el: '#app',
     data:{
       file_name: '',
-      response: null,
+      progress: '转换中',
+      response: {},
       Datas: {
         'animals': [
               {"name": "cat", "category": "animal"}
@@ -225,11 +226,7 @@
     },
       
     mounted:function(){
-            var theInterval = setInterval(function() {
-                    const res = axios.get('https://ericll.herokuapp.com/hmtool/')
-                    console.log('success')
-                  }, 5000);    
-            
+
             
     },
     methods:{
@@ -251,7 +248,13 @@
           this.upload()
           event.currentTarget.classList.remove('drag-in');
         },
+        getCookie (name) {
+              var value = '; ' + document.cookie
+              var parts = value.split('; ' + name + '=')
+              if (parts.length === 2) return parts.pop().split(';').shift()
+        },
         upload(){
+            var self = this;
 
             
             while(this.response == ''){
@@ -269,7 +272,7 @@
               document.getElementById("upload").classList.add("hide")
               document.getElementById("uploading").classList.remove("hide")
               formData.append(`host_excel`, file);
-//              setTimeout(() => { 
+
                 
                         
 
@@ -277,10 +280,6 @@
                   headers: {'Content-Type': 'multipart/form-data'},
                 
                 }).then((response)=>{
-                  document.getElementById("uploading").classList.add("hide")
-                  document.getElementById("uploaded").classList.remove("hide")
-                    
-                  console.log(response)
 
                   
                   if (response.data['product_brand'] == null){
@@ -288,7 +287,60 @@
                     document.getElementById("uploaded-error").classList.remove("hide")
 
                   } else {
-                    this.response = response.data
+
+
+                    this.response['year_list'] = response.data.year_list
+                    this.response['product_brand'] = response.data.product_brand
+//                    this.progress = '转换中'
+                      
+                      
+                      
+
+                    for(year of response.data.year_list){
+
+                      let data = {"year":year,"upload_id":response.data.upload_id,"product_brand":response.data.product_brand}
+                      let cookie = this.getCookie('csrftoken')
+
+
+                      console.log(year)
+
+                      async function start() {
+
+                          await this.axios.post('get_excel_xsmxz/',
+                                         Qs.stringify(data),
+                                         {headers: {'X-CSRFToken':cookie}}
+                                         )
+                            .then((response) => {
+                              let res = response.data
+                              self.response[res['index']] = res[res['index']]
+//                              self.progress = res['index'] + '年分析完成'
+                              
+                              
+                            }).catch((error) => {
+                              console.log(error);
+                            });
+                      }
+
+                      start();
+                        
+
+                    }
+                      
+                    console.log(this.response)
+                        
+                    
+                      
+                    
+    
+                      
+                    
+                    
+                    
+                      
+                    document.getElementById("uploading").classList.add("hide")
+                    document.getElementById("uploaded").classList.remove("hide")
+                      
+                    
                   }
 
                   
@@ -297,7 +349,7 @@
                     console.log('error', error);
                 })
 
-//              }, 100);
+
             } else {
               alert('请上传excel文件')
             }
