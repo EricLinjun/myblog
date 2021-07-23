@@ -344,14 +344,6 @@
                     
                     this.progress = '生成excel中'
                     
-                    var lag = this.response.year_list.length * 100
-                    setTimeout(function(){
-                        
-                      
-                        document.getElementById("uploading").classList.add("hide")
-                        document.getElementById("uploaded").classList.remove("hide")
-                        
-                    }, lag);
                     
                   }
 
@@ -432,16 +424,8 @@
           return blob;
         },
 
-        export_excel(){ 
-
-
-            
-            
-
-      
+        export_excel(){   
           for (year of this.response.year_list){
-
-
             var title = this.response['product_brand'] + '渠道' + year + '年采购情况'
             var index = 1
             var index_list = []
@@ -774,6 +758,11 @@
             this.wbBlob.push(this.sheet2blob(sheet, '渠道分析',sheet2, '单品分析'))
             var today = moment().format('YYMMDD');
             this.excel_name.push(this.response['product_brand'] + ' ' + year +'年销售明细帐分析v'+today+'.xlsx')
+              
+            if (this.excel_name.length == this.response.year_list.length){
+                document.getElementById("uploading").classList.add("hide")
+                document.getElementById("uploaded").classList.remove("hide")
+            }
   
           }
                 
@@ -781,8 +770,6 @@
         },
         
         download_excel(){
-            console.log(this.wbBlob)
-            console.log(this.excel_name)
             var self = this
             this.wbBlob.forEach(function (value, i) {
                 window.saveAs(value, self.excel_name[i])
