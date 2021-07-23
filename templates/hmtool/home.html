@@ -64,7 +64,7 @@
                  
               </div>
               <div class="row justify-content-center my-3">
-                <button class="btn btn-download-excel" @click="export_excel">下载Excel分析</button>
+                <button class="btn btn-download-excel" @click="download_excel">下载Excel分析</button>
                  
               </div>
               
@@ -210,6 +210,8 @@
     data:{
       file_name: '',
       progress: '转换中',
+      wbBlob: [],
+      excel_name: [],
       response: {},
       Datas: {
         'animals': [
@@ -329,14 +331,16 @@
                     
                       
                     
-    
+                    
                     this.progress = '生成excel中'
                     
-                    var lag = this.response.year_list.length * 1500
+                    var lag = this.response.year_list.length * 1000
                     setTimeout(function(){
+                        self.export_excel()
                       
                         document.getElementById("uploading").classList.add("hide")
                         document.getElementById("uploaded").classList.remove("hide")
+                        
                     }, lag);
 //                    console.log('excel完成')
                     
@@ -753,26 +757,28 @@
                 j = j + 1
               } 
             }
-            var wbBlob = this.sheet2blob(sheet, '渠道分析',sheet2, '单品分析')
+            this.wbBlob.push(this.sheet2blob(sheet, '渠道分析',sheet2, '单品分析'))
             var today = moment().format('YYMMDD');
-            var fileName =  this.response['product_brand'] + ' ' + year +'年销售明细帐分析v'+today+'.xlsx'
+            this.excel_name.push(this.response['product_brand'] + ' ' + year +'年销售明细帐分析v'+today+'.xlsx')
             
-//            console.log(sheet)
-            window.saveAs(wbBlob, fileName)
+
+//            window.saveAs(wbBlob, fileName)
           
             
           }
                 
 
         },
+        
+        download_excel(){
+            var self = this
+            this.wbBlob.forEach(function (value, i) {
+                window.saveAs(value, self.excel_name[i])
+            });
+            
+        },
        
-        export_excel_test(){
-          var ws = this.sheet_from_array_of_arrays([ ["Foo", "Bar", "Baz", "Qux"], [1,2,3,4], [2,3,4,5], [3,4,5,6] ]);
-          ws['!autofilter'] = { ref:"A1:D4" }
-          var wbBlob = this.sheet2blob(ws, '渠道分析',ws, '单品分析')
-          window.saveAs(wbBlob, 'auto.xlsx')
 
-        }
         
     }
 
