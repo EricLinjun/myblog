@@ -344,7 +344,7 @@
                     
                     this.progress = '生成excel中'
                     
-                    var lag = this.response.year_list.length * 2000
+                    var lag = this.response.year_list.length * 100
                     setTimeout(function(){
                         
                       
@@ -781,6 +781,8 @@
         },
         
         download_excel(){
+            console.log(this.wbBlob)
+            console.log(this.excel_name)
             var self = this
             this.wbBlob.forEach(function (value, i) {
                 window.saveAs(value, self.excel_name[i])
