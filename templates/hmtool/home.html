@@ -339,11 +339,20 @@
                       start();
                         
 
-                    }                  
+                    }
+                      
+
+                    
+                    
+                    var lag = this.response.year_list.length * 1000
+                    setTimeout(function(){
+                        
                       
                     document.getElementById("uploading").classList.add("hide")
                     document.getElementById("uploaded").classList.remove("hide")
-
+                        
+                    }, lag);
+//                    console.log('excel完成')
                     
                   }
 
