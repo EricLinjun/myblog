@@ -257,9 +257,6 @@
             var self = this;
 
             
-            while(this.response == ''){
-                  console.log('not yet')
-            }
 
             const formData = new FormData();               
             let file_info = document.getElementById('file');
@@ -269,9 +266,10 @@
             
 
             if( extension == 'xlsx'){
-              document.getElementById("upload").classList.add("hide")
-              document.getElementById("uploading").classList.remove("hide")
-              formData.append(`host_excel`, file);
+                document.getElementById("upload").classList.add("hide")
+                document.getElementById("uploading").classList.remove("hide")
+                formData.append(`host_excel`, file);                
+                
 
                 
                         
@@ -280,6 +278,7 @@
                   headers: {'Content-Type': 'multipart/form-data'},
                 
                 }).then((response)=>{
+                  
 
                   
                   if (response.data['product_brand'] == null){
@@ -291,8 +290,7 @@
 
                     this.response['year_list'] = response.data.year_list
                     this.response['product_brand'] = response.data.product_brand
-//                    this.progress = '转换中'
-                      
+                    
                       
                       
 
@@ -302,7 +300,7 @@
                       let cookie = this.getCookie('csrftoken')
 
 
-                      console.log(year)
+//                      console.log(year)
 
                       async function start() {
 
@@ -332,14 +330,15 @@
                       
                     
     
-                      
+                    this.progress = '生成excel中'
                     
-                    
-                    
+                    var lag = this.response.year_list.length * 1000
+                    setTimeout(function(){
                       
-                    document.getElementById("uploading").classList.add("hide")
-                    document.getElementById("uploaded").classList.remove("hide")
-                      
+                        document.getElementById("uploading").classList.add("hide")
+                        document.getElementById("uploaded").classList.remove("hide")
+                    }, lag);
+//                    console.log('excel完成')
                     
                   }
 
