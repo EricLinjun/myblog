@@ -353,7 +353,7 @@
                       let data = {"year":year,"upload_id":response.data.upload_id,"product_brand":response.data.product_brand}
                       let cookie = self.getCookie('csrftoken')
 
-                      await this.axios.post('get_excel_p1/',
+                      await this.axios.post('get_excel_xsmxz/',
                                      Qs.stringify(data),
                                      {headers: {'X-CSRFToken':cookie}}
                                      )
@@ -365,48 +365,9 @@
 
                           i = i + 1  
                           if (i == self.response.year_list.length){
-//                              self.export_excel()
-//                              console.log(res)
-                              i = 0
-                              start_two(i)
+                              self.export_excel()
                           } else {
                               start(i)
-                          }
-
-                        }).catch((error) => {
-                          alert('响应超时')
-                          console.log(error);
-                        });
-
-                  }
-                      
-                  async function start_two(i) {
-                      
-                      year = response.data.year_list[i]
-                      console.log(year)
-
-                      let data = {"year":year,"upload_id":response.data.upload_id,"product_brand":response.data.product_brand}
-                      let cookie = self.getCookie('csrftoken')
-
-                      await this.axios.post('get_excel_p2/',
-                                     Qs.stringify(data),
-                                     {headers: {'X-CSRFToken':cookie}}
-                                     )
-                        .then((response) => {
-                          console.log('ready part2')
-                          let res = response.data
-                          Vue.set(self.response[res['index']], 'by_product_quantity', res[res['index']]['by_product_quantity'])
-                          Vue.set(self.response[res['index']], 'by_product_payment', res[res['index']]['by_product_payment'])
-
-
-//                          Vue.set(self.response, parseInt(res['index']), res[res['index']])
-
-                          i = i + 1  
-                          if (i == self.response.year_list.length){
-                              self.export_excel()
-//                              console.log(self.response)
-                          } else {
-                              start_two(i)
                           }
 
                         }).catch((error) => {
