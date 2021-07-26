@@ -64,7 +64,7 @@ class home(APIView):
     def get(self, request):
         return render(request, 'hmtool/home.html')
     
-class get_excel_xsmxz(APIView):
+class get_excel_p1(APIView):
     def post(self, request):
         year = request.POST.get('year')
         upload_id = request.POST.get('upload_id')
@@ -138,6 +138,83 @@ class get_excel_xsmxz(APIView):
 
         this_year['by_client_quantity'] = new_list_q
         this_year['by_client_payment'] = new_list_p
+        
+#        new_list_q = []
+#        new_list_p = []
+#        new_list_q.append(['产品条码'] + ['产品英文名'] + ['产品中文名'] + month + ['总数'])
+#        new_list_p.append(['产品条码'] + ['产品英文名'] + ['产品中文名'] + month + ['总额'])
+#
+#        sale_product_list_order_q = list(
+#            Transactions.objects.filter(sale_updated_time__year=year).filter(upload_id=upload_id).values(
+#                'product_barcode').annotate(s=Sum('sale_quantity')).order_by('-s'))
+#        sale_product_list_order_p = list(
+#            Transactions.objects.filter(sale_updated_time__year=year).filter(upload_id=upload_id).values(
+#                'product_barcode').annotate(s=Sum('sale_payment')).order_by('-s'))
+#
+#        for i in sale_product_list_order_q:
+#            product = i['product_barcode']
+#            name_cn = \
+#            Transactions.objects.filter(upload_id=upload_id).filter(product_barcode=product).values(
+#                'product_name_cn').first()['product_name_cn']
+#            name_en = \
+#            Transactions.objects.filter(upload_id=upload_id).filter(product_barcode=product).values(
+#                'product_name_en').first()['product_name_en']
+#            product_quantity_by_month = Transactions.objects.filter(sale_updated_time__year=year).filter(
+#                upload_id=upload_id).filter(product_barcode=product).annotate(
+#                month=TruncMonth('sale_updated_time')).values('month').annotate(
+#                s=Sum('sale_quantity')).order_by().values_list('month', 's').order_by('month')
+#            product_quantity_by_month_list = [0] * 12
+#
+#            for i in product_quantity_by_month:
+#                product_quantity_by_month_list[(i[0].month - 1)] = float(i[1])
+#
+#            new_list_q.append([product] + [name_en] + [name_cn] + product_quantity_by_month_list + [
+#                sum(product_quantity_by_month_list)])
+#
+#        for i in sale_product_list_order_p:
+#            product = i['product_barcode']
+#            name_cn = \
+#            Transactions.objects.filter(upload_id=upload_id).filter(product_barcode=product).values(
+#                'product_name_cn').first()['product_name_cn']
+#            name_en = \
+#            Transactions.objects.filter(upload_id=upload_id).filter(product_barcode=product).values(
+#                'product_name_en').first()['product_name_en']
+#            product_payment_by_month = Transactions.objects.filter(sale_updated_time__year=year).filter(
+#                upload_id=upload_id).filter(product_barcode=product).annotate(
+#                month=TruncMonth('sale_updated_time')).values('month').annotate(
+#                s=Sum('sale_payment')).order_by().values_list('month', 's').order_by('month')
+#            product_payment_by_month_list = [0] * 12
+#
+#            for i in product_payment_by_month:
+#                product_payment_by_month_list[(i[0].month - 1)] = float(round(i[1], 4))
+#
+#            new_list_p.append([product] + [name_en] + [name_cn] + product_payment_by_month_list + [
+#                sum(product_payment_by_month_list)])
+#
+#        this_year['by_product_quantity'] = new_list_q
+#        this_year['by_product_payment'] = new_list_p
+
+        
+        response = {}
+
+        response[year] = this_year
+        response['index'] = year
+
+
+
+        return JsonResponse(response) 
+
+class get_excel_p2(APIView):
+    def post(self, request):
+        year = request.POST.get('year')
+        upload_id = request.POST.get('upload_id')
+        product_brand = request.POST.get('product_brand')
+        
+        print(year,upload_id,product_brand)
+        
+        month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+        this_year = {}
 
         new_list_q = []
         new_list_p = []
