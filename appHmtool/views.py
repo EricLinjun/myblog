@@ -6,11 +6,11 @@ from appHmtool.models import Transactions
 import datetime
 from django.db.models import F, Func, Value, CharField, Count, Sum
 from django.db.models.functions import TruncMonth, TruncDate
+import pandas as pd
+
 
 
 # Create your views here.
-# def home(request):
-#     return render(request, 'home.html')
 
 class home(APIView):
     def post(self, request):
@@ -18,187 +18,105 @@ class home(APIView):
         file = self.request.FILES.get('host_excel')
 
         try:
-            data = xlsx_get(file, column_limit=19).get('SheetJS')[1:]
-            date = [datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")]
+            df = pd.read_excel(file,dtype=object)
+            df = df.loc[df['订单状态'] == 'already_delivery']
+            df = df[df['更新时间'].notnull()]
+            df['客户名字'] = df['客户名字'].replace(['Xpanda Go', 'ACI Holdings Pty Ltd'], 'XPG')
+            df['year'] = pd.DatetimeIndex(df['更新时间']).year
+            df['month'] = pd.DatetimeIndex(df['更新时间']).month
+            years = list(df['year'].unique())
+            product_brand = list(df['品牌'].unique())[0]
             upload_id = [datetime.datetime.now().strftime("%Y%m%d%H%M%S")]
-            # upload_id = ['20210715122958']
 
-            Transactions.objects.all().delete()
-            for row in data:          
-                data_list = date + row[:13] + row[-1:] + upload_id
-                
-                if data_list[3] == 'already_delivery':
-                    dic = {'upload_time': data_list[0], 'sale_warehouse': data_list[1], 'sale_id': data_list[2],
-                           'sale_status': data_list[3], 'sale_updated_time': data_list[4], 'sale_client': data_list[5],
-                           'sale_name': data_list[6], 'product_barcode': data_list[7], 'product_name_cn': data_list[8],
-                           'product_name_en': data_list[9], 'product_brand': data_list[10],
-                           'product_supplier': data_list[11],
-                           'sale_quantity': data_list[12], 'sale_price': data_list[13], 'sale_payment': data_list[14],
-                           'upload_id': data_list[15]}
-                    Transactions.objects.create(**dic)
-
-            product_brand = Transactions.objects.values('product_brand').first()['product_brand']
-            year_list = list(Transactions.objects.filter(upload_id=upload_id[0]).values('sale_updated_time__year').distinct().order_by('-sale_updated_time__year'))
-            years = []
-            for i in year_list:
-                years.append(i['sale_updated_time__year'])
-            
-            print(year_list)
-            
-            
             response = {}
             response['product_brand'] = product_brand
             response['upload_id'] = upload_id[0]
-            response['year_list'] = years
-            
-            print(response)
 
-   
+            year_list = []
+            for i in years:
+                year_list.append(int(i))
+            response['year_list'] = year_list
 
+            for year in year_list:
+                month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+                total_quantity_by_month = df.loc[df['year'] == year].groupby('month').agg({'数量':['sum']})
+                total_payment_by_month = df.loc[df['year'] == year].groupby('month').agg({'货款合计':['sum']})
+                sale_client_list_order_q = df.loc[df['year'] == year].groupby('客户名字').agg({'数量':['sum']}).sort_values(by=('数量', 'sum'),ascending=False)
+                sale_client_list_order_p = df.loc[df['year'] == year].groupby('客户名字').agg({'货款合计':['sum']}).sort_values(by=('货款合计', 'sum'),ascending=False)
+                sale_product_list_order_q = df.loc[df['year'] == year].groupby(['货品编号','品名(中文)','品名(英文)']).agg({'数量':['sum']}).sort_values(by=('数量', 'sum'),ascending=False)
+                sale_product_list_order_p = df.loc[df['year'] == year].groupby(['货品编号','品名(中文)','品名(英文)']).agg({'货款合计':['sum']}).sort_values(by=('货款合计', 'sum'),ascending=False)
+
+                total_quantity_by_month_list = [0] * 12
+                total_payment_by_month_list = [0] * 12
+                for index, row in total_quantity_by_month.iterrows():
+                    total_quantity_by_month_list[(index - 1)] = int(row.values[0])
+                for index, row in total_payment_by_month.iterrows():
+                    total_payment_by_month_list[(index - 1)] = round(float(row.values[0]),2)
+
+                this_year = {}
+                new_list = []
+                new_list.append([str(year) + '年'] + month + ['总量'])
+                new_list.append(['销售数量'] + total_quantity_by_month_list + [round(sum(total_quantity_by_month_list),2)])
+                new_list.append(['销售金额'] + total_payment_by_month_list + [round(sum(total_payment_by_month_list),2)])
+                this_year['total'] = new_list
+
+                new_list_q = []
+                new_list_p = []
+                new_list_q.append(['渠道'] + month + ['总数'])
+                new_list_p.append(['渠道'] + month + ['总额'])
+
+                for index, row in sale_client_list_order_q.iterrows():
+                    client = index
+                    client_quantity_by_month = df.loc[(df['year'] == year) & (df['客户名字'] == client)].groupby('month').agg({'数量':['sum']})
+                    client_quantity_by_month_list = [0] * 12
+                    for index, row in client_quantity_by_month.iterrows():
+                        client_quantity_by_month_list[(index - 1)] = int(row.values[0])
+                    new_list_q.append([client] + client_quantity_by_month_list +  [sum(client_quantity_by_month_list)])
+                for index, row in sale_client_list_order_p.iterrows():
+                    client = index
+                    client_payment_by_month = df.loc[(df['year'] == year) & (df['客户名字'] == client)].groupby('month').agg({'货款合计':['sum']})
+                    client_payment_by_month_list = [0] * 12
+                    for index, row in client_payment_by_month.iterrows():
+                        client_payment_by_month_list[(index - 1)] = int(row.values[0])
+                    new_list_p.append([client] + client_payment_by_month_list +  [sum(client_payment_by_month_list)])
+                
+                this_year['by_client_quantity'] = new_list_q
+                this_year['by_client_payment'] = new_list_p
+
+
+                new_list_q = []
+                new_list_p = []
+                new_list_q.append(['产品条码'] + ['产品英文名'] + ['产品中文名'] + month + ['总数'])
+                new_list_p.append(['产品条码'] + ['产品英文名'] + ['产品中文名'] + month + ['总额'])
+                for index, row in sale_product_list_order_q.iterrows():
+                    product = index[0]
+                    name_cn = index[1]
+                    name_en = index[2]
+                    product_quantity_by_month = df.loc[(df['year'] == year) & (df['货品编号'] == product)].groupby('month').agg({'数量':['sum']})
+                    product_quantity_by_month_list = [0] * 12
+                    for index, row in product_quantity_by_month.iterrows():
+                        product_quantity_by_month_list[(index - 1)] = int(row.values[0])
+                    new_list_q.append([product] + [name_en] + [name_cn] + product_quantity_by_month_list + [sum(product_quantity_by_month_list)])
+                for index, row in sale_product_list_order_p.iterrows():
+                    product = index[0]
+                    name_cn = index[1]
+                    name_en = index[2]
+                    product_payment_by_month = df.loc[(df['year'] == year) & (df['货品编号'] == product)].groupby('month').agg({'货款合计':['sum']})
+                    product_payment_by_month_list = [0] * 12
+                    for index, row in product_payment_by_month.iterrows():
+                        product_payment_by_month_list[(index - 1)] = int(row.values[0])
+                    new_list_p.append([product] + [name_en] + [name_cn] + product_payment_by_month_list + [sum(product_payment_by_month_list)])
+                
+                
+                this_year['by_product_quantity'] = new_list_q
+                this_year['by_product_payment'] = new_list_p
+
+                response[year] = this_year
             return JsonResponse(response)
-
-
         except Exception as e:
             return HttpResponse(e)
 
     def get(self, request):
         return render(request, 'hmtool/home.html')
-    
-class get_excel_xsmxz(APIView):
-    def post(self, request):
-        year = request.POST.get('year')
-        upload_id = request.POST.get('upload_id')
-        product_brand = request.POST.get('product_brand')
-        
-        print(year,upload_id,product_brand)
-        
-        month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
-
-
-
-
-        total_quantity_by_month = Transactions.objects.filter(upload_id=upload_id).filter(
-            sale_updated_time__year=year).annotate(month=TruncMonth('sale_updated_time')).values(
-            'month').annotate(s=Sum('sale_quantity')).order_by().values_list('month', 's').order_by('month')
-        total_payment_by_month = Transactions.objects.filter(upload_id=upload_id).filter(
-            sale_updated_time__year=year).annotate(month=TruncMonth('sale_updated_time')).values(
-            'month').annotate(s=Sum('sale_payment')).order_by().values_list('month', 's').order_by('month')
-
-        total_quantity_by_month_list = [0] * 12
-        total_payment_by_month_list = [0] * 12
-        for i in total_quantity_by_month:
-            total_quantity_by_month_list[(i[0].month - 1)] = float(i[1])
-        for i in total_payment_by_month:
-            total_payment_by_month_list[(i[0].month - 1)] = float(round(i[1], 4))
-
-
-        this_year = {}
-        new_list = []
-        new_list.append([str(year) + '年'] + month + ['总量'])
-        new_list.append(['销售数量'] + total_quantity_by_month_list + [sum(total_quantity_by_month_list)])
-        new_list.append(['销售金额'] + total_payment_by_month_list + [sum(total_payment_by_month_list)])
-        this_year['total'] = new_list
-
-
-        sale_client_list_order_q = list(
-            Transactions.objects.filter(sale_updated_time__year=year).filter(upload_id=upload_id).values(
-                'sale_client').annotate(s=Sum('sale_quantity')).order_by('-s'))
-        sale_client_list_order_p = list(
-            Transactions.objects.filter(sale_updated_time__year=year).filter(upload_id=upload_id).values(
-                'sale_client').annotate(s=Sum('sale_payment')).order_by('-s'))
-
-        new_list_q = []
-        new_list_p = []
-        new_list_q.append(['渠道'] + month + ['总数'])
-        new_list_p.append(['渠道'] + month + ['总额'])
-
-        for i in sale_client_list_order_q:
-            client = i['sale_client']
-            client_quantity_by_month = Transactions.objects.filter(sale_updated_time__year=year).filter(
-                upload_id=upload_id).filter(sale_client=client).annotate(
-                month=TruncMonth('sale_updated_time')).values('month').annotate(
-                s=Sum('sale_quantity')).order_by().values_list('month', 's').order_by('month')
-            client_quantity_by_month_list = [0] * 12
-            for i in client_quantity_by_month:
-                client_quantity_by_month_list[(i[0].month - 1)] = float(i[1])
-            new_list_q.append(
-                [client] + client_quantity_by_month_list + [sum(client_quantity_by_month_list)])
-
-        for i in sale_client_list_order_p:
-            client = i['sale_client']
-            client_payment_by_month = Transactions.objects.filter(sale_updated_time__year=year).filter(
-                upload_id=upload_id).filter(sale_client=client).annotate(
-                month=TruncMonth('sale_updated_time')).values('month').annotate(
-                s=Sum('sale_payment')).order_by().values_list('month', 's').order_by('month')
-            client_payment_by_month_list = [0] * 12
-            for i in client_payment_by_month:
-                client_payment_by_month_list[(i[0].month - 1)] = float(round(i[1], 4))
-            new_list_p.append([client] + client_payment_by_month_list + [sum(client_payment_by_month_list)])
-
-        this_year['by_client_quantity'] = new_list_q
-        this_year['by_client_payment'] = new_list_p
-
-        new_list_q = []
-        new_list_p = []
-        new_list_q.append(['产品条码'] + ['产品英文名'] + ['产品中文名'] + month + ['总数'])
-        new_list_p.append(['产品条码'] + ['产品英文名'] + ['产品中文名'] + month + ['总额'])
-
-        sale_product_list_order_q = list(
-            Transactions.objects.filter(sale_updated_time__year=year).filter(upload_id=upload_id).values(
-                'product_barcode').annotate(s=Sum('sale_quantity')).order_by('-s'))
-        sale_product_list_order_p = list(
-            Transactions.objects.filter(sale_updated_time__year=year).filter(upload_id=upload_id).values(
-                'product_barcode').annotate(s=Sum('sale_payment')).order_by('-s'))
-
-        for i in sale_product_list_order_q:
-            product = i['product_barcode']
-            name_cn = \
-            Transactions.objects.filter(upload_id=upload_id).filter(product_barcode=product).values(
-                'product_name_cn').first()['product_name_cn']
-            name_en = \
-            Transactions.objects.filter(upload_id=upload_id).filter(product_barcode=product).values(
-                'product_name_en').first()['product_name_en']
-            product_quantity_by_month = Transactions.objects.filter(sale_updated_time__year=year).filter(
-                upload_id=upload_id).filter(product_barcode=product).annotate(
-                month=TruncMonth('sale_updated_time')).values('month').annotate(
-                s=Sum('sale_quantity')).order_by().values_list('month', 's').order_by('month')
-            product_quantity_by_month_list = [0] * 12
-
-            for i in product_quantity_by_month:
-                product_quantity_by_month_list[(i[0].month - 1)] = float(i[1])
-
-            new_list_q.append([product] + [name_en] + [name_cn] + product_quantity_by_month_list + [
-                sum(product_quantity_by_month_list)])
-
-        for i in sale_product_list_order_p:
-            product = i['product_barcode']
-            name_cn = \
-            Transactions.objects.filter(upload_id=upload_id).filter(product_barcode=product).values(
-                'product_name_cn').first()['product_name_cn']
-            name_en = \
-            Transactions.objects.filter(upload_id=upload_id).filter(product_barcode=product).values(
-                'product_name_en').first()['product_name_en']
-            product_payment_by_month = Transactions.objects.filter(sale_updated_time__year=year).filter(
-                upload_id=upload_id).filter(product_barcode=product).annotate(
-                month=TruncMonth('sale_updated_time')).values('month').annotate(
-                s=Sum('sale_payment')).order_by().values_list('month', 's').order_by('month')
-            product_payment_by_month_list = [0] * 12
-
-            for i in product_payment_by_month:
-                product_payment_by_month_list[(i[0].month - 1)] = float(round(i[1], 4))
-
-            new_list_p.append([product] + [name_en] + [name_cn] + product_payment_by_month_list + [
-                sum(product_payment_by_month_list)])
-
-        this_year['by_product_quantity'] = new_list_q
-        this_year['by_product_payment'] = new_list_p
-        
-        response = {}
-
-        response[year] = this_year
-        response['index'] = year
-
-
-
-        return JsonResponse(response) 
+ 
