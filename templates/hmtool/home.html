@@ -60,7 +60,7 @@
             <div style="height: 200px;padding-top: 30px;">
               
               <div class="row justify-content-center my-3">
-                <button class="btn btn-download" @click="download_ppt">下载PPT分析</button>
+                <button class="btn btn-download">下载PPT分析</button>
                  
               </div>
               <div class="row justify-content-center my-3">
@@ -178,5 +178,553 @@
 
 
 {% block js %}
-<script src="/static/hmtool/home.js"></script>
+
+
+<script>
+  (function () {
+        feather.replace()
+    })()
+
+
+  $(document).on("scroll", function(){
+        if ($(document).scrollTop() > 60){
+          if (document.getElementById('stuckNav') == null){
+            var newNav = $('.nav-wrapper').clone(true);
+            newNav.attr('id', 'stuckNav');
+            $('.nav-wrapper').append(newNav);
+
+          }
+          
+
+        }
+        else
+        {
+          $('#stuckNav').remove();
+        }
+    });
+
+  
+  var app = new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#app',
+    data:{
+      file_name: '',
+      progress: '转换中',
+      wbBlob: [],
+      excel_name: [],
+      response: {},
+      response_two: [],
+      Datas: {
+        'animals': [
+              {"name": "cat", "category": "animal"}
+              ,{"name": "dog", "category": "animal"}
+              ,{"name": "pig", "category": "animal"}
+            ],
+        'pokemons': [
+                    {"name": "pikachu", "category": "pokemon"}
+                    ,{"name": "Arbok", "category": "pokemon"}
+                    ,{"name": "Eevee", "category": "pokemon"}
+                  ]
+      },
+    },
+      
+    mounted:function(){
+
+            
+    },
+    methods:{
+        dragover(event) {
+          event.preventDefault();
+          if (!event.currentTarget.classList.contains('drag-in')) {
+            event.currentTarget.classList.add('drag-in');
+          }
+        },
+        dragleave(event) {
+          event.currentTarget.classList.remove('drag-in');
+        },
+        get_file(){          
+          document.getElementById('file').click()      
+        },
+        drop(event) {
+          event.preventDefault();
+          this.$refs.file.files = event.dataTransfer.files;
+          this.upload()
+          event.currentTarget.classList.remove('drag-in');
+        },
+        getCookie (name) {
+              var value = '; ' + document.cookie
+              var parts = value.split('; ' + name + '=')
+              if (parts.length === 2) return parts.pop().split(';').shift()
+        },
+        upload(){
+            var self = this;
+
+            
+
+            const formData = new FormData();               
+            let file_info = document.getElementById('file');
+            let file = file_info.files[0];
+            this.file_name = file.name
+            var extension = file.name.substring(file.name.lastIndexOf(".") + 1)
+            
+
+            if( extension == 'xlsx'){
+                document.getElementById("upload").classList.add("hide")
+                document.getElementById("uploading").classList.remove("hide")
+                formData.append(`host_excel`, file);     
+                
+                axios.post(``, formData, {
+                  headers: {'Content-Type': 'multipart/form-data'},
+                
+                }).then((response)=>{
+                  console.log(response)
+          
+                  if (response.data['product_brand'] == null){
+                    document.getElementById("uploaded").classList.add("hide")
+                    document.getElementById("uploaded-error").classList.remove("hide")
+
+                  } else {
+
+                    this.response = response.data
+                    self.export_excel()       
+                  }
+
+               
+                }).catch(error => {
+                    console.log('error', error);
+                })
+
+
+            } else {
+              alert('请上传excel文件')
+            }
+            
+        },
+        sheet_from_array_of_arrays(data) {
+            const ws = {};
+            const range = {s: {c:10000000, r:10000000}, e: {c:0, r:0 }};
+            for(let R = 0; R !== data.length; ++R) {
+            for(let C = 0; C !== data[R].length; ++C) {
+            if(range.s.r > R) range.s.r = R;
+            if(range.s.c > C) range.s.c = C;
+            if(range.e.r < R) range.e.r = R;
+            if(range.e.c < C) range.e.c = C;
+
+            const cell = {v: data[R][C], s: {
+              font: { name: "宋体", sz: 11, color: { auto: 1 } },
+              border: {
+              color: { auto: 1 }
+              },
+              alignment: {
+              wrapText: 0,
+              horizontal: "center",
+              vertical: "center",
+              indent: 0
+              }
+            }};
+            if(cell.v == null) continue;
+            const cell_ref = XLSX.utils.encode_cell({c:C,r:R});
+            if(typeof cell.v === 'number') cell.t = 'n';
+            else if(typeof cell.v === 'boolean') cell.t = 'b';
+            else if(cell.v instanceof Date) {
+            cell.t = 'n'; cell.z = XLSX.SSF._table[14];
+            cell.v = this.dateNum(cell.v);
+            }
+            else cell.t = 's';
+            ws[cell_ref] = cell;
+            }
+            }
+            /* TEST: proper range */
+            if(range.s.c < 10000000) ws['!ref'] = XLSX.utils.encode_range(range);
+            return ws;
+        },
+
+        sheet2blob(sheet, sheetName,sheet2, sheetName2) {
+          sheetName = sheetName || 'sheet1';
+          sheetName2 = sheetName2 || 'sheet2';
+          const workbook = {
+          SheetNames: [sheetName, sheetName2],
+          Sheets: {}
+          };
+          workbook.Sheets[sheetName] = sheet
+          workbook.Sheets[sheetName2] = sheet2
+          const wopts = {
+          bookType: 'xlsx', 
+          bookSST: false, 
+          type: 'binary'
+          };
+         
+          const wbout = XLSX.write(workbook, wopts,);
+          const blob = new Blob([s2ab(wbout)], {type: "application/octet-stream"});
+          function s2ab(s) {
+          const buf = new ArrayBuffer(s.length);
+          const view = new Uint8Array(buf);
+          for (let i=0; i!==s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+          return buf;
+          }
+          return blob;
+        },
+
+        export_excel(){   
+          for (year of this.response.year_list){
+            var title = this.response['product_brand'] + '渠道' + year + '年采购情况'
+            var index = 1
+            var index_list = []
+
+            let aoa = [[title]]
+            index = index + 2 
+            index_list.push(index)
+            aoa.push([])
+            aoa.push.apply(aoa, this.response[year].total)
+            index = index + this.response[year].total.length + 2
+            index_list.push(index)
+            aoa.push([])
+            aoa.push(['采购数量'])
+            aoa.push.apply(aoa, this.response[year].by_client_quantity)
+            index = index + this.response[year].by_client_quantity.length + 2
+            index_list.push(index)
+            aoa.push([])
+            aoa.push(['采购金额'])
+            aoa.push.apply(aoa, this.response[year].by_client_payment)
+            
+            var sheet = this.sheet_from_array_of_arrays(aoa);
+            
+
+            const mergeTitle = [
+              {
+                s: {r: 0, c: 0},
+                e: {r: 1, c: 13}
+              },
+              {
+                s: {r: index_list[1]-2, c: 0},
+                e: {r: index_list[1]-2, c: 13}
+              },
+              {
+                s: {r: index_list[2]-2, c: 0},
+                e: {r: index_list[2]-2, c: 13}
+              },
+            ]
+            sheet['!merges'] = mergeTitle.concat();
+
+            var filterRef = 'A' + index_list[1] + ':' + 'N' + index_list[1]                
+
+
+     
+            const sheetCols = [
+              { wch: 20} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+
+            ];   
+
+            sheet['!cols'] = sheetCols;
+            for (i of ['A','B','C','D','E','F','G','H','I','J','K','L','M','N']){
+              for (j of index_list){
+                color_cell = i+j
+                sheet[color_cell].s = {
+                  font: {
+                    name: '宋体',
+                    sz: 11,
+                    color: {rgb: "ffffff"},
+                    bold: true,
+                    italic: false,
+                    underline: false,
+                    // height: 20
+                  },
+                  alignment: {
+                    horizontal: "center",
+                    vertical: "center"
+                  },
+                  fill: {
+                    fgColor: {rgb: "16365C"},
+                  },
+                };
+              }
+            }
+
+            for (i of ['A1','A'+(index_list[1]-1),'A'+(index_list[2]-1)]){
+              sheet[i].s = {
+                  font: {
+                    name: '宋体',
+                    sz: 11,
+                    color: {rgb: "000000"},
+                    bold: true,
+                    italic: false,
+                    underline: false,
+                    // height: 20
+                  },
+                  border: {
+                  color: { auto: 1 }
+                  },
+                  alignment: {
+                    horizontal: "center",
+                    vertical: "center"
+                  },
+                  fill: {
+                    fgColor: {rgb: "ffffff"},
+                  },
+                };
+            }
+
+            for (i of ['B','C','D','E','F','G','H','I','J','K','L','M','N']){
+              color_cell = i+'5'
+              sheet[color_cell].s = {
+                font: { name: "宋体", sz: 11, color: { auto: 1 } },
+                border: {
+                color: { auto: 1 }
+                },
+                alignment: {
+                wrapText: 0,
+                horizontal: "center",
+                vertical: "center",
+                indent: 0
+                },
+                numFmt:  '_("$"* #,##0_);_("$"* (#,##0);_("$"* "-"??_);_(@_)'                 
+              };
+            }
+       
+            for (i of ['B','C','D','E','F','G','H','I','J','K','L','M','N']){
+              var j = index_list[2] + 1
+              var end = index_list[2] + this.response[year].by_client_payment.length
+              
+
+              while (j < end) {
+                color_cell = i+j
+                sheet[color_cell].s = {
+                  font: { name: "宋体", sz: 11, color: { auto: 1 } },
+                  border: {
+                  color: { auto: 1 }
+                  },
+                  alignment: {
+                  wrapText: 0,
+                  horizontal: "center",
+                  vertical: "center",
+                  indent: 0
+                  },
+                  numFmt:  '_("$"* #,##0_);_("$"* (#,##0);_("$"* "-"??_);_(@_)'                 
+                };
+
+                j = j + 1
+              } 
+            }
+
+            
+
+            var title = this.response['product_brand'] + '单品'+ year +'年采购情况'
+            var index = 1
+            var index_list = []
+
+            let aoa2 = [[title]]
+            index = index + 2 
+            index_list.push(index)
+            aoa2.push([])
+            for (i of this.response[year].total){
+              var total_row = []
+              total_row.push(i[0])
+              total_row.push(null)
+              total_row.push(null)
+              total_row.push.apply(total_row,i.slice(1,))
+              aoa2.push(total_row)
+            }
+ 
+            index = index + this.response[year].total.length + 2
+            index_list.push(index)
+            aoa2.push([])
+            aoa2.push(['单品数量'])
+            aoa2.push.apply(aoa2, this.response[year].by_product_quantity)
+            index = index + this.response[year].by_product_quantity.length + 2
+            index_list.push(index)
+            aoa2.push([])
+            aoa2.push(['单品金额'])
+            aoa2.push.apply(aoa2, this.response[year].by_product_payment)
+            
+            var sheet2 = this.sheet_from_array_of_arrays(aoa2);
+
+            const mergeTitle2 = [
+              {
+                s: {r: 0, c: 0},
+                e: {r: 1, c: 15}
+              },
+              {
+                s: {r: 2, c: 0},
+                e: {r: 2, c: 2}
+              },
+              {
+                s: {r: 3, c: 0},
+                e: {r: 3, c: 2}
+              },
+              {
+                s: {r: 4, c: 0},
+                e: {r: 4, c: 2}
+              },
+              {
+                s: {r: index_list[1]-2, c: 0},
+                e: {r: index_list[1]-2, c: 15}
+              },
+              {
+                s: {r: index_list[2]-2, c: 0},
+                e: {r: index_list[2]-2, c: 15}
+              },
+            ]
+            sheet2['!merges'] = mergeTitle2.concat();
+            sheet2["!margins"] = { left: 1.0, right: 1.0, top: 1.0, bottom: 1.0, header: 0.5, footer: 0.5 }      
+              
+            const sheetCols2 = [
+              { wch: 5} , 
+              { wch: 5} , 
+              { wch: 50} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+              { wch: 12} , 
+            ];   
+            sheet2['!cols'] = sheetCols2;
+            for (i of ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P']){
+              for (j of index_list){
+                if ((i =='B' || i =='C') && j == 3){
+                  continue
+                } else {
+                  color_cell = i+j
+                  sheet2[color_cell].s = {
+                    font: {
+                      name: '宋体',
+                      sz: 11,
+                      color: {rgb: "ffffff"},
+                      bold: true,
+                      italic: false,
+                      underline: false,
+                      // height: 20
+                    },
+                    alignment: {
+                      horizontal: "center",
+                      vertical: "center"
+                    },
+                    fill: {
+                      fgColor: {rgb: "16365C"},
+                    },
+                  };
+
+                }
+                
+
+                
+              }
+            }
+
+            for (i of ['A1','A'+(index_list[1]-1),'A'+(index_list[2]-1)]){
+              sheet2[i].s = {
+                  font: {
+                    name: '宋体',
+                    sz: 11,
+                    color: {rgb: "000000"},
+                    bold: true,
+                    italic: false,
+                    underline: false,
+                    // height: 20
+                  },
+                  border: {
+                  color: { auto: 1 }
+                  },
+                  alignment: {
+                    horizontal: "center",
+                    vertical: "center"
+                  },
+                  fill: {
+                    fgColor: {rgb: "ffffff"},
+                  },
+                };
+            }
+
+            for (i of ['D','E','F','G','H','I','J','K','L','M','N','O','P']){
+              color_cell = i+'5'
+              sheet2[color_cell].s = {
+                font: { name: "宋体", sz: 11, color: { auto: 1 } },
+                border: {
+                color: { auto: 1 }
+                },
+                alignment: {
+                wrapText: 0,
+                horizontal: "center",
+                vertical: "center",
+                indent: 0
+                },
+                numFmt:  '_("$"* #,##0_);_("$"* (#,##0);_("$"* "-"??_);_(@_)'                 
+              };
+            }
+
+            for (i of ['D','E','F','G','H','I','J','K','L','M','N','O','P']){
+              var j = index_list[2] + 1
+              var end = index_list[2] + this.response[year].by_product_payment.length
+              
+
+              while (j < end) {
+                color_cell = i+j
+                sheet2[color_cell].s = {
+                  font: { name: "宋体", sz: 11, color: { auto: 1 } },
+                  border: {
+                  color: { auto: 1 }
+                  },
+                  alignment: {
+                  wrapText: 0,
+                  horizontal: "center",
+                  vertical: "center",
+                  indent: 0
+                  },
+                  numFmt:  '_("$"* #,##0_);_("$"* (#,##0);_("$"* "-"??_);_(@_)'                 
+                };
+
+                j = j + 1
+              } 
+            }
+            this.wbBlob.push(this.sheet2blob(sheet, '渠道分析',sheet2, '单品分析'))
+            var today = moment().format('YYMMDD');
+            this.excel_name.push(this.response['product_brand'] + ' ' + year +'年销售明细帐分析v'+today+'.xlsx')
+              
+            if (this.excel_name.length == this.response.year_list.length){
+                document.getElementById("uploading").classList.add("hide")
+                document.getElementById("uploaded").classList.remove("hide")
+            }
+  
+          }
+                
+
+        },
+        
+        download_excel(){
+            var self = this
+            this.wbBlob.forEach(function (value, i) {
+                window.saveAs(value, self.excel_name[i])
+            });
+            
+        },
+       
+
+        
+    }
+
+  })
+
+  
+
+</script>
 {% endblock %}
