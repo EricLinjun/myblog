@@ -980,6 +980,9 @@ methods:{
       list_one.forEach((row,idx)=>{
         if(idx < 11){
           new_list.push(row.slice(2,16).concat(row[16].toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })))
+          if(idx == list_one.length - 1){
+              new_list[0][0] = client + ' TOP 10 销量单品'
+          }  
         } else {
           if(idx == 11){
             new_list.push(['其他'].concat(row.slice(3,17)))
