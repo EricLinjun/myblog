@@ -577,7 +577,7 @@ methods:{
             {
               text: {
                 text: "Health More Pty Ltd 内部使用 - " + today_date,
-                options: { x: 0, y: 7.1, w: "100%", h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "微软雅黑 Light", fontSize: 12 },
+                options: { x: 0, y: 7.1, w: "100%", h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri", fontSize: 12 },
               },
             },
             { image: { x: 11.3, y: 0.5, w: 1.2, h: 0.547, path: '/static/hmtool/pic/logo2.png' } },
@@ -665,9 +665,9 @@ methods:{
       
       slide.addText(
           [
-              { text: year + "年", options: { fontFace: "微软雅黑 Light", fontSize: 36, color: "ffffff", align: "right", breakLine: true } },
-              { text: this.response.product_brand, options: { fontFace: "微软雅黑 Light", fontSize: 36, color: "ffffff", align: "right", breakLine: true} },
-              { text: "销售明细账分析", options: { fontFace: "微软雅黑 Light", fontSize: 36, color: "ffffff", align: "right", } },
+              { text: year + "年", options: { fontFace: "Calibri", fontSize: 36, color: "ffffff", align: "right", breakLine: true } },
+              { text: this.response.product_brand, options: { fontFace: "Calibri", fontSize: 36, color: "ffffff", align: "right", breakLine: true} },
+              { text: "销售明细账分析", options: { fontFace: "Calibri", fontSize: 36, color: "ffffff", align: "right", } },
           ],
           { x: 3.5, y: 4.1, w: 8.5, h: 3.0, }
       );
@@ -701,7 +701,7 @@ methods:{
     },
     genSlide02(pptx, year) {
       let slide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-      slide.addText(year + "年总览", { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "微软雅黑 Light",fontSize: 14  });  
+      slide.addText(year + "年总览", { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri",fontSize: 14  });  
       slide_one_table = this.color_header(this.response[year].total)
       slide_one_table[2] = this.to_currency(slide_one_table[2])    
       slide.addTable(slide_one_table, {
@@ -723,14 +723,14 @@ methods:{
         h: 3.5,
         barDir: "col",
         catAxisLabelColor: "666666",
-        catAxisLabelFontFace: "微软雅黑 Light",
+        catAxisLabelFontFace: "Calibri",
         catAxisLabelFontSize: 16,
         catAxisOrientation: "minMax",
         showLegend: true,
         showTitle: false,
         legendPos: 't', 
         legendFontSize: 10,
-        legendFontFace: "微软雅黑 Light",
+        legendFontFace: "Calibri",
         // valAxisMaxVal: Auto,
         // valAxisMajorUnit: 10,
 
@@ -739,13 +739,13 @@ methods:{
             showValAxisTitle: true,
             valAxisTitle: "销售额(澳元)",
             valAxisTitleFontSize: 12,
-            valAxisLabelFontFace: "微软雅黑 Light",
+            valAxisLabelFontFace: "Calibri",
           },
           {
             showValAxisTitle: true,
             valAxisTitle: "销售数量(个)",
             valAxisTitleFontSize: 12,
-            valAxisLabelFontFace: "微软雅黑 Light",
+            valAxisLabelFontFace: "Calibri",
             valGridLine: { style: "none" },
           },
         ],
@@ -839,12 +839,12 @@ methods:{
 
     genSlide03(pptx, year) {
       let slide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-      slide.addText(year + "年总览分析", { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "微软雅黑 Light",fontSize: 14  });  
+      slide.addText(year + "年总览分析", { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri",fontSize: 14  });  
      
       slide_total_2_table = this.color_header(this.slide_total_2_table(this.response[year].by_client_quantity,this.response[year].by_client_payment))
       slide_total_2_table_2 = this.color_header(this.slide_total_2_table_2(this.response[year].by_product_quantity,this.response[year].by_product_payment))
 
-      slide.addText("TOP 5 销售渠道", { x: 0.3, y: 1.4, w: 2.5, h: 0.4, bold:true, align: "left", valign: "middle", color: "000000", fontFace: "微软雅黑 Light",fontSize: 14  });  
+      slide.addText("TOP 5 销售渠道", { x: 0.3, y: 1.4, w: 2.5, h: 0.4, bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14  });  
       slide.addTable(slide_total_2_table, {
         x: 0.3,
         y: 1.8,
@@ -857,7 +857,7 @@ methods:{
         align: "center",
       }); 
 
-      slide.addText("TOP 5 销售单品", { x: 0.3, y: 4.1, w: 2.5, h: 0.4, bold:true, align: "left", valign: "middle", color: "000000", fontFace: "微软雅黑 Light",fontSize: 14  });  
+      slide.addText("TOP 5 销售单品", { x: 0.3, y: 4.1, w: 2.5, h: 0.4, bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14  });  
 
       slide.addTable(slide_total_2_table_2, {
         x: 0.3,
@@ -919,20 +919,20 @@ methods:{
         // valAxisMaxVal: 5000,
     
         catAxisLabelColor: "000000",
-        catAxisLabelFontFace: "微软雅黑 Light",
+        catAxisLabelFontFace: "Calibri",
         catAxisLabelFontSize: 10,
-        valAxisLabelFontFace: "微软雅黑 Light",
+        valAxisLabelFontFace: "Calibri",
         valAxisLabelFontSize: 10,
         // catAxisOrientation: "minMax",
     
         // dataBorder: { pt: "1", color: "F1F1F1" },
         // dataLabelColor: "ffffff",
-        // dataLabelFontFace: "微软雅黑 Light",
+        // dataLabelFontFace: "Calibri",
         // dataLabelFontSize: 10,
         // dataLabelPosition: "ctr",
         showTitle: true,
         titleColor: "000000",
-        titleFontFace: "微软雅黑 Light",
+        titleFontFace: "Calibri",
         titleFontSize: 12,
         title: year + "年TOP5渠道销售总金额",
         
@@ -951,11 +951,11 @@ methods:{
         chartColors: ["c5117c", "c51122", "c55a11", "c5b411", "7cc511", "a6a6a6"],
         dataBorder: { pt: "2", color: "FFFFFF" },
         dataLabelColor: "FFFFFF",
-        dataLabelFontFace: "微软雅黑 Light",
+        dataLabelFontFace: "Calibri",
         dataLabelFontSize: 12,
     
         legendPos: "r",
-        legendFontFace: "微软雅黑 Light",
+        legendFontFace: "Calibri",
         legendFontSize: 8,
     
         showLabel: false,
@@ -968,7 +968,7 @@ methods:{
     
         title: year + "年TOP5单品销售总金额占比",
         titleColor: "000000",
-        titleFontFace: "微软雅黑 Light",
+        titleFontFace: "Calibri",
         titleFontSize: 12,
       };
       slide.addChart(pptx.charts.DOUGHNUT, dataChartPieStat, optsChartPie1);
@@ -1024,8 +1024,8 @@ methods:{
     genClientSlide(pptx, year, client){
 
       let slide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-      slide.addText('渠道销量 - '+client, { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "微软雅黑 Light",fontSize: 14  });  
-      // slide.addText(client + " ", { x: 0.3, y: 1.4, w: 2.5, h: 0.4, bold:true, align: "left", valign: "middle", color: "000000", fontFace: "微软雅黑 Light",fontSize: 14  });  
+      slide.addText('渠道销量 - '+client, { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri",fontSize: 14  });  
+      // slide.addText(client + " ", { x: 0.3, y: 1.4, w: 2.5, h: 0.4, bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14  });  
      
 
 
@@ -1063,11 +1063,11 @@ methods:{
       })
       arrDataTimeline2ser.reverse()
 
-      // slide.addText("TOP 3 单品销量和总销量走势", { x: 0.3, y: 4.9, w: 4, h: 0.4, bold:true, align: "left", valign: "middle", color: "000000", fontFace: "微软雅黑 Light",fontSize: 14  });  
+      // slide.addText("TOP 3 单品销量和总销量走势", { x: 0.3, y: 4.9, w: 4, h: 0.4, bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14  });  
       slide.addText(
           [
-              { text: "TOP 3 单品", options: { bold:true, align: "left", valign: "middle", color: "000000", fontFace: "微软雅黑 Light",fontSize: 14, breakLine: true } }, 
-              { text: "和总销量走势", options: { bold:true, align: "left", valign: "middle", color: "000000", fontFace: "微软雅黑 Light",fontSize: 14, } },
+              { text: "TOP 3 单品", options: { bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14, breakLine: true } }, 
+              { text: "和总销量走势", options: { bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14, } },
           ],
           {  x: 0.3, y: 4.9, w: 4, h: 0.4, }
       );
@@ -1089,9 +1089,9 @@ methods:{
         showValue: false,
         showLegend: true,
         legendPos: 'l',
-        catAxisLabelFontFace: "微软雅黑 Light",
-        valAxisLabelFontFace: "微软雅黑 Light",
-        legendFontFace:"微软雅黑 Light",
+        catAxisLabelFontFace: "Calibri",
+        valAxisLabelFontFace: "Calibri",
+        legendFontFace:"Calibri",
 
 
         // fill: "D1E1F1",
@@ -1143,9 +1143,9 @@ methods:{
       
       slide.addText(
           [
-              { text: this.response.product_brand, options: { fontFace: "微软雅黑 Light", fontSize: 36, color: "000000", align: "center", breakLine: true} },
-              { text: year + "年各渠道销量分析", options: { fontFace: "微软雅黑 Light", fontSize: 36, color: "000000", align: "center", breakLine: true } },
-              { text: "(渠道排序根据总销量由高至低)", options: { fontFace: "微软雅黑 Light", fontSize: 18, color: "000000", align: "center", } },
+              { text: this.response.product_brand, options: { fontFace: "Calibri", fontSize: 36, color: "000000", align: "center", breakLine: true} },
+              { text: year + "年各渠道销量分析", options: { fontFace: "Calibri", fontSize: 36, color: "000000", align: "center", breakLine: true } },
+              { text: "(渠道排序根据总销量由高至低)", options: { fontFace: "Calibri", fontSize: 18, color: "000000", align: "center", } },
           ],
           { x: 0, y: 2.2, w: "100%", h: 3.0, }
       );
@@ -1190,7 +1190,7 @@ methods:{
       
       slide.addText(
           [
-              { text: '感谢阅读', options: { fontFace: "微软雅黑 Light", fontSize: 36, color: "000000", align: "center", breakLine: true} },
+              { text: '感谢阅读', options: { fontFace: "Calibri", fontSize: 36, color: "000000", align: "center", breakLine: true} },
           ],
           { x: 0, y: 2.2, w: "100%", h: 3.0, }
       );
