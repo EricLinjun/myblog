@@ -178,7 +178,7 @@ methods:{
 
     export_excel(){   
       for (year of this.response.year_list){
-        var title = this.response['product_brand'] + '渠道' + year + '年采购情况'
+        var title = this.response['product_brand'] + '渠道' + year + '年销售情况'
         var index = 1
         var index_list = []
 
@@ -190,12 +190,12 @@ methods:{
         index = index + this.response[year].total.length + 2
         index_list.push(index)
         aoa.push([])
-        aoa.push(['采购数量'])
+        aoa.push(['销售数量'])
         aoa.push.apply(aoa, this.response[year].by_client_quantity)
         index = index + this.response[year].by_client_quantity.length + 2
         index_list.push(index)
         aoa.push([])
-        aoa.push(['采购金额'])
+        aoa.push(['销售金额'])
         aoa.push.apply(aoa, this.response[year].by_client_payment)
         
         var sheet = this.sheet_from_array_of_arrays(aoa);
@@ -332,7 +332,7 @@ methods:{
 
         
 
-        var title = this.response['product_brand'] + '单品'+ year +'年采购情况'
+        var title = this.response['product_brand'] + '单品'+ year +'年销售情况'
         var index = 1
         var index_list = []
 
