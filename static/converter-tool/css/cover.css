@@ -1,0 +1,267 @@
+/*
+ * Globals
+ */
+
+img{
+  width: 100%;
+  object-fit: contain;
+}
+
+.circle {
+	border-radius: 50%;
+	width: 40px;
+	height: 40px; 
+  color: black;
+  font-weight: 100;
+  font-size: 20px;
+  background-color: beige;
+  padding-top: 4px;
+  padding-left: 11px;
+  margin-top: 80px;
+  margin-left: 80px;
+  /* border: 2px solid #91764e ; */
+}
+
+.hide {
+ display:none
+}
+
+/* Links */
+a,
+a:focus,
+a:hover {
+  color: #fff;
+}
+
+
+/* Custom default button */
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:focus {
+  color: #333;
+  text-shadow: none; /* Prevent inheritance from `body` */
+  background-color: #fff;
+  border: .05rem solid #fff;
+}
+
+
+/*
+ * Base structure
+ */
+
+html,
+body {
+  height: 100%;
+  background-color: #FFFFFF;
+}
+
+body {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-pack: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  color: #fff;
+
+}
+
+
+
+
+/*
+ * Header
+ */
+
+.nav-wrapper {
+  background-color: #F8F8F8;
+}
+
+
+.tool-nav{
+  color:black;
+  text-shadow: none;
+  padding: 20px 0;
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+  -moz-transition: all 0.4s ease-in-out ;
+  font-weight: 400;
+  font-size: small;
+  color:#171717;
+}
+
+.tool-nav:hover{
+background-color: #dfdfdf;
+}
+
+/* .shrink {
+  padding: 15px 0; 
+
+} */
+
+
+#stuckNav{
+  position: fixed;
+  top: 0px;
+  left:0;
+  right:0;
+  z-index: 99;
+}
+
+
+.col-centered{
+  float: none;
+  margin: 0 auto;
+}
+
+
+/*
+ * Footer
+ */
+.mastfoot {
+  color: rgba(255, 255, 255, .5);
+}
+
+
+/*
+ * input box
+ */
+
+ .upload-area {
+  background-color:white;
+  height:400px;
+  max-width: 864px;
+  margin-top: -320px;
+  outline: 2px dashed #eeeeee;
+  border-radius: 10px;
+  outline-offset: -20px;
+  border:1px solid #eeeeee
+}
+
+.upload-area:hover{outline: 2px dashed #F3C583;  outline-offset: -20px;
+  -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+  transition: outline-offset .15s ease-in-out, background-color .15s linear;
+}
+
+.uploading-area {
+  background-color:white;
+  height:400px;
+  max-width: 864px;
+  margin-top: -320px;
+  border-radius: 10px;
+  border:1px solid #eeeeee
+}
+
+.btn-upload {
+  background-color: #444444;
+  color:white;
+  height: 50px;
+  width: 120px;
+  border-radius: 30px;
+}
+
+.btn-upload:hover {
+  color: white;
+  background-color: #171717;
+}
+
+.btn-cancel {
+  background-color: white;
+  color:#444444;
+  border: 1px solid #444444;
+  height: 45px;
+  width: 110px;
+  border-radius: 30px;
+}
+
+
+.btn-cancel:hover {
+  color: white;
+  background-color: #444444;
+}
+
+
+
+.btn-download {
+  background-color: #D83A56;
+  color:white;
+  height: 40px;
+  width: 200px;
+  border-radius: 30px;
+}
+
+.btn-download:hover {
+  color: white;
+  background-color: #ba253f ;
+}
+
+.btn-download-excel {
+  background-color: #7F8B52;
+  color:white;
+  height: 40px;
+  width: 200px;
+  border-radius: 30px;
+}
+
+.btn-download-excel:hover {
+  color: white;
+  background-color: #626b3f  ;
+}
+
+.drag-in {
+  outline: 2px dashed #F3C583;  outline-offset: -20px;
+  -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+  transition: outline-offset .15s ease-in-out, background-color .15s linear;
+}
+
+
+
+
+
+/* .files input {
+  outline: 2px dashed #eeeeee;
+  
+  border-radius: 10px;
+  outline-offset: -20px;
+  -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+  transition: outline-offset .15s ease-in-out, background-color .15s linear;
+  padding: 175px 0px 175px 35%;
+  text-align: center !important;
+  margin: 0;
+  width: 100% !important;
+}
+.files input:hover{     outline: 2px dashed #F3C583;  outline-offset: -20px;
+  -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+  transition: outline-offset .15s ease-in-out, background-color .15s linear; border:1px solid #F3C583;
+}
+.files{ position:relative}
+.files:after {  pointer-events: none;
+  position: absolute;
+  top: 80px;
+  left: 0;
+  width: 50px;
+  right: 0;
+  height: 56px;
+  content: "";
+  background-image: url(https://image.flaticon.com/icons/png/128/109/109612.png);
+  display: block;
+  margin: 0 auto;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+.color input{ background-color:#f1f1f1;}
+.files:before {
+  position: absolute;
+  bottom: 10px;
+  left: 0;  pointer-events: none;
+  width: 100%;
+  right: 0;
+  height: 57px;
+  content: "";
+  display: block;
+  margin: 0 auto;
+  color: #F3C583;
+  font-weight: 600;
+  text-transform: capitalize;
+  text-align: center;
+} */
