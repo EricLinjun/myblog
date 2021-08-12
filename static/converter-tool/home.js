@@ -557,14 +557,14 @@ methods:{
             title: "TITLE_SLIDE",
             background: { fill: "FFFFFF" },
             objects: [
-              { image: { x: 11.3, y: 0.5, w: 1.2, h: 0.454, path: '/static/converter-tool/pic/logo_blue.png' } },
+              { image: { x: 11.3, y: 0.5, w: 1.2, h: 0.454, path: '/static/converter-tool/pic/logo2.png' } },
             ],
           });
         pptx.defineSlideMaster({
           title: "TITLE_SLIDE",
           background: { fill: "FFFFFF" },
           objects: [
-            { image: { x: 11.3, y: 0.5, w: 1.2, h: 0.454, path: '/static/converter-tool/pic/logo_blue.png' } },
+            { image: { x: 11.3, y: 0.5, w: 1.2, h: 0.454, path: '/static/converter-tool/pic/logo2.png' } },
           ],
         });
   
@@ -584,7 +584,7 @@ methods:{
                 options: { x: 0, y: 7.1, w: "100%", h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri", fontSize: 12 },
               },
             },
-            { image: { x: 11.3, y: 0.5, w: 1.2, h: 0.454, path: '/static/converter-tool/pic/logo_blue.png' } },
+            { image: { x: 11.3, y: 0.5, w: 1.2, h: 0.454, path: '/static/converter-tool/pic/logo2.png' } },
           ],
         });
 
