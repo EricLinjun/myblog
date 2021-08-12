@@ -78,7 +78,7 @@ class home(APIView):
                     client_payment_by_month = df.loc[(df['year'] == year) & (df['客户名字'] == client)].groupby('month').agg({'货款合计':['sum']})
                     client_payment_by_month_list = [0] * 12
                     for index, row in client_payment_by_month.iterrows():
-                        client_payment_by_month_list[(index - 1)] = float(row.values[0])
+                        client_payment_by_month_list[(index - 1)] = round(float(row.values[0]),2)
                     new_list_p.append([client] + client_payment_by_month_list +  [sum(client_payment_by_month_list)])
                 
                 this_year['by_client_quantity'] = new_list_q
@@ -105,7 +105,7 @@ class home(APIView):
                     product_payment_by_month = df.loc[(df['year'] == year) & (df['货品编号'] == product)].groupby('month').agg({'货款合计':['sum']})
                     product_payment_by_month_list = [0] * 12
                     for index, row in product_payment_by_month.iterrows():
-                        product_payment_by_month_list[(index - 1)] = float(row.values[0])
+                        product_payment_by_month_list[(index - 1)] = round(float(row.values[0]),2)
                     new_list_p.append([product] + [name_en] + [name_cn] + product_payment_by_month_list + [sum(product_payment_by_month_list)])
                 
                 

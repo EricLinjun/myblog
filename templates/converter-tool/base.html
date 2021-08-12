@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-<!--    <link rel="icon" href="../../../../favicon.ico">-->
+
 
     <title>HM Tool</title>
 
@@ -26,13 +26,13 @@
 
     
         <div class="w-100" style="background-color: white;height: 60px;"> 
-            <img src="/static/converter-tool/pic/logo.png" style="width: 60px; height: 30px;margin-top: 15px;">
+            <img src="/static/converter-tool/pic/logo.png" style="width: 100px; height: 50px;margin-top: 10px;">
         </div>
-        <div class="w-100 nav-wrapper"> 
-          <div class="col-10 col-centered " style="max-width: 864px;">
-            <div class='col-12 col-lg-8 d-flex flex-row px-0 justify-content-center'>
+        <div class="w-100 nav-wrapper "> 
+          <div class="col-10 col-centered" style="max-width: 864px;">
+            <div class='col-12 d-flex flex-row px-0'>
               
-              <div class='col-6 tool-nav user-select-none'  onclick="location.href='./';">Excel & Powerpoint Converter</div>
+              <div class='col-6 tool-nav user-select-none col-centered'  onclick="location.href='./';">Excel & Powerpoint Converter</div>
               
             </div>
           </div>
@@ -40,6 +40,33 @@
     
 
     {% block main %}{% endblock%}
+    <style>
+        .goback {
+            background-color: black;
+            opacity: 0.8;
+            width: 200px;
+            height: 35px;
+            position: fixed;
+            left: 50%;
+            bottom: 20px;
+            border-radius: 10px;
+            transform: translate(-50%, 0);
+            
+        }
+        
+        .goback:hover{
+            opacity: 0.7
+        }
+    </style>
+
+    <a href="/project/">
+      <div class="goback">
+          <div class="text-center my-2 text-uppercase user-select-none" style="font-size:small;color: white;font-weight: 400">
+              go back to eric<text style="color:orange;font-weight: 800">LL</text>
+          </div>
+
+      </div>
+  </a>
 
 
 

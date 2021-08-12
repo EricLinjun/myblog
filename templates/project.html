@@ -33,19 +33,25 @@
         height: 100%;
         width: 100%;
         background-color: black;
-        opacity:0.7;
+        opacity:0.4;
         transition: all 0.4s ease-in-out;
     }
     .caption-wrapper:hover{
         opacity:0;
         transition: all 0.4s ease-in-out;
     }
+    .pic-wrapper{
+        border-top: 4px solid #ffa500;
+        border-right: 10px solid #F9F9F9;
+        /* border-left: 0px solid #F9F9F9; */
+
+    }
     .caption {
     position: absolute;
     top: 70%;
     left: 0;
     font-size: 40px;
-    font-weight: 200;
+    font-weight: 600;
     text-align: right;
     height: 100%;
     width: 100%;
@@ -137,12 +143,90 @@
     </div>
     <div class='container-xl ' style="background-color: #F9F9F9">
         <div class='row'>
-            <div class='col-12 col-xl-5 px-0'>
+            <div class='col-12 col-xl-5 px-0 pic-wrapper'>
+                
+                <div class='col px-0'>
+                    <div class='profile'>
+                        <img src="/static/img/converter.PNG" class="img-fluid  w-100" alt="Responsive image">
+                        <div class="caption-wrapper">
+                            <div class="caption">
+                                <p>Converter Page</p>
+                            </div>
+                       </div> 
+                    </div>
+                </div>
+                <div class='col px-0'>
+                    <div class='profile'>
+                        <img src="/static/img/converter2.PNG" class="img-fluid  w-100" alt="Responsive image">
+                        <div class="caption-wrapper">
+                            <div class="caption">
+                                <p>Powerpoint Report</p>
+                            </div>
+                       </div> 
+                    </div>
+                </div>
+            </div>
+            <div class='col-12 col-xl-7'>
+                <div style="border-top: solid 5px orange"></div>
+                <div class="content px-5" style="padding-top: 20px;">
+                    <div class="project-title text-left row">
+                        <div style="height: 10px;width: 10px;background-color: orange;border-radius: 5px;margin:13px 10px 0 0"></div>
+                        Excel Converter </div>
+                    <div class="row">    
+                        <div class="content-title text-left col-8" style="font-size: 15px;font-weight: 600">Django/Bootstrap/Vue.js/xlsx-js/pptxgenjs/Pandas </div>
+                    </div>
+                    <div class="content-text mt-1">Let the user to upload raw format excel file, then it will auto-convert the excel data to well documented Excel Report and Powerpoint Report. Demo example - Sales Excel to Sales report.</div>
+                    <ul>
+                        <li style="margin-top: 15px;">
+                            <text class="li-title" >Excel Report 
+                            </text>
+                            <br>
+                            Generate two sheets of analysis for Channel Monthly Sale and Product Monthly Sale. 
+                        </li>
+                        <li style="margin-top: 15px;margin-bottom: 20px;">
+                            <text class="li-title">Powerpoint Report
+                            </text>
+                            <br>
+                            Generate review on monthly sale and TOP5 sale channels and products. Then the powerpoint will go through Top 10 sold products of each channel.
+                        </li>
+                    </ul>
+                    
+                </div> 
+                <div style="margin: 0 40px;border-top: solid 1px #bbbbbb"></div>
+                <div class="row justify-content-center mx-0">
+                    
+                    <div class="icon-text2 content-text mx-3 my-4" >
+                        <a class="text-decoration-none contact" href="https://github.com/EricLinjun/myblog/tree/main/appConverterTool" target="_blank">
+                            <span data-feather="github" style="background-color: orange;padding: 5px;height: 30px;width: 30px;border-radius: 10px;color: white;">
+                            </span>
+                            <text class="project-icon-text text-uppercase">
+                                 github 
+                            </text>
+                        </a>
+                    </div>
+                    <div class="icon-text2 content-text mx-3 my-4" style="text-align:left;color:#bbbbbb;font-size: 15px;font-weight:400; text-shadow: none">
+                        <a class="text-decoration-none contact" href="/converter-tool/">
+                            <span data-feather="monitor" style="background-color: orange;padding: 5px;height: 30px;width: 30px;border-radius: 10px;color: white;">
+                            </span>
+                            <text  class="project-icon-text text-uppercase">
+                                   preview
+                            </text>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-12 col-xl-5 px-0 pic-wrapper'>
                 
                 <div class='col px-0'>
                     <div class='profile'>
                         <img src="/static/img/sales-report.png" class="img-fluid  w-100" alt="Responsive image">
-            
+                        <div class="caption-wrapper">
+                             <div class="caption">
+                                 <p>Distributor Sales Rport</p>
+                             </div>
+                        </div> 
                     </div>
                 </div>
             </div>
@@ -203,7 +287,7 @@
             </div>
         </div>
         <div class='row'>
-            <div class='col-12 col-xl-5 px-0'>
+            <div class='col-12 col-xl-5 px-0 pic-wrapper'>
                 <div class='col px-0'>
                     <div class='profile'>
                         <img src="/static/img/dash.png" class="img-fluid  w-100" alt="Responsive image">

@@ -1108,10 +1108,10 @@ methods:{
       let slide = pptx.addSlide({ masterName: "TITLE_SLIDE" });
   
       slide.addShape(pptx.shapes.RIGHT_TRIANGLE, {
-        x: -1,
-        y: -1,
-        w: 6.2,
-        h: 6.2,
+        x: -0.2,
+        y: -0.2,
+        w: 5,
+        h: 5,
         rotate: 90,
         line: { color: '333f50', width: 1.5 },
       });
@@ -1155,10 +1155,10 @@ methods:{
       let slide = pptx.addSlide({ masterName: "TITLE_SLIDE" });
   
       slide.addShape(pptx.shapes.RIGHT_TRIANGLE, {
-        x: -1,
-        y: -1,
-        w: 6.2,
-        h: 6.2,
+        x: -0.2,
+        y: -0.2,
+        w: 5,
+        h: 5,
         rotate: 90,
         line: { color: '333f50', width: 1.5 },
       });

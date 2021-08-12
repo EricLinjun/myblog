@@ -53,6 +53,9 @@ methods:{
     get_file(){          
       document.getElementById('file').click()      
     },
+    // get_demo(){          
+    //   window.saveAs()    
+    // },
     drop(event) {
       event.preventDefault();
       this.$refs.file.files = event.dataTransfer.files;
@@ -180,7 +183,7 @@ methods:{
 
     export_excel(){   
       for (year of this.response.year_list){
-        var title = this.response['product_brand'] + '渠道' + year + '年采购情况'
+        var title = this.response['product_brand'] + ' ' + year + ' Sales Report'
         var index = 1
         var index_list = []
 
@@ -192,12 +195,12 @@ methods:{
         index = index + this.response[year].total.length + 2
         index_list.push(index)
         aoa.push([])
-        aoa.push(['采购数量'])
+        aoa.push(['Volume'])
         aoa.push.apply(aoa, this.response[year].by_client_quantity)
         index = index + this.response[year].by_client_quantity.length + 2
         index_list.push(index)
         aoa.push([])
-        aoa.push(['采购金额'])
+        aoa.push(['Sales'])
         aoa.push.apply(aoa, this.response[year].by_client_payment)
         
         var sheet = this.sheet_from_array_of_arrays(aoa);
@@ -334,7 +337,7 @@ methods:{
 
         
 
-        var title = this.response['product_brand'] + '单品'+ year +'年采购情况'
+        var title = this.response['product_brand'] + ' ' + year +' Sales Report'
         var index = 1
         var index_list = []
 
@@ -354,12 +357,12 @@ methods:{
         index = index + this.response[year].total.length + 2
         index_list.push(index)
         aoa2.push([])
-        aoa2.push(['单品数量'])
+        aoa2.push(['Volume'])
         aoa2.push.apply(aoa2, this.response[year].by_product_quantity)
         index = index + this.response[year].by_product_quantity.length + 2
         index_list.push(index)
         aoa2.push([])
-        aoa2.push(['单品金额'])
+        aoa2.push(['Sales'])
         aoa2.push.apply(aoa2, this.response[year].by_product_payment)
         
         var sheet2 = this.sheet_from_array_of_arrays(aoa2);
@@ -394,9 +397,9 @@ methods:{
         sheet2["!margins"] = { left: 1.0, right: 1.0, top: 1.0, bottom: 1.0, header: 0.5, footer: 0.5 }      
           
         const sheetCols2 = [
-          { wch: 5} , 
-          { wch: 5} , 
-          { wch: 50} , 
+          { wch: 20} , 
+          { wch: 25} , 
+          { wch: 25} , 
           { wch: 12} , 
           { wch: 12} , 
           { wch: 12} , 
@@ -509,10 +512,9 @@ methods:{
             j = j + 1
           } 
         }
-        this.wbBlob.push(this.sheet2blob(sheet, '渠道分析',sheet2, '单品分析'))
+        this.wbBlob.push(this.sheet2blob(sheet, 'By Channel',sheet2, 'By Product'))
         var today = moment().format('YYMMDD');
-        this.excel_name.push(this.response['product_brand'] + ' ' + year +'年销售明细帐分析v'+today+'.xlsx')
-        // this.ppt_name.push(this.response['product_brand'] + ' ' + year +'年销售明细帐分析v'+today+'.pptx') 
+        this.excel_name.push(this.response['product_brand'] + ' ' + year +' Sales Report v'+today+'.xlsx')
         
 
         if (this.excel_name.length == this.response.year_list.length){
@@ -555,14 +557,14 @@ methods:{
             title: "TITLE_SLIDE",
             background: { fill: "FFFFFF" },
             objects: [
-              { image: { x: 11.3, y: 0.5, w: 1.2, h: 0.547, path: '/static/converter-tool/pic/logo2.png' } },
+              { image: { x: 11.3, y: 0.5, w: 1.2, h: 0.454, path: '/static/converter-tool/pic/logo_blue.png' } },
             ],
           });
         pptx.defineSlideMaster({
           title: "TITLE_SLIDE",
           background: { fill: "FFFFFF" },
           objects: [
-            { image: { x: 11.3, y: 0.5, w: 1.2, h: 0.547, path: '/static/converter-tool/pic/logo2.png' } },
+            { image: { x: 11.3, y: 0.5, w: 1.2, h: 0.454, path: '/static/converter-tool/pic/logo_blue.png' } },
           ],
         });
   
@@ -578,11 +580,11 @@ methods:{
             { rect: { x: 0.0, y: 7.1, w: "100%", h: 0.4, fill: { color: "000000" } } },
             {
               text: {
-                text: "Health More Pty Ltd 内部使用 - " + today_date,
+                text: "Star Company - " + today_date,
                 options: { x: 0, y: 7.1, w: "100%", h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri", fontSize: 12 },
               },
             },
-            { image: { x: 11.3, y: 0.5, w: 1.2, h: 0.547, path: '/static/converter-tool/pic/logo2.png' } },
+            { image: { x: 11.3, y: 0.5, w: 1.2, h: 0.454, path: '/static/converter-tool/pic/logo_blue.png' } },
           ],
         });
 
@@ -607,7 +609,7 @@ methods:{
         var today = moment().format('YYMMDD');
 
        
-        var name = this.response['product_brand'] + ' ' + year +'年销售明细帐分析v'+today+'.pptx'
+        var name = this.response['product_brand'] + ' ' + year +' Sales Report v'+today+'.pptx'
   
       
         this.pptx_list.push(pptx)
@@ -667,9 +669,9 @@ methods:{
       
       slide.addText(
           [
-              { text: year + "年", options: { fontFace: "Calibri", fontSize: 36, color: "ffffff", align: "right", breakLine: true } },
+              { text: year, options: { fontFace: "Calibri", fontSize: 36, color: "ffffff", align: "right", breakLine: true } },
               { text: this.response.product_brand, options: { fontFace: "Calibri", fontSize: 36, color: "ffffff", align: "right", breakLine: true} },
-              { text: "销售明细账分析", options: { fontFace: "Calibri", fontSize: 36, color: "ffffff", align: "right", } },
+              { text: "Sales Report", options: { fontFace: "Calibri", fontSize: 36, color: "ffffff", align: "right", } },
           ],
           { x: 3.5, y: 4.1, w: 8.5, h: 3.0, }
       );
@@ -703,7 +705,7 @@ methods:{
     },
     genSlide02(pptx, year) {
       let slide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-      slide.addText(year + "年总览", { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri",fontSize: 14  });  
+      slide.addText(year + " Sales", { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri",fontSize: 14  });  
       slide_one_table = this.color_header(this.response[year].total)
       slide_one_table[2] = this.to_currency(slide_one_table[2])    
       slide.addTable(slide_one_table, {
@@ -739,13 +741,13 @@ methods:{
         valAxes: [
           {
             showValAxisTitle: true,
-            valAxisTitle: "销售额(澳元)",
+            valAxisTitle: "Sales",
             valAxisTitleFontSize: 12,
             valAxisLabelFontFace: "Calibri",
           },
           {
             showValAxisTitle: true,
-            valAxisTitle: "销售数量(个)",
+            valAxisTitle: "Volume",
             valAxisTitleFontSize: 12,
             valAxisLabelFontFace: "Calibri",
             valGridLine: { style: "none" },
@@ -767,7 +769,7 @@ methods:{
           type: pptx.charts.BAR,
           data: [
             {
-              name: "销售金额",
+              name: "Sales",
               labels: labels,
               values: this.response[year].total[2].slice(1,12),
             },
@@ -781,7 +783,7 @@ methods:{
           type: pptx.charts.LINE,
           data: [
             {
-              name: "销售数量",
+              name: "Volume",
               labels: labels,
               values: this.response[year].total[1].slice(1,12),
             },
@@ -806,7 +808,7 @@ methods:{
           new_list.push([row[0],list_one[idx][13],row[13].toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })])
         } else {
           if(idx == 6){
-            new_list.push(['其他',list_one[idx][13],row[13]])
+            new_list.push(['Others',list_one[idx][13],row[13]])
           } else {
             new_list[6][1] = new_list[6][1] + list_one[idx][13]
             new_list[6][2] = new_list[6][2] + row[13]
@@ -822,10 +824,10 @@ methods:{
       new_list = []
       list_two.forEach((row,idx)=>{
         if(idx < 6){
-          new_list.push([row[2],list_one[idx][15],row[15].toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })])
+          new_list.push([row[1],list_one[idx][15],row[15].toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })])
         } else {
           if(idx == 6){
-            new_list.push(['其他',list_one[idx][15],row[15]])
+            new_list.push(['Others',list_one[idx][15],row[15]])
           } else {
             new_list[6][1] = new_list[6][1] + list_one[idx][15]
             new_list[6][2] = new_list[6][2] + row[15]
@@ -841,12 +843,12 @@ methods:{
 
     genSlide03(pptx, year) {
       let slide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-      slide.addText(year + "年总览分析", { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri",fontSize: 14  });  
+      slide.addText(year + " Sales TOP 5", { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri",fontSize: 14  });  
      
       slide_total_2_table = this.color_header(this.slide_total_2_table(this.response[year].by_client_quantity,this.response[year].by_client_payment))
       slide_total_2_table_2 = this.color_header(this.slide_total_2_table_2(this.response[year].by_product_quantity,this.response[year].by_product_payment))
 
-      slide.addText("TOP 5 销售渠道", { x: 0.3, y: 1.4, w: 2.5, h: 0.4, bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14  });  
+      slide.addText("TOP 5 Channel", { x: 0.3, y: 1.4, w: 2.5, h: 0.4, bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14  });  
       slide.addTable(slide_total_2_table, {
         x: 0.3,
         y: 1.8,
@@ -859,7 +861,7 @@ methods:{
         align: "center",
       }); 
 
-      slide.addText("TOP 5 销售单品", { x: 0.3, y: 4.1, w: 2.5, h: 0.4, bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14  });  
+      slide.addText("TOP 5 Products", { x: 0.3, y: 4.1, w: 2.5, h: 0.4, bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14  });  
 
       slide.addTable(slide_total_2_table_2, {
         x: 0.3,
@@ -936,7 +938,7 @@ methods:{
         titleColor: "000000",
         titleFontFace: "Calibri",
         titleFontSize: 12,
-        title: year + "年TOP5渠道销售总金额",
+        title: year + " TOP5 Channel Sales",
         
     
         // showLegend: true,
@@ -968,7 +970,7 @@ methods:{
     
         holeSize: 50,
     
-        title: year + "年TOP5单品销售总金额占比",
+        title: year + " TOP5 Product Sales",
         titleColor: "000000",
         titleFontFace: "Calibri",
         titleFontSize: 12,
@@ -981,19 +983,19 @@ methods:{
       var new_list = []
       list_one.forEach((row,idx)=>{
         if(idx < 11){
-          new_list.push(row.slice(2,16).concat(row[16].toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })))
+          new_list.push([row[1]].concat(row.slice(3,16),row[16].toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })))
           if(idx == list_one.length - 1){
-              new_list[0][0] = client + ' TOP 10 销量单品'
+              new_list[0][0] = client + ' TOP 10 Product'
           }  
         } else {
           if(idx == 11){
-            new_list.push(['其他'].concat(row.slice(3,17)))
+            new_list.push(['Others'].concat(row.slice(3,17)))
           } else {
             for (i of [2,3,4,5,6,7,8,9,10,11,12,13,14]){
               new_list[11][i] = new_list[11][i] + row[i+2]
             }
             if(idx == list_one.length - 1){
-              new_list[0][0] = client + ' TOP 10 销量单品'
+              new_list[0][0] = client + ' TOP 10 Product'
               new_list[11][14]= new_list[11][14].toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })
             }
           }
@@ -1006,10 +1008,10 @@ methods:{
       var new_list = []
       list_one.forEach((row,idx)=>{
         if(idx < 4){
-          new_list.push(row.slice(2,16).concat(row[16].toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })))
+          new_list.push([row[1]].concat(row.slice(3,16),row[16].toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })))
         } else {
           if(idx == 4){
-            new_list.push(['其他'].concat(row.slice(3,17)))
+            new_list.push(['Others'].concat(row.slice(3,17)))
           } else {
             for (i of [2,3,4,5,6,7,8,9,10,11,12,13,14]){
               new_list[4][i] = new_list[4][i] + row[i+2]
@@ -1026,7 +1028,7 @@ methods:{
     genClientSlide(pptx, year, client){
 
       let slide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-      slide.addText('渠道销量 - '+client, { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri",fontSize: 14  });  
+      slide.addText('Channel Volume - '+client, { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri",fontSize: 14  });  
       // slide.addText(client + " ", { x: 0.3, y: 1.4, w: 2.5, h: 0.4, bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14  });  
      
 
@@ -1068,8 +1070,8 @@ methods:{
       // slide.addText("TOP 3 单品销量和总销量走势", { x: 0.3, y: 4.9, w: 4, h: 0.4, bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14  });  
       slide.addText(
           [
-              { text: "TOP 3 单品", options: { bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14, breakLine: true } }, 
-              { text: "和总销量走势", options: { bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14, } },
+              { text: "TOP 3 Products", options: { bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14, breakLine: true } }, 
+              { text: "and Total Volume", options: { bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14, } },
           ],
           {  x: 0.3, y: 4.9, w: 4, h: 0.4, }
       );
@@ -1110,10 +1112,10 @@ methods:{
       let slide = pptx.addSlide({ masterName: "TITLE_SLIDE" });
   
       slide.addShape(pptx.shapes.RIGHT_TRIANGLE, {
-        x: -1,
-        y: -1,
-        w: 6.2,
-        h: 6.2,
+        x: -0.2,
+        y: -0.2,
+        w: 5,
+        h: 5,
         rotate: 90,
         line: { color: '333f50', width: 1.5 },
       });
@@ -1146,8 +1148,8 @@ methods:{
       slide.addText(
           [
               { text: this.response.product_brand, options: { fontFace: "Calibri", fontSize: 36, color: "000000", align: "center", breakLine: true} },
-              { text: year + "年各渠道销量分析", options: { fontFace: "Calibri", fontSize: 36, color: "000000", align: "center", breakLine: true } },
-              { text: "(渠道排序根据总销量由高至低)", options: { fontFace: "Calibri", fontSize: 18, color: "000000", align: "center", } },
+              { text: year + " Channel Analysis", options: { fontFace: "Calibri", fontSize: 36, color: "000000", align: "center", breakLine: true } },
+              { text: "(From Top to Bottom)", options: { fontFace: "Calibri", fontSize: 18, color: "000000", align: "center", } },
           ],
           { x: 0, y: 2.2, w: "100%", h: 3.0, }
       );
@@ -1157,10 +1159,10 @@ methods:{
       let slide = pptx.addSlide({ masterName: "TITLE_SLIDE" });
   
       slide.addShape(pptx.shapes.RIGHT_TRIANGLE, {
-        x: -1,
-        y: -1,
-        w: 6.2,
-        h: 6.2,
+        x: -0.2,
+        y: -0.2,
+        w: 5,
+        h: 5,
         rotate: 90,
         line: { color: '333f50', width: 1.5 },
       });
@@ -1192,7 +1194,7 @@ methods:{
       
       slide.addText(
           [
-              { text: '感谢阅读', options: { fontFace: "Calibri", fontSize: 36, color: "000000", align: "center", breakLine: true} },
+              { text: 'Thanks For Reading', options: { fontFace: "Calibri", fontSize: 36, color: "000000", align: "center", breakLine: true} },
           ],
           { x: 0, y: 2.2, w: "100%", h: 3.0, }
       );
