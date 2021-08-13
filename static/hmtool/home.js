@@ -27,13 +27,12 @@ el: '#app',
 data:{
   file_name: '',
   progress: '转换中',
+  error_msg: '数据格式不对 请重新上传',
   wbBlob: [],
   pptx_list: [],
   excel_name: [],
   pptx_name:[],
   response: {},
-  response_two: [],
-
 },
   
 mounted:function(){
@@ -89,6 +88,7 @@ methods:{
               if (response.data['product_brand'] == null){
                 document.getElementById("uploading").classList.add("hide")
                 document.getElementById("uploaded-error").classList.remove("hide")
+                this.error_msg = response.data
 
               } else {
 
@@ -100,6 +100,7 @@ methods:{
            
             }).catch(error => {
                 console.log('error', error);
+                this.error_msg = '文件过大或是其他错误 请联系Eric'
                 document.getElementById("uploading").classList.add("hide")
                 document.getElementById("uploaded-error").classList.remove("hide")
 
@@ -178,7 +179,7 @@ methods:{
 
     export_excel(){   
       for (year of this.response.year_list){
-        var title = this.response['product_brand'] + '渠道' + year + '年销售情况'
+        var title = this.response['product_brand'] + '渠道' + year + ' 销售情况'
         var index = 1
         var index_list = []
 
@@ -332,7 +333,7 @@ methods:{
 
         
 
-        var title = this.response['product_brand'] + '单品'+ year +'年销售情况'
+        var title = this.response['product_brand'] + '单品'+ year +' 销售情况'
         var index = 1
         var index_list = []
 
@@ -509,8 +510,8 @@ methods:{
         }
         this.wbBlob.push(this.sheet2blob(sheet, '渠道分析',sheet2, '单品分析'))
         var today = moment().format('YYMMDD');
-        this.excel_name.push(this.response['product_brand'] + ' ' + year +'年销售明细帐分析v'+today+'.xlsx')
-        // this.ppt_name.push(this.response['product_brand'] + ' ' + year +'年销售明细帐分析v'+today+'.pptx') 
+        this.excel_name.push(this.response['product_brand'] + ' ' + year +' 销售明细帐分析v'+today+'.xlsx')
+        // this.ppt_name.push(this.response['product_brand'] + ' ' + year +' 销售明细帐分析v'+today+'.pptx') 
         
 
         if (this.excel_name.length == this.response.year_list.length){
@@ -605,7 +606,7 @@ methods:{
         var today = moment().format('YYMMDD');
 
        
-        var name = this.response['product_brand'] + ' ' + year +'年销售明细帐分析v'+today+'.pptx'
+        var name = this.response['product_brand'] + ' ' + year +' 销售明细帐分析v'+today+'.pptx'
   
       
         this.pptx_list.push(pptx)
@@ -665,7 +666,7 @@ methods:{
       
       slide.addText(
           [
-              { text: year + "年", options: { fontFace: "Calibri", fontSize: 36, color: "ffffff", align: "right", breakLine: true } },
+              { text: year + " ", options: { fontFace: "Calibri", fontSize: 36, color: "ffffff", align: "right", breakLine: true } },
               { text: this.response.product_brand, options: { fontFace: "Calibri", fontSize: 36, color: "ffffff", align: "right", breakLine: true} },
               { text: "销售明细账分析", options: { fontFace: "Calibri", fontSize: 36, color: "ffffff", align: "right", } },
           ],
@@ -694,14 +695,29 @@ methods:{
         if(idx == 0){
           new_list.push(item)
         } else {
-          new_list.push(item.toLocaleString('en-AU', { style: 'currency', currency: 'AUD' }))
+          if (typeof(item) == 'number'){
+            new_list.push(item.toLocaleString('en-AU', { style: 'currency', currency: 'AUD' }))
+          } else {
+            new_list.push(item)
+          } 
         }
       })
       return new_list
     },
+    remove_null(a_list){
+      new_list = []
+      for(i of a_list){
+        if (i == ' '){
+          new_list.push(0)
+        } else {
+          new_list.push(i)
+        }
+      }
+      return new_list
+    },
     genSlide02(pptx, year) {
       let slide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-      slide.addText(year + "年总览", { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri",fontSize: 14  });  
+      slide.addText(year + " 总览", { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri",fontSize: 14  });  
       slide_one_table = this.color_header(this.response[year].total)
       slide_one_table[2] = this.to_currency(slide_one_table[2])    
       slide.addTable(slide_one_table, {
@@ -760,6 +776,7 @@ methods:{
         ],
       };   
       let labels = this.response[year].total[0].slice(1,12);
+
       let chartTypes = [
         {
           type: pptx.charts.BAR,
@@ -767,7 +784,7 @@ methods:{
             {
               name: "销售金额",
               labels: labels,
-              values: this.response[year].total[2].slice(1,12),
+              values: this.remove_null(this.response[year].total[2].slice(1,13)),
             },
           ],
           options: {
@@ -781,7 +798,7 @@ methods:{
             {
               name: "销售数量",
               labels: labels,
-              values: this.response[year].total[1].slice(1,12),
+              values: this.remove_null(this.response[year].total[1].slice(1,13)),
             },
           ],
           options: {
@@ -839,7 +856,7 @@ methods:{
 
     genSlide03(pptx, year) {
       let slide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
-      slide.addText(year + "年总览分析", { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri",fontSize: 14  });  
+      slide.addText("总览分析", { x: 0.5, y: 0.6, w: 2.5, h: 0.4, align: "center", valign: "middle", color: "FFFFFF", fontFace: "Calibri",fontSize: 14  });  
      
       slide_total_2_table = this.color_header(this.slide_total_2_table(this.response[year].by_client_quantity,this.response[year].by_client_payment))
       slide_total_2_table_2 = this.color_header(this.slide_total_2_table_2(this.response[year].by_product_quantity,this.response[year].by_product_payment))
@@ -934,7 +951,7 @@ methods:{
         titleColor: "000000",
         titleFontFace: "Calibri",
         titleFontSize: 12,
-        title: year + "年TOP5渠道销售总金额",
+        title: year + " TOP5渠道销售总金额",
         
     
         // showLegend: true,
@@ -966,7 +983,7 @@ methods:{
     
         holeSize: 50,
     
-        title: year + "年TOP5单品销售总金额占比",
+        title: year + " TOP5单品销售总金额占比",
         titleColor: "000000",
         titleFontFace: "Calibri",
         titleFontSize: 12,
@@ -1002,15 +1019,30 @@ methods:{
 
     client_slide_chart(list_one){
       var new_list = []
+      
       list_one.forEach((row,idx)=>{
+        var new_row = []
+        if(idx != 0){    
+          for( i of row){
+            if (i == ' '){
+              new_row.push(0)
+            } else {
+              new_row.push(i)
+            }
+          }
+        } else {
+          new_row = row
+        }
+        
+
         if(idx < 4){
-          new_list.push(row.slice(2,16).concat(row[16].toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })))
+          new_list.push(new_row.slice(2,16).concat(new_row[16].toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })))
         } else {
           if(idx == 4){
-            new_list.push(['其他'].concat(row.slice(3,17)))
+            new_list.push(['其他'].concat(new_row.slice(3,17)))
           } else {
             for (i of [2,3,4,5,6,7,8,9,10,11,12,13,14]){
-              new_list[4][i] = new_list[4][i] + row[i+2]
+              new_list[4][i] = new_list[4][i] + new_row[i+2]
             }
             if(idx == list_one.length - 1){
               new_list[4][14]= new_list[4][14].toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })
@@ -1018,6 +1050,7 @@ methods:{
           }
         }
       })
+      
       return(new_list)
     },
 
@@ -1063,7 +1096,6 @@ methods:{
       })
       arrDataTimeline2ser.reverse()
 
-      // slide.addText("TOP 3 单品销量和总销量走势", { x: 0.3, y: 4.9, w: 4, h: 0.4, bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14  });  
       slide.addText(
           [
               { text: "TOP 3 单品", options: { bold:true, align: "left", valign: "middle", color: "000000", fontFace: "Calibri",fontSize: 14, breakLine: true } }, 
@@ -1144,7 +1176,7 @@ methods:{
       slide.addText(
           [
               { text: this.response.product_brand, options: { fontFace: "Calibri", fontSize: 36, color: "000000", align: "center", breakLine: true} },
-              { text: year + "年各渠道销量分析", options: { fontFace: "Calibri", fontSize: 36, color: "000000", align: "center", breakLine: true } },
+              { text: year + " 各渠道销量分析", options: { fontFace: "Calibri", fontSize: 36, color: "000000", align: "center", breakLine: true } },
               { text: "(渠道排序根据总销量由高至低)", options: { fontFace: "Calibri", fontSize: 18, color: "000000", align: "center", } },
           ],
           { x: 0, y: 2.2, w: "100%", h: 3.0, }
